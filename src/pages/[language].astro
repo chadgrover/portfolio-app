@@ -1,0 +1,31 @@
+---
+import Page from '../layouts/Page.astro';
+import { supportedLanguages } from '../lib/languages';
+import { loadPortfolio, type Portfolio } from '../lib/portfolio';
+
+export async function getStaticPaths() {
+  const portfolio = await loadPortfolio();
+  return supportedLanguages.map((language) => ({
+    params: { language },
+    props: { language, content: portfolio[language] },
+  }));
+}
+interface Props {
+  language: 'en' | 'ja';
+  content: Portfolio;
+}
+const { language, content } = Astro.props;
+const labels = { en: 'English', ja: '日本語' };
+---
+<Page language={language} title={`${content.displayName} | Portfolio`}>
+  <nav aria-label={language === 'ja' ? '言語' : 'Language'}>
+    {supportedLanguages.map((destination) => (
+      <a href={`/${destination}/`} lang={destination} hreflang={destination}
+        aria-current={language === destination ? 'page' : undefined}>{labels[destination]}</a>
+    ))}
+  </nav>
+  <p class="notice">{language === 'ja' ? '架空のポートフォリオ・デモ' : 'Fictional portfolio demonstration'}</p>
+  <h1>{content.displayName}</h1>
+  <p class="role">{content.role}</p>
+  <p>{content.introduction}</p>
+</Page>

@@ -1,0 +1,12 @@
+---
+import Page from '../layouts/Page.astro';
+---
+<Page language="en" title="Portfolio language selection">
+  <noscript slot="head"><meta http-equiv="refresh" content="0;url=/en/" /></noscript>
+  <h1>Portfolio</h1>
+  <p><a href="/en/" lang="en">Continue in English</a></p>
+  <script>
+    import { selectLanguage } from '../lib/languages';
+    window.location.replace(`/${selectLanguage(navigator.language)}/`);
+  </script>
+</Page>
