@@ -1,0 +1,34 @@
+{
+  "name": "portfolio-app",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "24.22.0",
+    "npm": "12.2.1"
+  },
+  "packageManager": "npm@12.2.1",
+  "scripts": {
+    "dev": "astro dev",
+    "check": "astro check && npm run check:content",
+    "check:content": "tsx scripts/check-content.ts",
+    "test": "vitest run",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "7.4.4"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.12",
+    "@types/node": "24.19.2",
+    "tsx": "4.23.15",
+    "typescript": "6.0.3",
+    "vitest": "5.0.5",
+    "wrangler": "4.156.0"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "workerd@1.20261023.1": true
+  }
+}

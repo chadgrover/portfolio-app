@@ -1,0 +1,76 @@
+name: Verify and deploy
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24.22.0'
+      - run: npm install --global npm@12.2.1
+      - run: npm ci
+      - run: npm run check
+      - run: npm test
+      - run: npm run build
+
+  deploy:
+    needs: checks
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: portfolio-pages-production
+      cancel-in-progress: false
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      # Resolve both current main tips only after this job enters the deployment group.
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: main
+          path: app
+          persist-credentials: false
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          repository: chadgrover/portfolio-content
+          ref: main
+          path: content-input
+          token: ${{ secrets.PORTFOLIO_CONTENT_READ_TOKEN }}
+          persist-credentials: false
+      - name: Record source revisions
+        run: |
+          printf 'Application: `%s`\n\nContent: `%s`\n' "$(git rev-parse HEAD)" "$(git -C ../content-input rev-parse HEAD)" >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24.22.0'
+      - run: npm install --global npm@12.2.1
+      - run: npm ci
+      - name: Verify current application with fictional fixtures
+        run: |
+          npm run check
+          npm test
+          npm run build
+      - name: Validate and build published portfolio content
+        env:
+          PORTFOLIO_CONTENT_DIR: ${{ github.workspace }}/content-input/published
+        run: |
+          npm run check
+          npm run build
+      - name: Upload generated website
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_PAGES_PROJECT: ${{ vars.CLOUDFLARE_PAGES_PROJECT }}
+        run: npx --no-install wrangler pages deploy dist --project-name="$CLOUDFLARE_PAGES_PROJECT" --branch=main

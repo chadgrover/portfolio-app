@@ -1,0 +1,3 @@
+# Separate private content ownership
+
+Published portfolio content and Draft portfolio content belong in a separate private repository so the Portfolio owner can edit content independently of application rendering. The private application repository owns the single schema, validation, static rendering, and deployment; it fetches published JSON with one extra read-only credential, accepting cross-repository coordination and credential maintenance in exchange for that ownership boundary. Content edits wait for the next application deployment or manual application run, and only generated public files reach the host.
