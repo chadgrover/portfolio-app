@@ -1,4 +1,4 @@
-name: Checks and deploy
+name: Check and deploy
 
 on:
   pull_request:
@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  checks:
+  check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -26,7 +26,7 @@ jobs:
       - run: npm run build
 
   deploy:
-    needs: checks
+    needs: check
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     concurrency:
