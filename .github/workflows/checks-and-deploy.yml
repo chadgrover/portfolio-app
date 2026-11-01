@@ -44,7 +44,7 @@ jobs:
           persist-credentials: false
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          repository: chadgrover/portfolio-content
+          repository: ${{ github.repository_owner }}/portfolio-content
           ref: main
           path: content-input
           token: ${{ secrets.PORTFOLIO_CONTENT_READ_TOKEN }}

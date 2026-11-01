@@ -44,7 +44,7 @@ Each language file requires non-empty string values for `home.hero.displayName`,
 
 ## Deployment setup (owner action, not yet provisioned)
 
-Keep both `chadgrover/portfolio-app` and `chadgrover/portfolio-content` private. Create the content repository with `main`, fictional `published/en.json` and `published/ja.json`, and optional separate `drafts/`. It needs no schema implementation, deployment pipeline, dispatch workflow, or saved deployment credentials. The content-agent handoff is delivered separately in the owner's OS temporary directory.
+Keep both `chadgrover/portfolio-app` and `chadgrover/portfolio-content` private. The workflow derives the owner from `github.repository_owner` and expects a sibling repository named `portfolio-content`. Create the content repository with `main`, fictional `published/en.json` and `published/ja.json`, and optional separate `drafts/`. It needs no schema implementation, deployment pipeline, dispatch workflow, or saved deployment credentials. The content-agent handoff is delivered separately in the owner's OS temporary directory.
 
 Create a Cloudflare Pages **Direct Upload** project using its assigned `pages.dev` address and production branch `main`. Do not connect Git integration, add root redirects, enable paid features/spending, or change unrelated billing settings. No adapter, SSR, runtime service, or custom domain is needed.
 
