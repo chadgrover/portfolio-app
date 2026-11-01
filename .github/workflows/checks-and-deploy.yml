@@ -1,4 +1,4 @@
-name: Verify and deploy
+name: Checks and deploy
 
 on:
   pull_request:

@@ -6,7 +6,7 @@ import Page from '../layouts/Page.astro';
   <h1>Portfolio</h1>
   <p><a href="/en/" lang="en">Continue in English</a></p>
   <script>
-    import { selectLanguage } from '../lib/languages';
+    import { selectLanguage } from '../lib/i18n/utils';
     window.location.replace(`/${selectLanguage(navigator.language)}/`);
   </script>
 </Page>
