@@ -1,23 +1,26 @@
 ---
 import Page from '../layouts/Page.astro';
-import { supportedLanguages } from '../lib/languages';
-import { loadPortfolio, type Portfolio } from '../lib/portfolio';
+import { supportedLanguages } from '../lib/i18n/constants';
+import type { Language } from '../lib/i18n/types';
+import { loadPortfolioContent } from '../lib/portfolio-content/load';
+import type { PortfolioContent } from '../lib/portfolio-content/types';
 
 export async function getStaticPaths() {
-  const portfolio = await loadPortfolio();
+  const portfolio = await loadPortfolioContent();
   return supportedLanguages.map((language) => ({
     params: { language },
     props: { language, content: portfolio[language] },
   }));
 }
 interface Props {
-  language: 'en' | 'ja';
-  content: Portfolio;
+  language: Language;
+  content: PortfolioContent;
 }
 const { language, content } = Astro.props;
+const { hero } = content.home;
 const labels = { en: 'English', ja: '日本語' };
 ---
-<Page language={language} title={`${content.displayName} | Portfolio`}>
+<Page language={language} title={`${hero.displayName} | Portfolio`}>
   <nav aria-label={language === 'ja' ? '言語' : 'Language'}>
     {supportedLanguages.map((destination) => (
       <a href={`/${destination}/`} lang={destination} hreflang={destination}
@@ -25,7 +28,7 @@ const labels = { en: 'English', ja: '日本語' };
     ))}
   </nav>
   <p class="notice">{language === 'ja' ? '架空のポートフォリオ・デモ' : 'Fictional portfolio demonstration'}</p>
-  <h1>{content.displayName}</h1>
-  <p class="role">{content.role}</p>
-  <p>{content.introduction}</p>
+  <h1>{hero.displayName}</h1>
+  <p class="role">{hero.role}</p>
+  <p>{hero.introduction}</p>
 </Page>

@@ -1,5 +1,9 @@
 {
-  "displayName": "Example Developer",
-  "role": "Fictional software developer",
-  "introduction": "This fictional portfolio demonstrates a bilingual static website. It does not describe a real person's professional history."
+  "home": {
+    "hero": {
+      "displayName": "Example Developer",
+      "role": "Fictional software developer",
+      "introduction": "This fictional portfolio demonstrates a bilingual static website. It does not describe a real person's professional history."
+    }
+  }
 }

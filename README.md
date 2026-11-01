@@ -16,15 +16,17 @@ npm run build       # provider-neutral static website in dist/
 npm run preview
 ```
 
-The two unit-test boundaries are the content loader and primary-browser-language policy. No browser/E2E runner or generated-HTML assertion suite is included. `astro build` does not replace the explicit type check.
+The two unit-test boundaries are the content loader (`src/lib/portfolio-content/load.test.ts`) and primary-browser-language policy (`src/lib/i18n/utils.test.ts`). Tests are colocated with their modules and grouped in named suites. No browser/E2E runner or generated-HTML assertion suite is included. `astro build` does not replace the explicit type check.
 
 ## Content contract
 
-`src/lib/portfolio.ts` owns the shared schema, supplied through `astro/zod`. `src/lib/languages.ts` explicitly registers `en` and `ja`; that list controls required files, generated routes, and language navigation. Adding another JSON filename alone cannot publish a language.
+`src/lib/portfolio-content/schema.ts` owns the shared schema, supplied through `astro/zod`. `src/lib/i18n/constants.ts` explicitly registers `en` and `ja`; that list controls required files, generated routes, and language navigation. Adding another JSON filename alone cannot publish a language.
+
+`src/lib/portfolio-content/load.ts` exports `loadPortfolioContent`, which selects and validates content. Derived types live in each module's `types.ts`.
 
 With `PORTFOLIO_CONTENT_DIR` unset, local development and CI load `fixtures/published/en.json` and `ja.json`. Set it to another directory holding the same files to validate and build that content instead.
 
-Each language file requires non-empty string values for `displayName`, `role`, and `introduction`. Whitespace-only values fail. Missing files, unreadable or malformed JSON, and invalid required fields fail without fixture fallback when the setting is explicit (including an empty setting). Errors name files or fields without echoing content values. Only configured language files in the selected directory are read. Extra JSON fields are not rendered.
+Each language file requires non-empty string values for `home.hero.displayName`, `home.hero.role`, and `home.hero.introduction`. Keys use camelCase. The fictional fixtures remain the development and CI dataset. Whitespace-only values fail. Missing files, unreadable or malformed JSON, and invalid required fields fail without fixture fallback when the setting is explicit (including an empty setting). Errors name files or fields without echoing content values. Only configured language files in the selected directory are read. Extra JSON fields are not rendered.
 
 `/en/` and `/ja/` share one page. `/` uses only `navigator.language`: case-insensitive `ja-JP` selects `/ja/`; every other or unavailable value selects `/en/`. Navigation replaces the root history entry. Direct language links stay selected. JavaScript-disabled visitors receive an English meta redirect and visible English link. There are no cookies, stored preferences, secondary-language matching, or host root redirects. A top-level `404.html` provides bilingual recovery links and allows Cloudflare Pages to return HTTP 404 instead of SPA fallback.
 
