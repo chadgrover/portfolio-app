@@ -42,9 +42,17 @@ jobs:
           ref: main
           path: app
           persist-credentials: false
+      - name: Require content repository configuration
+        env:
+          PORTFOLIO_CONTENT_REPOSITORY: ${{ vars.PORTFOLIO_CONTENT_REPOSITORY }}
+        run: |
+          if [ -z "$PORTFOLIO_CONTENT_REPOSITORY" ]; then
+            echo "::error::Set the PORTFOLIO_CONTENT_REPOSITORY repository variable to owner/repository."
+            exit 1
+          fi
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          repository: ${{ github.repository_owner }}/portfolio-content
+          repository: ${{ vars.PORTFOLIO_CONTENT_REPOSITORY }}
           ref: main
           path: content-input
           token: ${{ secrets.PORTFOLIO_CONTENT_READ_TOKEN }}
