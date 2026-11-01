@@ -1,7 +1,8 @@
 ---
+import type { Language } from '../lib/i18n/types';
 import '../styles/global.css';
 interface Props {
-  language: 'en' | 'ja';
+  language: Language;
   title: string;
 }
 const { language, title } = Astro.props;
