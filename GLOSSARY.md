@@ -12,13 +12,8 @@ A person who views the portfolio, such as an engineer, technical hiring manager,
 
 **Portfolio content**:
 The professional information presented about the portfolio owner.
+_Avoid_: Published content, public information
 
-**Published portfolio content**:
-Portfolio content approved for portfolio visitors to read.
-
-**Draft portfolio content**:
-A working version of portfolio content that has not been approved for portfolio visitors to read.
-
-**Portfolio fixture**:
-Fictional portfolio content, such as an example introduction or role, used while the portfolio is being developed. It contains no real professional history or personal contact details.
-_Avoid_: Sample production content
+**Private information**:
+Information that must never appear in the portfolio or its source, such as secrets, personal details the portfolio owner has not chosen to publish, or proprietary client code.
+_Avoid_: Personal content
