@@ -2,14 +2,14 @@
 import Page from '../layouts/Page.astro';
 import { supportedLanguages } from '../lib/i18n/constants';
 import type { Language } from '../lib/i18n/types';
-import { loadPortfolioContent } from '../lib/portfolio-content/load';
+import { getEntry } from 'astro:content';
 import type { PortfolioContent } from '../lib/portfolio-content/types';
 
 export async function getStaticPaths() {
-  const portfolio = await loadPortfolioContent();
-  return supportedLanguages.map((language) => ({
-    params: { language },
-    props: { language, content: portfolio[language] },
+  return Promise.all(supportedLanguages.map(async (language) => {
+    const entry = await getEntry('portfolio', language);
+    if (!entry) throw new Error(`Missing portfolio content: src/content/portfolio/${language}.json`);
+    return { params: { language }, props: { language, content: entry.data } };
   }));
 }
 interface Props {
