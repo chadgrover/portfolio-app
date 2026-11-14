@@ -147,3 +147,7 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+# Impeccable configuration
+.impeccable/config.json
+.impeccable/config.local.json
