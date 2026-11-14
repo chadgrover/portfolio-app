@@ -26,19 +26,19 @@ Chad is presented as a **full-stack web** developer who works professionally in 
 
 - Visitors read on desktop and mobile, often arriving from a résumé, application, or profile link.
 - Language routes are `/en/` and `/ja/`. The research recommends replacing the root's automatic redirect with an explicit language chooser (not yet implemented).
-- The repository is public by design (ADR 0001). Committed content and its Git history count as published, and Cloudflare Pages builds `main`.
+- The repository is public by design (ADR 0001). Committed content and its Git history count as published. Cloudflare Workers Builds builds `main` and serves it as an assets-only Worker (ADR 0002).
 
 ## Capabilities and Constraints
 
 - Static Astro output; core reading and navigation must work without JavaScript.
-- Content is validated by the schema in `src/lib/portfolio-content/schema.ts`. It currently covers only the hero (name, role, introduction).
-- Content approval covers public Git history as well as the rendered site. Nothing private or unapproved gets committed.
+- Portfolio content lives in an Astro content collection (`src/content/portfolio/`), validated by `src/lib/portfolio-content/schema.ts`. It currently covers only the hero (name, role, introduction).
+- Content approval covers public Git history as well as the rendered site. Private information (see `GLOSSARY.md`) never gets committed.
 - Both languages must be complete for core pages, with matching facts, dates, ownership, and links.
 - Open: production domain, contact method, résumé format/language, availability, and which private work can be named.
 
 ## Evidence on Hand
 
-- Only **fictional fixtures** exist today (`fixtures/published/en.json`, `ja.json`), and they are labelled as a demonstration.
+- Only **fictional placeholder content** exists today (`src/content/portfolio/en.json`, `ja.json`), and it is labelled as a demonstration.
 - Real professional work is **mostly private**. It may be described only at a level the owner approves, without employer code, internal diagrams, or customer data.
 - The portfolio repository itself is public, showcased evidence.
 - There are no testimonials, metrics, or publishable case studies yet. Do not fabricate any.
