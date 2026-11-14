@@ -1,0 +1,30 @@
+import { describe, expect, test } from 'vitest';
+import { portfolioContentSchema } from './schema';
+
+describe('portfolioContentSchema', () => {
+  const hero = { displayName: 'Example Developer', role: 'Fictional developer', introduction: 'A fictional introduction.' };
+  const requiredHeroFields = ['displayName', 'role', 'introduction'] as const;
+
+  test('accepts complete portfolio content', () => {
+    expect(portfolioContentSchema.safeParse({ home: { hero } }).success).toBe(true);
+  });
+
+  test('accepts Japanese portfolio content', () => {
+    const japaneseHero = { displayName: '架空の開発者', role: '架空の役職', introduction: 'これは架空の紹介です。' };
+    expect(portfolioContentSchema.safeParse({ home: { hero: japaneseHero } }).success).toBe(true);
+  });
+
+  describe.each(requiredHeroFields)('%s', (field) => {
+    test.each([
+      ['missing', undefined],
+      ['empty', ''],
+      ['whitespace-only', '   '],
+      ['a number', 42],
+      ['null', null],
+    ])('rejects a value that is %s', (_, value) => {
+      const result = portfolioContentSchema.safeParse({ home: { hero: { ...hero, [field]: value } } });
+      expect(result.success).toBe(false);
+      expect(result.error?.issues[0]?.path).toEqual(['home', 'hero', field]);
+    });
+  });
+});
