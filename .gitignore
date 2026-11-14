@@ -151,3 +151,9 @@ vite.config.ts.timestamp-*
 # Impeccable configuration
 .impeccable/config.json
 .impeccable/config.local.json
+
+# Local agent tooling
+.claude/
+.claude/settings.local.json
+.agents/
+.codex/
