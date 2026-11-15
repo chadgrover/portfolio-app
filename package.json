@@ -11,7 +11,8 @@
   "scripts": {
     "dev": "astro dev",
     "check": "astro check",
-    "test": "vitest run",
+    "test": "vitest run --project unit",
+    "test:build-output": "vitest run --project build-output",
     "build": "astro build",
     "preview": "astro preview"
   },

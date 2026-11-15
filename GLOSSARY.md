@@ -25,3 +25,7 @@ _Avoid_: Social link, social media
 **Private information**:
 Information that must never appear in the portfolio or its source, such as secrets, personal details the portfolio owner has not chosen to publish, or proprietary client code.
 _Avoid_: Personal content
+
+**Build output**:
+The complete set of files the production build produces, which the host serves to portfolio visitors exactly as built.
+_Avoid_: Built site, build artifact
