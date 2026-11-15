@@ -6,5 +6,4 @@ a { color: #215b85; text-underline-offset: .2em; }
 a[aria-current="page"] { font-weight: 700; }
 a:focus-visible { outline: 3px solid #215b85; outline-offset: 5px; }
 h1 { line-height: 1.2; font-size: clamp(2rem, 7vw, 3rem); }
-.notice { font-size: .9rem; }
 .role { font-weight: 600; }

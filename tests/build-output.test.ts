@@ -4,8 +4,12 @@ import { fileURLToPath } from 'node:url';
 import { gzipSync } from 'node:zlib';
 import { describe, expect, test } from 'vitest';
 import { supportedLanguages } from '../src/lib/i18n/constants';
+import type { Language } from '../src/lib/i18n/types';
+import type { PortfolioContent } from '../src/lib/portfolio-content/types';
+import type { ProfileLink } from '../src/lib/profile-links/types';
 
 const distDirectory = fileURLToPath(new URL('../dist/', import.meta.url));
+const contentDirectory = fileURLToPath(new URL('../src/content/portfolio/', import.meta.url));
 const surfaceBriefDirectory = fileURLToPath(new URL('../.impeccable/surfaces/', import.meta.url));
 const siteOrigin = 'https://site.invalid/';
 const bytesPerKilobyte = 1000;
@@ -42,7 +46,15 @@ const isJavaScriptType = (type: string) =>
 const buildOutputPathOf = (href: string, pagePath: string) =>
   decodeURIComponent(new URL(href, new URL(pagePath, siteOrigin)).pathname.slice(1));
 
-const withoutMarkdownMarks = (text: string) => text.replace(/\*\*[^*]+\*\*\s*|`/g, '');
+const readContentFile = (name: string) => JSON.parse(readFileSync(join(contentDirectory, name), 'utf8'));
+const readPortfolioContent = (language: Language): PortfolioContent => readContentFile(`${language}.json`);
+const readProfileLinks = (): ProfileLink[] => readContentFile('profile-links.json');
+const withoutTags = (html: string) => html.replace(/<[^>]*>/g, '');
+const visibleText = (html: string) => withoutTags(html.replace(/<(script|style)\b[\s\S]*?<\/\1>/gi, ''));
+const elementTexts = (html: string, name: string) =>
+  [...html.matchAll(new RegExp(`<${name}\\b[^>]*>([\\s\\S]*?)</${name}>`, 'gi'))].map(([, inner]) => withoutTags(inner).trim());
+
+const withoutMarkdownMarks =(text: string) => text.replace(/\*\*[^*]+\*\*\s*|`/g, '');
 const distinctiveContractPhrases = (surfaceBrief: string) => {
   const [, afterHeading = ''] = surfaceBrief.split(directionContractHeading);
   const [contract] = afterHeading.split(/^## /m);
@@ -83,6 +95,48 @@ describe.each(supportedLanguages)('localized home page /%s/', (language) => {
   test('loads no first-party JavaScript', () => {
     expect(firstPartyJavaScript(html)).toEqual([]);
   });
+
+  const { home, profileLinkLabels } = readPortfolioContent(language);
+
+  test('shows the display name as its heading', () => {
+    expect(elementTexts(html, 'h1')).toEqual([home.hero.displayName]);
+  });
+
+  test('describes itself with its meta description', () => {
+    const descriptions = tags(html, 'meta')
+      .map(attributes)
+      .filter((meta) => meta.get('name') === 'description')
+      .map((meta) => meta.get('content'));
+    expect(descriptions).toEqual([home.metaDescription]);
+  });
+
+  test('shows the role', () => {
+    expect(visibleText(html)).toContain(home.hero.role);
+  });
+
+  test.each(readProfileLinks())('links to the $platform profile with a localized accessible name', ({ platform, url }) => {
+    const accessibleNames = tags(html, 'a')
+      .map(attributes)
+      .filter((anchor) => anchor.get('href') === url)
+      .map((anchor) => anchor.get('aria-label'));
+    expect(accessibleNames).toEqual([profileLinkLabels[platform].accessibleName]);
+  });
+
+  test('lists profile links in their content order', () => {
+    const profileLinkUrls = new Set(readProfileLinks().map(({ url }) => url));
+    const linkedUrls = tags(html, 'a')
+      .map((anchor) => attributes(anchor).get('href') ?? '')
+      .filter((href) => profileLinkUrls.has(href));
+    expect(linkedUrls).toEqual([...profileLinkUrls]);
+  });
+
+  test('carries no fictional portfolio notice', () => {
+    expect(visibleText(html)).not.toMatch(/fictional|架空/i);
+  });
+});
+
+test('the Japanese home page shows the name in katakana', () => {
+  expect(elementTexts(readBuildOutput('ja/index.html'), 'h1')).toEqual(['グローヴァ　チャッド']);
 });
 
 describe('404 page', () => {

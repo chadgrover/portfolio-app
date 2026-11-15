@@ -2,16 +2,50 @@ import { describe, expect, test } from 'vitest';
 import { portfolioContentSchema } from './schema';
 
 describe('portfolioContentSchema', () => {
-  const hero = { displayName: 'Example Developer', role: 'Fictional developer', introduction: 'A fictional introduction.' };
-  const requiredHeroFields = ['displayName', 'role', 'introduction'] as const;
+  const hero = { displayName: 'Chad Grover', displayNameLines: ['Chad', 'Grover'], role: 'Full-Stack Developer' };
+  const profileLinkLabels = {
+    linkedin: { name: 'LinkedIn', accessibleName: 'LinkedIn profile' },
+    github: { name: 'GitHub', accessibleName: 'GitHub profile' },
+  };
+  const metaDescription = 'Chad Grover, full-stack developer.';
+  const content = { home: { metaDescription, hero }, profileLinkLabels };
+  const withHero = (overrides: Record<string, unknown>) => ({
+    ...content,
+    home: { metaDescription, hero: { ...hero, ...overrides } },
+  });
+  const requiredHeroFields = ['displayName', 'role'] as const;
 
   test('accepts complete portfolio content', () => {
-    expect(portfolioContentSchema.safeParse({ home: { hero } }).success).toBe(true);
+    expect(portfolioContentSchema.safeParse(content).success).toBe(true);
   });
 
   test('accepts Japanese portfolio content', () => {
-    const japaneseHero = { displayName: '架空の開発者', role: '架空の役職', introduction: 'これは架空の紹介です。' };
-    expect(portfolioContentSchema.safeParse({ home: { hero: japaneseHero } }).success).toBe(true);
+    const japaneseContent = {
+      home: {
+        metaDescription: 'フルスタックエンジニア、グローヴァ　チャッド。',
+        hero: { displayName: 'グローヴァ　チャッド', displayNameLines: ['グローヴァ', 'チャッド'], role: 'フルスタックエンジニア' },
+      },
+      profileLinkLabels: {
+        linkedin: { name: 'LinkedIn', accessibleName: 'LinkedInプロフィール' },
+        github: { name: 'GitHub', accessibleName: 'GitHubプロフィール' },
+      },
+    };
+    expect(portfolioContentSchema.safeParse(japaneseContent).success).toBe(true);
+  });
+
+  test('rejects content missing a platform label', () => {
+    const result = portfolioContentSchema.safeParse({ ...content, profileLinkLabels: { linkedin: profileLinkLabels.linkedin } });
+    expect(result.success).toBe(false);
+    expect(result.error?.issues[0]?.path).toEqual(['profileLinkLabels', 'github']);
+  });
+
+  test.each(['name', 'accessibleName'])('rejects a blank label %s', (field) => {
+    const result = portfolioContentSchema.safeParse({
+      ...content,
+      profileLinkLabels: { ...profileLinkLabels, github: { ...profileLinkLabels.github, [field]: ' ' } },
+    });
+    expect(result.success).toBe(false);
+    expect(result.error?.issues[0]?.path).toEqual(['profileLinkLabels', 'github', field]);
   });
 
   describe.each(requiredHeroFields)('%s', (field) => {
@@ -22,9 +56,33 @@ describe('portfolioContentSchema', () => {
       ['a number', 42],
       ['null', null],
     ])('rejects a value that is %s', (_, value) => {
-      const result = portfolioContentSchema.safeParse({ home: { hero: { ...hero, [field]: value } } });
+      const result = portfolioContentSchema.safeParse(withHero({ [field]: value }));
       expect(result.success).toBe(false);
       expect(result.error?.issues[0]?.path).toEqual(['home', 'hero', field]);
+    });
+  });
+
+  test.each([
+    ['missing', undefined],
+    ['whitespace-only', '  '],
+  ])('rejects a meta description that is %s', (_, value) => {
+    const result = portfolioContentSchema.safeParse({ ...content, home: { ...content.home, metaDescription: value } });
+    expect(result.success).toBe(false);
+    expect(result.error?.issues[0]?.path).toEqual(['home', 'metaDescription']);
+  });
+
+  describe('displayNameLines', () => {
+    test.each([
+      ['missing', undefined],
+      ['empty', []],
+      ['a string', 'Chad Grover'],
+      ['holding a blank line', ['Chad', ' ']],
+      ['spelling a different name', ['Chad', 'Grove']],
+      ['out of order', ['Grover', 'Chad']],
+    ])('rejects lines that are %s', (_, value) => {
+      const result = portfolioContentSchema.safeParse(withHero({ displayNameLines: value }));
+      expect(result.success).toBe(false);
+      expect(result.error?.issues[0]?.path.slice(0, 3)).toEqual(['home', 'hero', 'displayNameLines']);
     });
   });
 });
