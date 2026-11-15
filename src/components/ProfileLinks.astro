@@ -1,0 +1,29 @@
+---
+import { getEntry } from 'astro:content';
+import type { ImageMetadata } from 'astro';
+import githubMark from '../assets/profile-link-marks/github.svg';
+import linkedinMark from '../assets/profile-link-marks/linkedin.png';
+import type { Language } from '../lib/i18n/types';
+import type { ProfileLink, ProfilePlatform } from '../lib/profile-links/types';
+
+interface Props {
+  links: ProfileLink[];
+  language: Language;
+}
+const { links, language } = Astro.props;
+const marks: Record<ProfilePlatform, ImageMetadata> = { linkedin: linkedinMark, github: githubMark };
+const portfolio = await getEntry('portfolio', language);
+const labels = portfolio!.data.profileLinkLabels;
+---
+{links.length > 0 && (
+  <ul class="profile-links" role="list">
+    {links.map(({ platform, url }) => (
+      <li>
+        <a href={url} aria-label={labels[platform].accessibleName}>
+          <span class="mark"><img src={marks[platform].src} alt="" width={marks[platform].width} height={marks[platform].height} /></span>
+          <span class="label">{labels[platform].name}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+)}

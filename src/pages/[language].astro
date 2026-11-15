@@ -1,8 +1,10 @@
 ---
 import Page from '../layouts/Page.astro';
+import ProfileLinks from '../components/ProfileLinks.astro';
 import { supportedLanguages } from '../lib/i18n/constants';
 import type { Language } from '../lib/i18n/types';
 import { getEntry } from 'astro:content';
+import { profileLinksEntryId } from '../content.config';
 import type { PortfolioContent } from '../lib/portfolio-content/types';
 
 export async function getStaticPaths() {
@@ -18,17 +20,18 @@ interface Props {
 }
 const { language, content } = Astro.props;
 const { hero } = content.home;
+const profileLinks = (await getEntry('profileLinks', profileLinksEntryId))!.data.links;
 const labels = { en: 'English', ja: '日本語' };
 ---
 <Page language={language} title={`${hero.displayName} | Portfolio`}>
+  <meta slot="head" name="description" content={content.home.metaDescription} />
   <nav aria-label={language === 'ja' ? '言語' : 'Language'}>
     {supportedLanguages.map((destination) => (
       <a href={`/${destination}/`} lang={destination} hreflang={destination}
         aria-current={language === destination ? 'page' : undefined}>{labels[destination]}</a>
     ))}
   </nav>
-  <p class="notice">{language === 'ja' ? '架空のポートフォリオ・デモ' : 'Fictional portfolio demonstration'}</p>
   <h1>{hero.displayName}</h1>
   <p class="role">{hero.role}</p>
-  <p>{hero.introduction}</p>
+  <ProfileLinks links={profileLinks} language={language} />
 </Page>

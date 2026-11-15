@@ -1,9 +1,12 @@
 import { defineCollection } from 'astro:content';
-import { glob } from 'astro/loaders';
+import { z } from 'astro/zod';
+import { file, glob } from 'astro/loaders';
 import { supportedLanguages } from './lib/i18n/constants';
 import { portfolioContentSchema } from './lib/portfolio-content/schema';
+import { profileLinksSchema } from './lib/profile-links/schema';
 
-const portfolioFiles = glob({ pattern: '*.json', base: './src/content/portfolio' });
+const portfolioDirectory = './src/content/portfolio';
+const portfolioFiles = glob({ pattern: `{${supportedLanguages.join(',')}}.json`, base: portfolioDirectory });
 
 const portfolio = defineCollection({
   loader: {
@@ -19,4 +22,13 @@ const portfolio = defineCollection({
   schema: portfolioContentSchema,
 });
 
-export const collections = { portfolio };
+export const profileLinksEntryId = 'profile-links';
+
+const profileLinks = defineCollection({
+  loader: file(`${portfolioDirectory}/${profileLinksEntryId}.json`, {
+    parser: (text) => ({ [profileLinksEntryId]: { links: JSON.parse(text) } }),
+  }),
+  schema: z.object({ links: profileLinksSchema }),
+});
+
+export const collections = { portfolio, profileLinks };

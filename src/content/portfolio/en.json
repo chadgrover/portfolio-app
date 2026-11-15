@@ -1,9 +1,23 @@
 {
   "home": {
+    "metaDescription": "Chad Grover, full-stack developer working in English and Japanese. LinkedIn and GitHub profiles.",
     "hero": {
-      "displayName": "Example Developer",
-      "role": "Fictional software developer",
-      "introduction": "This fictional portfolio demonstrates a bilingual static website. It does not describe a real person's professional history."
+      "displayName": "Chad Grover",
+      "displayNameLines": [
+        "Chad",
+        "Grover"
+      ],
+      "role": "Full-Stack Developer"
+    }
+  },
+  "profileLinkLabels": {
+    "linkedin": {
+      "name": "LinkedIn",
+      "accessibleName": "LinkedIn profile"
+    },
+    "github": {
+      "name": "GitHub",
+      "accessibleName": "GitHub profile"
     }
   }
 }

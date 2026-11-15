@@ -1,9 +1,23 @@
 {
   "home": {
+    "metaDescription": "フルスタックエンジニア、グローヴァ　チャッド。日本語と英語で仕事をしています。LinkedInとGitHubのプロフィール。",
     "hero": {
-      "displayName": "架空の開発者",
-      "role": "架空のソフトウェア開発者",
-      "introduction": "これは二言語の静的ウェブサイトを紹介する架空のポートフォリオです。実在する人物の職歴を表すものではありません。"
+      "displayName": "グローヴァ　チャッド",
+      "displayNameLines": [
+        "グローヴァ",
+        "チャッド"
+      ],
+      "role": "フルスタックエンジニア"
+    }
+  },
+  "profileLinkLabels": {
+    "linkedin": {
+      "name": "LinkedIn",
+      "accessibleName": "LinkedInプロフィール"
+    },
+    "github": {
+      "name": "GitHub",
+      "accessibleName": "GitHubプロフィール"
     }
   }
 }
