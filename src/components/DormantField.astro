@@ -1,0 +1,67 @@
+---
+import { fieldCharacterAt } from '../lib/dormant-field/characters';
+
+const narrowestGridColumns = 52;
+const tallestScreenRows = 136;
+const fieldCellCount = narrowestGridColumns * tallestScreenRows;
+const driftEvery = 37;
+const driftDelaySteps = 29;
+const cells = Array.from({ length: fieldCellCount }, (_, index) => ({
+  character: fieldCharacterAt(index),
+  drift: index % driftEvery === 0 ? `--drift-delay: ${((index * 7) % driftDelaySteps) / 10}s` : undefined,
+}));
+---
+<div class="dormant-field" aria-hidden="true" data-nosnippet>
+  {cells.map(({ character, drift }) => (drift ? <i class="drift" style={drift}>{character}</i> : <i>{character}</i>))}
+</div>
+
+<style is:global>
+  .dormant-field {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, var(--u));
+    grid-auto-rows: var(--u);
+    justify-content: center;
+    align-content: start;
+    overflow: clip;
+    font-family: var(--mono);
+    font-size: calc(var(--u) * 0.5);
+    line-height: 1;
+    color: var(--dormant);
+    user-select: none;
+  }
+
+  .dormant-field i {
+    display: grid;
+    place-items: center;
+    font-style: normal;
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .dormant-field i {
+      transition:
+        color var(--wake-fade) var(--phosphor-decay),
+        background-color var(--wake-fade) var(--phosphor-decay);
+    }
+
+    .dormant-field i:hover {
+      color: var(--phosphor-trace);
+      background-color: var(--wake-fill);
+      transition-duration: 0s;
+    }
+  }
+
+  @media (hover: none) and (prefers-reduced-motion: no-preference) {
+    .drift {
+      animation: drift 1.8s var(--phosphor-decay) var(--drift-delay) 1;
+    }
+  }
+
+  @keyframes drift {
+    12% {
+      color: var(--phosphor-trace);
+      background-color: var(--wake-fill);
+    }
+  }
+</style>

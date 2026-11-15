@@ -1,11 +1,14 @@
 ---
 import Page from '../layouts/Page.astro';
+import CellLettering from '../components/CellLettering.astro';
 import ProfileLinks from '../components/ProfileLinks.astro';
+import Terminal from '../components/Terminal.astro';
 import { supportedLanguages } from '../lib/i18n/constants';
 import type { Language } from '../lib/i18n/types';
 import { getEntry } from 'astro:content';
 import { profileLinksEntryId } from '../content.config';
 import type { PortfolioContent } from '../lib/portfolio-content/types';
+import { chunksAtPhrases } from '../lib/portfolio-content/phrases';
 
 export async function getStaticPaths() {
   return Promise.all(supportedLanguages.map(async (language) => {
@@ -23,15 +26,95 @@ const { hero } = content.home;
 const profileLinks = (await getEntry('profileLinks', profileLinksEntryId))!.data.links;
 const labels = { en: 'English', ja: '日本語' };
 ---
-<Page language={language} title={`${hero.displayName} | Portfolio`}>
+<Page language={language} title={`${hero.displayName} | ${hero.role}`}>
   <meta slot="head" name="description" content={content.home.metaDescription} />
-  <nav aria-label={language === 'ja' ? '言語' : 'Language'}>
-    {supportedLanguages.map((destination) => (
-      <a href={`/${destination}/`} lang={destination} hreflang={destination}
-        aria-current={language === destination ? 'page' : undefined}>{labels[destination]}</a>
-    ))}
-  </nav>
-  <h1>{hero.displayName}</h1>
-  <p class="role">{hero.role}</p>
-  <ProfileLinks links={profileLinks} language={language} />
+  <Terminal>
+    <header class="masthead">
+      <nav class="language-switch" aria-label={language === 'ja' ? '言語' : 'Language'}>
+        <ul role="list">
+          {supportedLanguages.map((destination) => (
+            <li>
+              <a class="block-control" href={`/${destination}/`} lang={destination} hreflang={destination}
+                aria-current={language === destination ? 'page' : undefined}>{labels[destination]}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      <p class="prompt terminal-line"><span class="prompt-mark" aria-hidden="true">›</span><code lang="en">whoami</code></p>
+    </header>
+    <main class="hero">
+      <h1 class="name">
+        <span class="visually-hidden">{hero.displayName}</span>
+        <CellLettering lines={hero.displayNameLines} />
+      </h1>
+      <p class="role terminal-line">
+        {chunksAtPhrases(hero.role, hero.rolePhrases).map((chunk, index) => (
+          <>{index > 0 && <wbr />}{chunk}</>
+        ))}
+      </p>
+      <ProfileLinks links={profileLinks} language={language} />
+    </main>
+  </Terminal>
 </Page>
+
+<style>
+  .masthead {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .language-switch {
+    align-self: flex-end;
+    max-inline-size: 100%;
+  }
+
+  .language-switch ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .language-switch li + li {
+    margin-inline-start: -1px;
+  }
+
+  .language-switch a {
+    align-items: center;
+    justify-content: center;
+    inline-size: round(up, max(5 * var(--u), 4.7em + 2 * var(--u)), var(--u));
+    letter-spacing: 0.06em;
+  }
+
+  .prompt {
+    margin-block-end: calc(2 * var(--u));
+    font-size: var(--body-size);
+    letter-spacing: 0.08em;
+  }
+
+  .prompt code {
+    font: inherit;
+  }
+
+  .prompt-mark {
+    margin-inline-end: 0.8em;
+    color: var(--phosphor);
+  }
+
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .name {
+    margin-block-end: calc(2 * var(--u));
+  }
+
+  .role {
+    margin-block-end: calc(2 * var(--u));
+    font-size: var(--headline-size);
+    letter-spacing: 0.02em;
+    word-break: keep-all;
+  }
+</style>

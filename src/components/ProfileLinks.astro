@@ -19,11 +19,39 @@ const labels = portfolio!.data.profileLinkLabels;
   <ul class="profile-links" role="list">
     {links.map(({ platform, url }) => (
       <li>
-        <a href={url} aria-label={labels[platform].accessibleName}>
-          <span class="mark"><img src={marks[platform].src} alt="" width={marks[platform].width} height={marks[platform].height} /></span>
+        <a class="block-control" href={url} aria-label={labels[platform].accessibleName}>
+          <span class="mark-tile"><img src={marks[platform].src} alt="" width={marks[platform].width} height={marks[platform].height} /></span>
           <span class="label">{labels[platform].name}</span>
         </a>
       </li>
     ))}
   </ul>
 )}
+
+<style>
+  .profile-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--u);
+  }
+
+  .mark-tile {
+    display: grid;
+    place-items: center;
+    flex: none;
+    inline-size: calc(var(--control) - 2px);
+    background: #fff;
+  }
+
+  .mark-tile img {
+    inline-size: 62%;
+    block-size: 62%;
+    object-fit: contain;
+  }
+
+  .label {
+    display: grid;
+    place-items: center;
+    padding-inline: calc(var(--u) - 1px);
+  }
+</style>

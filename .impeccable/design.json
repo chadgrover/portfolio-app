@@ -1,0 +1,272 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-15T15:03:36+00:00",
+  "title": "Design System: Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "phosphor-blue": {
+        "role": "primary",
+        "displayName": "Phosphor Blue",
+        "tonalRamp": [
+          "oklch(15% 0.06 228)",
+          "oklch(25% 0.08 228)",
+          "oklch(35% 0.1 228)",
+          "oklch(48% 0.126 228)",
+          "oklch(62% 0.146 228)",
+          "oklch(75% 0.12 228)",
+          "oklch(86% 0.098 228)",
+          "oklch(95% 0.08 228)"
+        ]
+      },
+      "phosphor-trace": {
+        "role": "secondary",
+        "displayName": "Phosphor Trace",
+        "tonalRamp": [
+          "oklch(15% 0.044 228)",
+          "oklch(25% 0.059 228)",
+          "oklch(35% 0.073 228)",
+          "oklch(48% 0.092 228)",
+          "oklch(62% 0.107 228)",
+          "oklch(75% 0.088 228)",
+          "oklch(86% 0.072 228)",
+          "oklch(95% 0.059 228)"
+        ]
+      },
+      "black-glass": {
+        "role": "neutral",
+        "displayName": "Black Glass",
+        "tonalRamp": [
+          "oklch(15% 0.008 228)",
+          "oklch(25% 0.011 228)",
+          "oklch(35% 0.013 228)",
+          "oklch(48% 0.017 228)",
+          "oklch(62% 0.019 228)",
+          "oklch(75% 0.016 228)",
+          "oklch(86% 0.013 228)",
+          "oklch(95% 0.011 228)"
+        ]
+      },
+      "phosphor-white": {
+        "role": "neutral",
+        "displayName": "Phosphor White",
+        "tonalRamp": [
+          "oklch(15% 0.016 228)",
+          "oklch(25% 0.021 228)",
+          "oklch(35% 0.027 228)",
+          "oklch(48% 0.034 228)",
+          "oklch(62% 0.039 228)",
+          "oklch(75% 0.032 228)",
+          "oklch(86% 0.026 228)",
+          "oklch(95% 0.021 228)"
+        ]
+      },
+      "dormant-cell": {
+        "role": "neutral",
+        "displayName": "Dormant Cell",
+        "tonalRamp": [
+          "oklch(15% 0.024 228)",
+          "oklch(25% 0.032 228)",
+          "oklch(35% 0.04 228)",
+          "oklch(48% 0.05 228)",
+          "oklch(62% 0.058 228)",
+          "oklch(75% 0.048 228)",
+          "oklch(86% 0.039 228)",
+          "oklch(95% 0.032 228)"
+        ]
+      },
+      "mark-tile-white": {
+        "role": "neutral",
+        "displayName": "Mark Tile White",
+        "tonalRamp": [
+          "#ffffff"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Cell Lettering",
+        "purpose": "The owner's name and the 404 status code, drawn as lit cells from Misaki Gothic 2nd."
+      },
+      "headline": {
+        "displayName": "Role",
+        "purpose": "The role line and 404 headings; real text."
+      },
+      "body": {
+        "displayName": "Prompt",
+        "purpose": "The whoami prompt and 404 explanatory text."
+      },
+      "label": {
+        "displayName": "Control Label",
+        "purpose": "Text inside block controls."
+      },
+      "field": {
+        "displayName": "Field Character",
+        "purpose": "Dormant field characters and characters inside lit cells."
+      }
+    },
+    "shadows": [
+      {
+        "name": "phosphor-bloom",
+        "value": "inset 0 0 0 max(1px, calc(var(--u) * 0.05)) var(--ground), 0 0 calc(var(--u) * 0.7) rgb(57 200 255 / 0.45)",
+        "purpose": "Lit cells only: ground-coloured inner hairline separating cells plus an unoffset phosphor glow."
+      }
+    ],
+    "motion": [
+      {
+        "name": "phosphor-decay",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Easing for every wake fade and the touch drift."
+      },
+      {
+        "name": "wake-fade",
+        "value": "3s",
+        "purpose": "Decay time of a woken field cell or a hovered lit cell; the wake itself is instant (0s)."
+      },
+      {
+        "name": "wake-fill",
+        "value": "rgb(127 220 255 / 0.12)",
+        "purpose": "Background of a woken or drifting field cell."
+      },
+      {
+        "name": "sweep",
+        "value": "clip-path inset 100% to 0 from the right, steps(columns, jump-start), columns × 22ms, 180ms delay, once",
+        "purpose": "Left-to-right reveal of each lettering line on load."
+      },
+      {
+        "name": "drift",
+        "value": "1.8s phosphor-decay, staggered 0–2.8s delays, one iteration, every 37th cell",
+        "purpose": "Touch-only (hover: none) sparse pulse that ends within 5s."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "prefers-reduced-motion: reduce",
+        "purpose": "Disables sweep, wake, drift and lit-cell transitions; the name renders fully lit."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "narrow-grid",
+        "value": "40rem",
+        "purpose": "Below: 52 columns, 2-column margins. At and above: 60 columns, 4-column margins."
+      },
+      {
+        "name": "lit-characters",
+        "value": "60rem wide / 32rem tall",
+        "purpose": "Below either: lit cells hide their field character."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Block Control",
+      "kind": "button",
+      "refersTo": "block-control",
+      "description": "Outlined square block for links and actions; inverts to solid phosphor when hovered or current.",
+      "html": "<a class=\"ds-block-control\" href=\"#\">English home</a>",
+      "css": ".ds-block-control { position: relative; display: inline-flex; align-items: center; height: 48px; padding-inline: 23px; border: 1px solid #39c8ff; color: #e6fbff; background: #020507; text-decoration: none; font-family: 'Azeret Mono', ui-monospace, monospace; font-weight: 500; font-size: 16px; letter-spacing: 0.08em; border-radius: 0; } .ds-block-control::after { content: ''; position: absolute; inset-inline: -1px; inset-block: min(-1px, calc(50% - 22px)); } .ds-block-control:hover { color: #020507; background: #39c8ff; } .ds-block-control:focus-visible { outline: 2px solid #e6fbff; outline-offset: 3px; }"
+    },
+    {
+      "name": "Language Switch",
+      "kind": "nav",
+      "refersTo": "block-control-current",
+      "description": "Two joined block controls; the current language is filled.",
+      "html": "<nav class=\"ds-lang\" aria-label=\"Language\"><a class=\"ds-lang-item\" href=\"#\" aria-current=\"page\">English</a><a class=\"ds-lang-item\" href=\"#\" lang=\"ja\">日本語</a></nav>",
+      "css": ".ds-lang { display: flex; } .ds-lang-item { display: flex; align-items: center; justify-content: center; inline-size: 144px; height: 48px; border: 1px solid #39c8ff; color: #e6fbff; background: #020507; text-decoration: none; font-family: 'Azeret Mono', ui-monospace, monospace; font-weight: 500; font-size: 16px; letter-spacing: 0.06em; } .ds-lang-item + .ds-lang-item { margin-inline-start: -1px; } .ds-lang-item:hover, .ds-lang-item[aria-current='page'] { color: #020507; background: #39c8ff; } .ds-lang-item:focus-visible { outline: 2px solid #e6fbff; outline-offset: 3px; }"
+    },
+    {
+      "name": "Profile Link",
+      "kind": "button",
+      "refersTo": "mark-tile",
+      "description": "Block control with an official platform mark on a white tile at its left and the platform name at its right.",
+      "html": "<a class=\"ds-profile\" href=\"#\"><span class=\"ds-profile-tile\"><svg viewBox=\"0 0 16 16\" width=\"28\" height=\"28\" aria-hidden=\"true\"><path fill=\"#000\" d=\"M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z\"/></svg></span><span class=\"ds-profile-label\">GitHub</span></a>",
+      "css": ".ds-profile { display: inline-flex; align-items: stretch; height: 48px; border: 1px solid #39c8ff; color: #e6fbff; background: #020507; text-decoration: none; font-family: 'Azeret Mono', ui-monospace, monospace; font-weight: 500; font-size: 16px; letter-spacing: 0.08em; } .ds-profile-tile { display: grid; place-items: center; inline-size: 46px; background: #fff; } .ds-profile-label { display: grid; place-items: center; padding-inline: 23px; } .ds-profile:hover { color: #020507; background: #39c8ff; } .ds-profile:focus-visible { outline: 2px solid #e6fbff; outline-offset: 3px; }"
+    },
+    {
+      "name": "Dormant Field",
+      "kind": "custom",
+      "refersTo": "dormant-cell",
+      "description": "Background grid of code characters that wake under the pointer and decay over 3s.",
+      "html": "<div class=\"ds-field\" aria-hidden=\"true\"><i>c</i><i>o</i><i>n</i><i>s</i><i>t</i><i> </i><i>u</i><i>=</i><i>m</i><i>i</i><i>n</i><i>(</i><i>1</i><i>0</i><i>0</i><i>c</i><i>q</i><i>i</i><i>/</i><i>6</i><i>0</i><i>)</i><i>;</i><i>}</i></div>",
+      "css": ".ds-field { display: grid; grid-template-columns: repeat(12, 24px); grid-auto-rows: 24px; background: #020507; font-family: 'Azeret Mono', ui-monospace, monospace; font-size: 12px; line-height: 1; color: #0e2c3c; } .ds-field i { display: grid; place-items: center; font-style: normal; transition: color 3s cubic-bezier(0.16, 1, 0.3, 1), background-color 3s cubic-bezier(0.16, 1, 0.3, 1); } .ds-field i:hover { color: #7fdcff; background-color: rgb(127 220 255 / 0.12); transition-duration: 0s; } @media (prefers-reduced-motion: reduce) { .ds-field i { transition: none; } }"
+    },
+    {
+      "name": "Cell Lettering",
+      "kind": "custom",
+      "refersTo": "lit-cell",
+      "description": "Display lettering as lit cells with a phosphor bloom; sweeps on left to right once.",
+      "html": "<span class=\"ds-cells\" aria-hidden=\"true\"><i class=\"on\"></i><i class=\"on\"></i><i class=\"on\"></i><i class=\"on\"></i><i></i><i></i><i></i><i></i><i class=\"on\"></i><i class=\"on\"></i><i class=\"on\"></i><i></i><i class=\"on\"></i><i></i><i></i><i></i><i class=\"on\"></i><i class=\"on\"></i><i class=\"on\"></i><i class=\"on\"></i></span>",
+      "css": ".ds-cells { display: grid; grid-template-columns: repeat(4, 24px); grid-auto-rows: 24px; padding: 16px; background: #020507; animation: ds-sweep 88ms steps(4, jump-start) 180ms backwards; } .ds-cells .on { background: #39c8ff; box-shadow: inset 0 0 0 1px #020507, 0 0 17px rgb(57 200 255 / 0.45); transition: background-color 3s cubic-bezier(0.16, 1, 0.3, 1); } .ds-cells .on:hover { background: #e6fbff; transition-duration: 0s; } @keyframes ds-sweep { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } } @media (prefers-reduced-motion: reduce) { .ds-cells { animation: none; } .ds-cells .on { transition: none; } }"
+    },
+    {
+      "name": "Prompt Line",
+      "kind": "custom",
+      "refersTo": "body",
+      "description": "Phosphor-blue prompt mark followed by an English code command.",
+      "html": "<p class=\"ds-prompt\"><span aria-hidden=\"true\">›</span><code lang=\"en\">whoami</code></p>",
+      "css": ".ds-prompt { margin: 0; background: #020507; color: #e6fbff; font-family: 'Azeret Mono', ui-monospace, monospace; font-weight: 500; font-size: 17px; letter-spacing: 0.08em; line-height: 48px; } .ds-prompt span { margin-inline-end: 0.8em; color: #39c8ff; } .ds-prompt code { font: inherit; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Phosphor Wake",
+    "overview": "The page is a dark terminal screen. Its background is a full grid of faint code characters that sit almost invisible until the pointer passes over them; each touched cell flares and then settles back over a few seconds, like persistence on an old phosphor tube. The name is not set in a font. It is drawn out of that same grid as solid lit cells, so the identity and the screen are one material. Everything else is plain, real text in a monospace voice.\n\nDensity is low and deliberate: one column, one left edge, a handful of elements spaced in whole cells. The register is late-twentieth-century screen graphics and developer tooling, carried entirely by grid, glow and colour, never by borrowed imagery. The system is dark only and uses a single hue family, so it reads the same way to English and Japanese visitors.",
+    "keyCharacteristics": [
+      "One cell unit (`--u`) measures every position, size and gap on the page.",
+      "One phosphor hue (blue) in four steps on a near-black ground; no second accent.",
+      "Display lettering is lit cells from an 8×8 bitmap face; all other text is live text.",
+      "Square, outlined controls that invert to solid phosphor when current or hovered.",
+      "Motion is CSS only, short, and fully disabled under reduced motion."
+    ],
+    "rules": [
+      {
+        "name": "The One Phosphor Rule",
+        "body": "Every colour on the page is a step of the blue phosphor family or the black ground. Do not add a second hue. Red is excluded outright: it reads as alarm in both languages, and a living person's name is not written in red in Japan.",
+        "section": "colors"
+      },
+      {
+        "name": "The Dark Only Rule",
+        "body": "`color-scheme: dark` is the only scheme. There is no light theme and no theme toggle.",
+        "section": "colors"
+      },
+      {
+        "name": "The Cells Are Only For Display Rule",
+        "body": "Only the name and other display lettering are drawn as cells. The role and every other line stay real text in Azeret Mono or system gothic, so they meet WCAG 1.4.4 (resize text) and 1.4.5 (images of text). The lettering itself is `aria-hidden`, with the real name in a visually hidden heading.",
+        "section": "typography"
+      },
+      {
+        "name": "The Content Breaks Lines Rule",
+        "body": "Line and phrase breaks come from per-language content (`displayNameLines`, `rolePhrases`). Code never splits a name or a role; it only inserts break opportunities between the phrases content supplies.",
+        "section": "typography"
+      },
+      {
+        "name": "The Whole Cell Rule",
+        "body": "Text line heights round up to whole cells (at least 2 cells, at least 1.5em), so every line box lands back on the grid.",
+        "section": "typography"
+      },
+      {
+        "name": "The Whole Cell Rule (layout)",
+        "body": "Every element measures whole cells. If a value cannot be expressed as a multiple of `--u` (or rounded up to one), it does not belong in this system.",
+        "section": "layout"
+      },
+      {
+        "name": "The Glow Not Shadow Rule",
+        "body": "Depth is emitted light around lit cells only. No offset shadows, no layered cards, no blur panels.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** size and place everything in whole cells of `--u`: 2-cell controls, 2-cell vertical gaps, line heights rounded up to the cell.",
+      "**Do** keep motion in CSS with zero first-party JavaScript, and turn all of it off under `prefers-reduced-motion: reduce`, leaving the name fully lit.",
+      "**Do** draw display lettering from Misaki Gothic 2nd at build time, mapping Latin to full-width forms.",
+      "**Do** take name and role breaks from per-language content, never from code.",
+      "**Do** show third-party marks as official artwork, unmodified, on the white mark tile.",
+      "**Do** give every interactive target at least 44px of hit area."
+    ],
+    "donts": [
+      "**Don't** add a light theme or a second hue; never use red.",
+      "**Don't** render the role, body copy or any control label as cells or as an image of text.",
+      "**Don't** ship Misaki Gothic 2nd, or any Japanese web font, as a font file.",
+      "**Don't** round corners or add offset shadows; the only depth is the lit-cell glow.",
+      "**Don't** add JavaScript-driven animation, looping motion, or touch motion that runs past 5s."
+    ]
+  }
+}

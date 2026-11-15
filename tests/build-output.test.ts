@@ -1,5 +1,5 @@
 import { readFileSync, readdirSync } from 'node:fs';
-import { extname, join, relative } from 'node:path';
+import { basename, extname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gzipSync } from 'node:zlib';
 import { describe, expect, test } from 'vitest';
@@ -51,10 +51,31 @@ const readPortfolioContent = (language: Language): PortfolioContent => readConte
 const readProfileLinks = (): ProfileLink[] => readContentFile('profile-links.json');
 const withoutTags = (html: string) => html.replace(/<[^>]*>/g, '');
 const visibleText = (html: string) => withoutTags(html.replace(/<(script|style)\b[\s\S]*?<\/\1>/gi, ''));
-const elementTexts = (html: string, name: string) =>
-  [...html.matchAll(new RegExp(`<${name}\\b[^>]*>([\\s\\S]*?)</${name}>`, 'gi'))].map(([, inner]) => withoutTags(inner).trim());
+const elementBodies = (html: string, name: string) =>
+  [...html.matchAll(new RegExp(`<${name}\\b[^>]*>([\\s\\S]*?)</${name}>`, 'gi'))].map(([, inner]) => inner);
+const elementTexts = (html: string, name: string) => elementBodies(html, name).map((inner) => withoutTags(inner).trim());
 
-const withoutMarkdownMarks =(text: string) => text.replace(/\*\*[^*]+\*\*\s*|`/g, '');
+const japaneseCodePoints = [
+  [0x3000, 0x30ff],
+  [0x3400, 0x4dbf],
+  [0x4e00, 0x9fff],
+  [0xf900, 0xfaff],
+  [0xff00, 0xffef],
+];
+const fontFaceRules = (css: string) => css.match(/@font-face\s*{[^}]*}/gi) ?? [];
+const unicodeRangesOf = (fontFace: string) =>
+  (fontFace.match(/unicode-range\s*:\s*([^;}]+)/i)?.[1] ?? '')
+    .split(',')
+    .map((range) => range.trim())
+    .filter((range) => range !== '')
+    .map((range) => {
+      const [start, end = start] = range.replace(/^u\+/i, '').split('-');
+      return [parseInt(start.replace(/\?/g, '0'), 16), parseInt(end.replace(/\?/g, 'f'), 16)];
+    });
+const coversJapanese = ([start, end]: number[]) =>
+  japaneseCodePoints.some(([japaneseStart, japaneseEnd]) => start <= japaneseEnd && end >= japaneseStart);
+
+const withoutMarkdownMarks = (text: string) => text.replace(/\*\*[^*]+\*\*\s*|`/g, '');
 const distinctiveContractPhrases = (surfaceBrief: string) => {
   const [, afterHeading = ''] = surfaceBrief.split(directionContractHeading);
   const [contract] = afterHeading.split(/^## /m);
@@ -100,6 +121,20 @@ describe.each(supportedLanguages)('localized home page /%s/', (language) => {
 
   test('shows the display name as its heading', () => {
     expect(elementTexts(html, 'h1')).toEqual([home.hero.displayName]);
+  });
+
+  test('titles itself with the display name and role', () => {
+    expect(elementTexts(html, 'title')).toEqual([`${home.hero.displayName} | ${home.hero.role}`]);
+  });
+
+  test('offers a language switch that marks only the current language', () => {
+    const switchAnchors = elementBodies(html, 'nav')
+      .flatMap((nav) => tags(nav, 'a'))
+      .map(attributes)
+      .filter((anchor) => supportedLanguages.some((destination) => anchor.get('href') === `/${destination}/`));
+    expect(switchAnchors.map((anchor) => [anchor.get('href'), anchor.get('aria-current')])).toEqual(
+      supportedLanguages.map((destination) => [`/${destination}/`, destination === language ? 'page' : undefined]),
+    );
   });
 
   test('describes itself with its meta description', () => {
@@ -163,6 +198,30 @@ describe('performance budgets', () => {
       .reduce((total, path) => total + compressedSize(readBuildOutputBytes(path)), 0);
     expect(webFontBytes).toBeLessThanOrEqual(webFontBudgetBytes);
   });
+
+  test.each(buildOutputFiles.filter((path) => extname(path) === '.html'))(
+    '%s declares only web fonts that leave Japanese text to system fonts',
+    (path) => {
+      const fontFaces = fontFaceRules(deliveredCss(readBuildOutput(path), path));
+      const fontFacesReachingJapanese = fontFaces.filter((fontFace) => {
+        const ranges = unicodeRangesOf(fontFace);
+        return ranges.length === 0 || ranges.some(coversJapanese);
+      });
+      expect(fontFacesReachingJapanese).toEqual([]);
+    },
+  );
+
+  test.each(buildOutputFiles.filter((path) => webFontExtensions.includes(extname(path))))(
+    '%s is a web font declared for Latin text only',
+    (fontPath) => {
+      const declaringFontFaces = buildOutputFiles
+        .filter((path) => extname(path) === '.html')
+        .flatMap((path) => fontFaceRules(deliveredCss(readBuildOutput(path), path)))
+        .filter((fontFace) => fontFace.includes(basename(fontPath)));
+      expect(declaringFontFaces).not.toEqual([]);
+      expect(declaringFontFaces.filter((fontFace) => unicodeRangesOf(fontFace).some(coversJapanese))).toEqual([]);
+    },
+  );
 });
 
 describe('direction contracts', () => {

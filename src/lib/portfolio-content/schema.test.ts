@@ -2,7 +2,7 @@ import { describe, expect, test } from 'vitest';
 import { portfolioContentSchema } from './schema';
 
 describe('portfolioContentSchema', () => {
-  const hero = { displayName: 'Chad Grover', displayNameLines: ['Chad', 'Grover'], role: 'Full-Stack Developer' };
+  const hero = { displayName: 'Chad Grover', displayNameLines: ['Chad', 'Grover'], role: 'Full-Stack Developer', rolePhrases: ['Full-Stack', 'Developer'] };
   const profileLinkLabels = {
     linkedin: { name: 'LinkedIn', accessibleName: 'LinkedIn profile' },
     github: { name: 'GitHub', accessibleName: 'GitHub profile' },
@@ -23,7 +23,7 @@ describe('portfolioContentSchema', () => {
     const japaneseContent = {
       home: {
         metaDescription: 'フルスタックエンジニア、グローヴァ　チャッド。',
-        hero: { displayName: 'グローヴァ　チャッド', displayNameLines: ['グローヴァ', 'チャッド'], role: 'フルスタックエンジニア' },
+        hero: { displayName: 'グローヴァ　チャッド', displayNameLines: ['グローヴァ', 'チャッド'], role: 'フルスタックエンジニア', rolePhrases: ['フルスタック', 'エンジニア'] },
       },
       profileLinkLabels: {
         linkedin: { name: 'LinkedIn', accessibleName: 'LinkedInプロフィール' },
@@ -69,6 +69,20 @@ describe('portfolioContentSchema', () => {
     const result = portfolioContentSchema.safeParse({ ...content, home: { ...content.home, metaDescription: value } });
     expect(result.success).toBe(false);
     expect(result.error?.issues[0]?.path).toEqual(['home', 'metaDescription']);
+  });
+
+  describe('rolePhrases', () => {
+    test.each([
+      ['missing', undefined],
+      ['empty', []],
+      ['holding a blank phrase', ['Full-Stack', ' ']],
+      ['spelling a different role', ['Full-Stack', 'Engineer']],
+      ['out of order', ['Developer', 'Full-Stack']],
+    ])('rejects phrases that are %s', (_, value) => {
+      const result = portfolioContentSchema.safeParse(withHero({ rolePhrases: value }));
+      expect(result.success).toBe(false);
+      expect(result.error?.issues[0]?.path.slice(0, 3)).toEqual(['home', 'hero', 'rolePhrases']);
+    });
   });
 
   describe('displayNameLines', () => {

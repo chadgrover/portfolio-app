@@ -7,7 +7,11 @@
         "Chad",
         "Grover"
       ],
-      "role": "Full-Stack Developer"
+      "role": "Full-Stack Developer",
+      "rolePhrases": [
+        "Full-Stack",
+        "Developer"
+      ]
     }
   },
   "profileLinkLabels": {
