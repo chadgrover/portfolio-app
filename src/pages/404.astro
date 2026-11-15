@@ -1,11 +1,57 @@
 ---
 import Page from '../layouts/Page.astro';
+import CellLettering from '../components/CellLettering.astro';
+import Terminal from '../components/Terminal.astro';
 ---
 <Page language="en" title="Page not found / ページが見つかりません">
-  <h1>Page not found</h1>
-  <p>The requested page could not be found. <a href="/en/" hreflang="en">English home</a></p>
-  <section lang="ja">
-    <h2>ページが見つかりません</h2>
-    <p>お探しのページは見つかりませんでした。<a href="/ja/" hreflang="ja">日本語のホーム</a></p>
-  </section>
+  <Terminal>
+    <main class="not-found">
+      <CellLettering lines={['404']} />
+      <h1 class="terminal-line">Page not found</h1>
+      <p class="terminal-line">The requested page could not be found.</p>
+      <section lang="ja">
+        <h2 class="terminal-line">ページが見つかりません</h2>
+        <p class="terminal-line">お探しのページは見つかりませんでした。</p>
+      </section>
+      <ul class="homes" role="list">
+        <li><a class="block-control" href="/en/" hreflang="en">English home</a></li>
+        <li><a class="block-control" href="/ja/" lang="ja" hreflang="ja">日本語のホーム</a></li>
+      </ul>
+    </main>
+  </Terminal>
 </Page>
+
+<style>
+  .not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-block-start: calc(2 * var(--u));
+    font-size: var(--body-size);
+    letter-spacing: 0.04em;
+  }
+
+  .not-found :global(.cell-lettering) {
+    margin-block-end: calc(2 * var(--u));
+  }
+
+  h1,
+  h2 {
+    font-size: var(--headline-size);
+  }
+
+  section {
+    margin-block: calc(2 * var(--u));
+  }
+
+  .homes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--u);
+  }
+
+  .homes a {
+    align-items: center;
+    padding-inline: calc(var(--u) - 1px);
+  }
+</style>

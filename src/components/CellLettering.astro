@@ -1,0 +1,90 @@
+---
+import { letterCells } from '../lib/cell-lettering/lettering';
+import { fieldCharacterAt } from '../lib/dormant-field/characters';
+
+interface Props {
+  lines: string[];
+}
+const { lines } = Astro.props;
+const letteredLines = lines.map(letterCells);
+const cellsBefore = (lineIndex: number) =>
+  letteredLines.slice(0, lineIndex).reduce((total, rows) => total + rows.length * rows[0].length, 0);
+---
+<span class="cell-lettering" aria-hidden="true">
+  {letteredLines.map((rows, lineIndex) => {
+    const columns = rows[0].length;
+    return (
+      <span class="cell-line" style={`--columns: ${columns}`}>
+        {rows.flatMap((row, rowIndex) =>
+          row.map((lit, column) =>
+            lit ? <i class="lit" data-character={fieldCharacterAt(cellsBefore(lineIndex) + rowIndex * columns + column)} /> : <i />,
+          ),
+        )}
+      </span>
+    );
+  })}
+</span>
+
+<style is:global>
+  .cell-lettering {
+    display: grid;
+    row-gap: calc(2 * var(--u));
+    pointer-events: none;
+  }
+
+  .cell-line {
+    display: grid;
+    grid-template-columns: repeat(var(--columns), var(--u));
+    grid-auto-rows: var(--u);
+    animation: sweep calc(var(--columns) * 22ms) steps(var(--columns), jump-start) 180ms backwards;
+  }
+
+  .lit {
+    display: grid;
+    place-items: center;
+    pointer-events: auto;
+    font-family: var(--mono);
+    font-size: calc(var(--u) * 0.5);
+    font-style: normal;
+    line-height: 1;
+    color: var(--ground);
+    background-color: var(--phosphor);
+    box-shadow:
+      inset 0 0 0 max(1px, calc(var(--u) * 0.05)) var(--ground),
+      0 0 calc(var(--u) * 0.7) var(--phosphor-bloom);
+    transition: background-color var(--wake-fade) var(--phosphor-decay);
+  }
+
+  .lit::before {
+    content: attr(data-character);
+  }
+
+  @media (width < 60rem), (height < 32rem) {
+    .lit::before {
+      content: none;
+    }
+  }
+
+  .lit:hover {
+    background-color: var(--phosphor-white);
+    transition-duration: 0s;
+  }
+
+  @keyframes sweep {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cell-line {
+      animation: none;
+    }
+    .lit {
+      transition: none;
+    }
+  }
+</style>

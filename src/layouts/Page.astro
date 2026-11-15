@@ -1,5 +1,6 @@
 ---
 import type { Language } from '../lib/i18n/types';
+import azeretMono from '../assets/fonts/azeret-mono-500-latin.woff2?url';
 import '../styles/global.css';
 interface Props {
   language: Language;
@@ -13,7 +14,8 @@ const { language, title } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>{title}</title>
+    <link rel="preload" href={azeretMono} as="font" type="font/woff2" crossorigin />
     <slot name="head" />
   </head>
-  <body><main><slot /></main></body>
+  <body><slot /></body>
 </html>

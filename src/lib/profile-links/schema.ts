@@ -1,6 +1,6 @@
 import { z } from 'astro/zod';
 
-export const profilePlatforms = ['linkedin', 'github'] as const;
+const profilePlatforms = ['linkedin', 'github'] as const;
 
 export const profilePlatformSchema = z.enum(profilePlatforms);
 

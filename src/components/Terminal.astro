@@ -1,0 +1,47 @@
+---
+import DormantField from './DormantField.astro';
+---
+<div class="terminal">
+  <DormantField />
+  <div class="terminal-layer">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .terminal {
+    --grid-columns: 60;
+    --margin-columns: 4;
+    --u: min(100cqi / var(--grid-columns), 100svh / 32);
+    --control: round(up, max(2 * var(--u), 2.5rem), var(--u));
+    --headline-size: max(1.125rem, calc(var(--u) * 1.15));
+    --body-size: max(1rem, calc(var(--u) * 0.7));
+    container-type: inline-size;
+    position: relative;
+    min-height: 100svh;
+    overflow: clip;
+  }
+
+  .terminal-layer {
+    position: relative;
+    box-sizing: border-box;
+    inline-size: round(down, 100cqi, var(--u));
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: var(--u) calc(var(--margin-columns) * var(--u)) calc(3 * var(--u));
+    pointer-events: none;
+  }
+
+  @media (width < 40rem) {
+    .terminal {
+      --grid-columns: 52;
+      --margin-columns: 2;
+    }
+  }
+
+  .terminal-layer :global(a) {
+    pointer-events: auto;
+  }
+</style>

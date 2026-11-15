@@ -1,9 +1,111 @@
-:root { font-family: system-ui, sans-serif; color: #20252b; background: #faf9f6; line-height: 1.7; }
-body { margin: 0; }
-main { max-width: 44rem; margin: 0 auto; padding: 3rem 1.5rem; overflow-wrap: anywhere; }
-nav { display: flex; gap: 1.5rem; margin-bottom: 3rem; }
-a { color: #215b85; text-underline-offset: .2em; }
-a[aria-current="page"] { font-weight: 700; }
-a:focus-visible { outline: 3px solid #215b85; outline-offset: 5px; }
-h1 { line-height: 1.2; font-size: clamp(2rem, 7vw, 3rem); }
-.role { font-weight: 600; }
+@font-face {
+  font-family: 'Azeret Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../assets/fonts/azeret-mono-500-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  --ground: #020507;
+  --phosphor: #39c8ff;
+  --phosphor-trace: #7fdcff;
+  --phosphor-white: #e6fbff;
+  --dormant: #0e2c3c;
+  --phosphor-decay: cubic-bezier(0.16, 1, 0.3, 1);
+  --wake-fade: 3s;
+  --wake-fill: color-mix(in srgb, var(--phosphor-trace) 12%, transparent);
+  --phosphor-bloom: color-mix(in srgb, var(--phosphor) 45%, transparent);
+  --mono: 'Azeret Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  --gothic: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic Medium', 'Yu Gothic', YuGothic, 'Noto Sans JP', Meiryo, sans-serif;
+  color-scheme: dark;
+  scrollbar-color: var(--dormant) var(--ground);
+  font-family: var(--mono);
+  font-weight: 500;
+  color: var(--phosphor-white);
+  background: var(--ground);
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+:lang(ja) {
+  font-family: 'Azeret Mono', var(--gothic);
+  line-break: strict;
+  word-break: auto-phrase;
+}
+
+body {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+h1,
+h2,
+p,
+ul {
+  margin: 0;
+  font: inherit;
+}
+
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: var(--phosphor);
+  text-underline-offset: 0.25em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--phosphor-white);
+  outline-offset: 3px;
+}
+
+::selection {
+  color: var(--ground);
+  background: var(--phosphor);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.block-control {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  height: var(--control);
+  border: 1px solid var(--phosphor);
+  color: var(--phosphor-white);
+  background: var(--ground);
+  text-decoration: none;
+  font-size: max(1rem, calc(var(--u) * 0.68));
+  letter-spacing: 0.08em;
+}
+
+.block-control::after {
+  content: '';
+  position: absolute;
+  inset-inline: -1px;
+  inset-block: min(-1px, calc(50% - 22px));
+}
+
+.block-control:hover,
+.block-control[aria-current='page'] {
+  color: var(--ground);
+  background: var(--phosphor);
+}
+
+.terminal-line {
+  pointer-events: auto;
+  line-height: round(up, max(2 * var(--u), 1.5em), var(--u));
+}
