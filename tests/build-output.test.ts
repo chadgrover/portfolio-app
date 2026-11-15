@@ -6,11 +6,15 @@ import { describe, expect, test } from 'vitest';
 import { supportedLanguages } from '../src/lib/i18n/constants';
 
 const distDirectory = fileURLToPath(new URL('../dist/', import.meta.url));
+const surfaceBriefDirectory = fileURLToPath(new URL('../.impeccable/surfaces/', import.meta.url));
 const siteOrigin = 'https://site.invalid/';
 const bytesPerKilobyte = 1000;
 const cssBudgetBytes = 20_000;
 const webFontBudgetBytes = 60_000;
 const webFontExtensions = ['.woff2', '.woff', '.ttf', '.otf'];
+const directionContractHeading = '## Direction contract';
+const shortestDistinctiveSentenceLength = 40;
+const seedReferencePattern = /seed:[0-9a-f]{16}/g;
 
 const buildOutputFiles = readdirSync(distDirectory, { recursive: true, withFileTypes: true })
   .filter((entry) => entry.isFile())
@@ -37,6 +41,17 @@ const isJavaScriptType = (type: string) =>
   ['', 'module'].includes(type.trim().toLowerCase()) || /(?:java|ecma)script/i.test(type);
 const buildOutputPathOf = (href: string, pagePath: string) =>
   decodeURIComponent(new URL(href, new URL(pagePath, siteOrigin)).pathname.slice(1));
+
+const withoutMarkdownMarks = (text: string) => text.replace(/\*\*[^*]+\*\*\s*|`/g, '');
+const distinctiveContractPhrases = (surfaceBrief: string) => {
+  const [, afterHeading = ''] = surfaceBrief.split(directionContractHeading);
+  const [contract] = afterHeading.split(/^## /m);
+  const sentences = withoutMarkdownMarks(contract)
+    .split(/\n|(?<=\.)\s/)
+    .map((sentence) => sentence.trim())
+    .filter((sentence) => sentence.length >= shortestDistinctiveSentenceLength);
+  return [...sentences, ...(contract.match(seedReferencePattern) ?? [])];
+};
 
 const firstPartyJavaScript = (html: string) => [
   ...tags(html, 'script').filter((tag) => {
@@ -93,5 +108,20 @@ describe('performance budgets', () => {
       .filter((path) => webFontExtensions.includes(extname(path)))
       .reduce((total, path) => total + compressedSize(readBuildOutputBytes(path)), 0);
     expect(webFontBytes).toBeLessThanOrEqual(webFontBudgetBytes);
+  });
+});
+
+describe('direction contracts', () => {
+  const contractPhrases = readdirSync(surfaceBriefDirectory)
+    .map((name) => readFileSync(join(surfaceBriefDirectory, name), 'utf8'))
+    .flatMap(distinctiveContractPhrases);
+
+  test('surface briefs hold a direction contract', () => {
+    expect(contractPhrases).not.toEqual([]);
+  });
+
+  test.each(buildOutputFiles)('%s carries no direction contract phrase', (path) => {
+    const content = withoutMarkdownMarks(readBuildOutput(path));
+    expect(contractPhrases.filter((phrase) => content.includes(phrase))).toEqual([]);
   });
 });
