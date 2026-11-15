@@ -19,6 +19,7 @@ npm run dev
 | `npm run check` | Check types and content |
 | `npm test` | Run unit tests |
 | `npm run build` | Build the static site to `dist/` |
+| `npm run test:build-output` | Test the build output in `dist/` |
 | `npm run preview` | Preview the build locally |
 
 ## Content
