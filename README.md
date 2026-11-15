@@ -4,7 +4,7 @@ A bilingual static portfolio built with Astro.
 
 ## Getting started
 
-Use Node 24.22.0 and npm 12.2.1.
+Use Node 26.13.1 and npm 12.2.2.
 
 ```sh
 npm ci
