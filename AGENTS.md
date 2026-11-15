@@ -1,5 +1,7 @@
 # AGENTS.md
 
+Write self-documenting code: names, types, and structure carry the intent, and the code holds no comments.
+
 ## Domain and decisions
 
 `GLOSSARY.md` defines the domain terms: use them when naming concepts, and check every commit against its **Private information** entry.
