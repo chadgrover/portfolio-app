@@ -6,11 +6,15 @@ describe('selectLanguage', () => {
     expect(selectLanguage('ja-JP')).toBe('ja');
   });
 
-  test.each(['JA-jp', 'ja-jp', 'Ja-Jp'])('matches %s case-insensitively', (value) => {
+  test.each(['JA-jp', 'ja-jp', 'Ja-Jp', 'JA'])('matches %s case-insensitively', (value) => {
     expect(selectLanguage(value)).toBe('ja');
   });
 
-  test.each(['ja', 'ja-Osaka', 'en', 'en-US', 'fr-FR', '', undefined, null])(
+  test.each(['ja', 'ja-Osaka'])('selects Japanese for any Japanese form %s', (value) =>
+    expect(selectLanguage(value)).toBe('ja'),
+  );
+
+  test.each(['en', 'en-US', 'fr-FR', '', undefined, null])(
     'defaults %s to English',
     (value) => expect(selectLanguage(value)).toBe('en'),
   );
