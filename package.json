@@ -17,13 +17,13 @@
     "preview": "astro preview"
   },
   "dependencies": {
-    "astro": "7.4.7"
+    "astro": "7.4.12"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.12",
     "@types/node": "26.6.6",
     "typescript": "6.0.3",
-    "vitest": "5.0.5"
+    "vitest": "5.1.0"
   },
   "allowScripts": {
     "esbuild@0.28.2": true
