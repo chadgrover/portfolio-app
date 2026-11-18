@@ -10,6 +10,8 @@ test('visibleText returns paragraph text and leaves out title, script and style 
 });
 
 test('firstPartyJavaScript finds a local script and ignores a third-party one', () => {
-  const $ = cheerio.load('<script src="/_astro/page.js"></script><script src="https://cdn.example/widget.js"></script>');
+  const $ = cheerio.load(
+    '<script src="/_astro/page.js"></script><script src="https://cdn.example/widget.js"></script>',
+  );
   expect(firstPartyJavaScript($)).toEqual(['<script src="/_astro/page.js"></script>']);
 });
