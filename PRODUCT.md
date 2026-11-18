@@ -33,7 +33,8 @@ The owner is presented as a **Full-Stack Developer** (フルスタックエン�
 - Static output; core reading and navigation work without JavaScript.
 - Content approval covers public Git history as well as the rendered site. Private information (see `GLOSSARY.md`) never gets committed.
 - Third-party marks, such as the GitHub and LinkedIn logos, appear as their official artwork, unmodified.
-- Open: production domain, an email contact method on that domain, résumé format and language, availability, and which private work can be named.
+- The production origin is Astro's `site` in `astro.config.mjs`.
+- Open: an email contact method on the production domain, résumé format and language, availability, and which private work can be named.
 
 ### Bilingual publishing
 

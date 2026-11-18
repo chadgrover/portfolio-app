@@ -1,7 +1,9 @@
 ---
 import Page from '../layouts/Page.astro';
+import LanguageAlternates from '../components/LanguageAlternates.astro';
 ---
 <Page language="en" title="Portfolio language selection">
+  <LanguageAlternates slot="head" />
   <noscript slot="head"><meta http-equiv="refresh" content="0;url=/en/" /></noscript>
   <main>
     <h1>Portfolio</h1>

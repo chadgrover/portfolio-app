@@ -3,6 +3,7 @@ import Page from '../layouts/Page.astro';
 import CellLettering from '../components/CellLettering.astro';
 import ProfileLinks from '../components/ProfileLinks.astro';
 import Terminal from '../components/Terminal.astro';
+import LanguageAlternates from '../components/LanguageAlternates.astro';
 import { supportedLanguages } from '../lib/i18n/constants';
 import type { Language } from '../lib/i18n/types';
 import { getEntry } from 'astro:content';
@@ -28,6 +29,8 @@ const labels = { en: 'English', ja: '日本語' };
 ---
 <Page language={language} title={`${hero.displayName} | ${hero.role}`}>
   <meta slot="head" name="description" content={content.home.metaDescription} />
+  <link slot="head" rel="canonical" href={new URL(`/${language}/`, Astro.site).href} />
+  <LanguageAlternates slot="head" />
   <Terminal>
     <header class="masthead">
       <nav class="language-switch" aria-label={language === 'ja' ? '言語' : 'Language'}>

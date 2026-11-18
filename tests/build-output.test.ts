@@ -1,6 +1,7 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { basename, extname, join } from 'node:path';
 import { describe, expect, test } from 'vitest';
+import astroConfig from '../astro.config.mjs';
 import { supportedLanguages } from '../src/lib/i18n/constants';
 import { compressedSize, listBuildOutputFiles, readBuildOutput, readBuildOutputBytes } from './support/build-output';
 import { readPortfolioContent, readProfileLinks } from './support/content';
@@ -17,11 +18,32 @@ const inKilobytes = (bytes: number) => `${bytes / bytesPerKilobyte} KB`;
 
 const buildOutputFiles = listBuildOutputFiles();
 
+test.each(['en/index.html', 'ja/index.html', 'index.html'])(
+  '%s lists every language version and the language selection as hreflang alternates',
+  (path) => {
+    const $ = loadBuildOutputPage(path);
+    const alternates = $('link[rel="alternate"][hreflang]')
+      .toArray()
+      .map((link) => [$(link).attr('hreflang'), $(link).attr('href')]);
+    expect(alternates).toEqual([
+      ...supportedLanguages.map((alternate) => [alternate, new URL(`/${alternate}/`, astroConfig.site).href]),
+      ['x-default', new URL('/', astroConfig.site).href],
+    ]);
+  },
+);
+
 describe.each(supportedLanguages)('localized home page /%s/', (language) => {
   const $ = loadBuildOutputPage(`${language}/index.html`);
 
   test('declares its page language', () => {
     expect($('html').attr('lang')).toBe(language);
+  });
+
+  test('declares itself canonical at its absolute URL', () => {
+    const canonicals = $('link[rel="canonical"]')
+      .toArray()
+      .map((link) => $(link).attr('href'));
+    expect(canonicals).toEqual([new URL(`/${language}/`, astroConfig.site).href]);
   });
 
   test('loads no first-party JavaScript', () => {
