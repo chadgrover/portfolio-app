@@ -1,110 +1,19 @@
 import { readFileSync, readdirSync } from 'node:fs';
-import { basename, extname, join, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { gzipSync } from 'node:zlib';
+import { basename, extname, join } from 'node:path';
 import { describe, expect, test } from 'vitest';
 import { supportedLanguages } from '../src/lib/i18n/constants';
-import type { Language } from '../src/lib/i18n/types';
-import type { PortfolioContent } from '../src/lib/portfolio-content/types';
-import type { ProfileLink } from '../src/lib/profile-links/types';
+import { buildOutputFiles, compressedSize, readBuildOutput, readBuildOutputBytes } from './support/build-output';
+import { readPortfolioContent, readProfileLinks } from './support/content';
+import { distinctiveContractPhrases, surfaceBriefDirectory, withoutMarkdownMarks } from './support/direction-contract';
+import { attributes, elementBodies, elementTexts, firstPartyJavaScript, tags, visibleText } from './support/html';
+import { coversJapanese, deliveredCss, fontFaceRules, unicodeRangesOf } from './support/styles';
 
-const distDirectory = fileURLToPath(new URL('../dist/', import.meta.url));
-const contentDirectory = fileURLToPath(new URL('../src/content/portfolio/', import.meta.url));
-const surfaceBriefDirectory = fileURLToPath(new URL('../.impeccable/surfaces/', import.meta.url));
-const siteOrigin = 'https://site.invalid/';
 const bytesPerKilobyte = 1000;
 const cssBudgetBytes = 20_000;
 const webFontBudgetBytes = 60_000;
 const webFontExtensions = ['.woff2', '.woff', '.ttf', '.otf'];
-const directionContractHeading = '## Direction contract';
-const shortestDistinctiveSentenceLength = 40;
-const seedReferencePattern = /seed:[0-9a-f]{16}/g;
 
-const buildOutputFiles = readdirSync(distDirectory, { recursive: true, withFileTypes: true })
-  .filter((entry) => entry.isFile())
-  .map((entry) => relative(distDirectory, join(entry.parentPath, entry.name)));
-
-const readBuildOutputBytes = (path: string) => readFileSync(join(distDirectory, path));
-const readBuildOutput = (path: string) => readBuildOutputBytes(path).toString('utf8');
-const compressedSize = (content: string | Buffer) => gzipSync(content, { level: 9 }).length;
 const inKilobytes = (bytes: number) => `${bytes / bytesPerKilobyte} KB`;
-
-const tags = (html: string, name: string) => html.match(new RegExp(`<${name}\\b[^>]*>`, 'gi')) ?? [];
-const attributes = (tag: string) =>
-  new Map(
-    [...tag.matchAll(/\s([^\s=/>]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g)].map(
-      ([, name, doubleQuoted, singleQuoted, unquoted]) => [
-        name.toLowerCase(),
-        doubleQuoted ?? singleQuoted ?? unquoted ?? '',
-      ],
-    ),
-  );
-const relTokens = (tag: string) => (attributes(tag).get('rel') ?? '').toLowerCase().split(/\s+/);
-const isThirdParty = (url: string) => /^(?:[a-z][a-z\d+.-]*:)?\/\//i.test(url.trim());
-const isJavaScriptType = (type: string) =>
-  ['', 'module'].includes(type.trim().toLowerCase()) || /(?:java|ecma)script/i.test(type);
-const buildOutputPathOf = (href: string, pagePath: string) =>
-  decodeURIComponent(new URL(href, new URL(pagePath, siteOrigin)).pathname.slice(1));
-
-const readContentFile = (name: string) => JSON.parse(readFileSync(join(contentDirectory, name), 'utf8'));
-const readPortfolioContent = (language: Language): PortfolioContent => readContentFile(`${language}.json`);
-const readProfileLinks = (): ProfileLink[] => readContentFile('profile-links.json');
-const withoutTags = (html: string) => html.replace(/<[^>]*>/g, '');
-const visibleText = (html: string) => withoutTags(html.replace(/<(script|style)\b[\s\S]*?<\/\1>/gi, ''));
-const elementBodies = (html: string, name: string) =>
-  [...html.matchAll(new RegExp(`<${name}\\b[^>]*>([\\s\\S]*?)</${name}>`, 'gi'))].map(([, inner]) => inner);
-const elementTexts = (html: string, name: string) => elementBodies(html, name).map((inner) => withoutTags(inner).trim());
-
-const japaneseCodePoints = [
-  [0x3000, 0x30ff],
-  [0x3400, 0x4dbf],
-  [0x4e00, 0x9fff],
-  [0xf900, 0xfaff],
-  [0xff00, 0xffef],
-];
-const fontFaceRules = (css: string) => css.match(/@font-face\s*{[^}]*}/gi) ?? [];
-const unicodeRangesOf = (fontFace: string) =>
-  (fontFace.match(/unicode-range\s*:\s*([^;}]+)/i)?.[1] ?? '')
-    .split(',')
-    .map((range) => range.trim())
-    .filter((range) => range !== '')
-    .map((range) => {
-      const [start, end = start] = range.replace(/^u\+/i, '').split('-');
-      return [parseInt(start.replace(/\?/g, '0'), 16), parseInt(end.replace(/\?/g, 'f'), 16)];
-    });
-const coversJapanese = ([start, end]: number[]) =>
-  japaneseCodePoints.some(([japaneseStart, japaneseEnd]) => start <= japaneseEnd && end >= japaneseStart);
-
-const withoutMarkdownMarks = (text: string) => text.replace(/\*\*[^*]+\*\*\s*|`/g, '');
-const distinctiveContractPhrases = (surfaceBrief: string) => {
-  const [, afterHeading = ''] = surfaceBrief.split(directionContractHeading);
-  const [contract] = afterHeading.split(/^## /m);
-  const sentences = withoutMarkdownMarks(contract)
-    .split(/\n|(?<=\.)\s/)
-    .map((sentence) => sentence.trim())
-    .filter((sentence) => sentence.length >= shortestDistinctiveSentenceLength);
-  return [...sentences, ...(contract.match(seedReferencePattern) ?? [])];
-};
-
-const firstPartyJavaScript = (html: string) => [
-  ...tags(html, 'script').filter((tag) => {
-    const scriptAttributes = attributes(tag);
-    return isJavaScriptType(scriptAttributes.get('type') ?? '') && !isThirdParty(scriptAttributes.get('src') ?? '');
-  }),
-  ...tags(html, 'link').filter(
-    (tag) => relTokens(tag).includes('modulepreload') && !isThirdParty(attributes(tag).get('href') ?? ''),
-  ),
-];
-
-const deliveredCss = (html: string, pagePath: string) => {
-  const inlineStyles = [...html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)].map((match) => match[1]);
-  const linkedStylesheets = tags(html, 'link')
-    .filter((tag) => relTokens(tag).includes('stylesheet'))
-    .map((tag) => attributes(tag).get('href') ?? '')
-    .filter((href) => href !== '' && !isThirdParty(href))
-    .map((href) => readBuildOutput(buildOutputPathOf(href, pagePath)));
-  return [...inlineStyles, ...linkedStylesheets].join('\n');
-};
 
 describe.each(supportedLanguages)('localized home page /%s/', (language) => {
   const html = readBuildOutput(`${language}/index.html`);
