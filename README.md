@@ -30,4 +30,6 @@ English and Japanese portfolio content lives in `src/content/portfolio/en.json` 
 
 Cloudflare Workers Builds builds `main` with `npm run build` and serves `dist/` as an assets-only Worker configured in `wrangler.jsonc`. See [ADR 0001](docs/adr/0001-public-application-repository.md) for why content lives in this repository and [ADR 0002](docs/adr/0002-assets-only-cloudflare-worker.md) for why the site runs on Workers.
 
+Every build reads the production origin from `PRODUCTION_ORIGIN`. Copy `.env.example` to `.env` locally, and set it as a build variable in Workers Builds and as a repository variable in GitHub Actions.
+
 Learn more in the [Astro documentation](https://docs.astro.build/).
