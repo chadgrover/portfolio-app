@@ -2,8 +2,10 @@ import * as cheerio from 'cheerio';
 import { expect, test } from 'vitest';
 import { firstPartyJavaScript, visibleText } from './html';
 
-test('visibleText returns paragraph text and leaves out script and style text', () => {
-  const $ = cheerio.load('<style>p { color: red }</style><p>Hello</p><script>const greeting = 1;</script>');
+test('visibleText returns paragraph text and leaves out title, script and style text', () => {
+  const $ = cheerio.load(
+    '<title>Tab</title><style>p { color: red }</style><p>Hello</p><script>const greeting = 1;</script>',
+  );
   expect(visibleText($)).toBe('Hello');
 });
 
