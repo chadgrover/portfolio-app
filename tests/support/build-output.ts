@@ -5,9 +5,10 @@ import { gzipSync } from 'node:zlib';
 
 const distDirectory = fileURLToPath(new URL('../../dist/', import.meta.url));
 
-export const buildOutputFiles = readdirSync(distDirectory, { recursive: true, withFileTypes: true })
-  .filter((entry) => entry.isFile())
-  .map((entry) => relative(distDirectory, join(entry.parentPath, entry.name)));
+export const listBuildOutputFiles = () =>
+  readdirSync(distDirectory, { recursive: true, withFileTypes: true })
+    .filter((entry) => entry.isFile())
+    .map((entry) => relative(distDirectory, join(entry.parentPath, entry.name)));
 
 export const readBuildOutputBytes = (path: string) => readFileSync(join(distDirectory, path));
 export const readBuildOutput = (path: string) => readBuildOutputBytes(path).toString('utf8');
