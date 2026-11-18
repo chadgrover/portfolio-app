@@ -68,9 +68,8 @@ describe.each(supportedLanguages)('localized home page /%s/', (language) => {
   });
 
   test.each(readProfileLinks())('links to the $platform profile with a localized accessible name', ({ platform, url }) => {
-    const accessibleNames = $('a')
+    const accessibleNames = $(`a[href="${url}"]`)
       .toArray()
-      .filter((anchor) => $(anchor).attr('href') === url)
       .map((anchor) => $(anchor).attr('aria-label'));
     expect(accessibleNames).toEqual([profileLinkLabels[platform].accessibleName]);
   });

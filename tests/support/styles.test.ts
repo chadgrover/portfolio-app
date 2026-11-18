@@ -12,7 +12,8 @@ test('deliveredCss joins inline style CSS with linked stylesheet CSS', () => {
 });
 
 test('fontFaces reads each font face source and its numeric unicode ranges, wildcards included', () => {
-  const css = '@font-face{font-family:Sans;src:url(/_astro/sans.woff2) format("woff2");unicode-range:U+131,U+4??,U+2000-206F}';
+  const css =
+    '@font-face{font-family:Sans;src:url(/_astro/sans.woff2) format("woff2");unicode-range:U+131,U+4??,U+2000-206F}';
   expect(fontFaces(css)).toEqual([
     {
       sourceUrls: ['/_astro/sans.woff2'],
