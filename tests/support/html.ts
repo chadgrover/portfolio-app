@@ -8,7 +8,7 @@ const isJavaScriptType = (type: string) =>
 
 export const loadBuildOutputPage = (path: string) => cheerio.load(readBuildOutput(path));
 
-export const visibleText = ($: CheerioAPI) => $('html').prop('innerText');
+export const visibleText = ($: CheerioAPI) => $('body').prop('innerText');
 
 export const firstPartyJavaScript = ($: CheerioAPI) =>
   [
