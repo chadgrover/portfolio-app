@@ -149,7 +149,6 @@ vite.config.ts.timestamp-*
 .turbo
 
 # Impeccable configuration
-.impeccable/config.json
 .impeccable/config.local.json
 
 # Local agent tooling
