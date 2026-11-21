@@ -30,6 +30,6 @@ _Avoid_: Personal content
 The complete set of files the production build produces, which the host serves to portfolio visitors exactly as built.
 _Avoid_: Built site, build artifact
 
-**Contributor**:
+**Maintainer**:
 A person who works on the portfolio's source through its issues and pull requests, such as the portfolio owner.
-_Avoid_: Maintainer, collaborator
+_Avoid_: Contributor, collaborator
