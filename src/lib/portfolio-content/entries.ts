@@ -11,9 +11,9 @@ export const portfolioContentFor = async (language: Language) => {
 
 export const getLatinScriptName = async () => (await portfolioContentFor('en')).home.hero.displayName;
 
-export const profileLinks = async () => {
+export const getProfileLinks = async () => {
   const fileOrder = parseProfileLinks(await readFile(profileLinksPath, 'utf8')).map(({ id }) => id);
   return (await getCollection('profileLinks'))
     .sort((first, second) => fileOrder.indexOf(first.id) - fileOrder.indexOf(second.id))
-    .map(({ id, data }) => ({ id, ...data }));
+    .map(({ data }) => data);
 };

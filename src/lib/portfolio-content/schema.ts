@@ -12,7 +12,12 @@ export const portfolioContentSchema = z.object({
   }),
 });
 
+export const profileLinkIds = ['linkedin', 'github'] as const;
+
+export type ProfileLinkId = (typeof profileLinkIds)[number];
+
 export const profileLinkSchema = z.object({
+  id: z.enum(profileLinkIds),
   name: text,
   url: z.url({ protocol: /^https$/ }).refine(
     (url) => { const parsed = URL.parse(url); return !parsed?.username && !parsed?.password; },

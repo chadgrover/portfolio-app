@@ -10,6 +10,10 @@ describe('parseProfileLinks', () => {
     expect(parseProfileLinks(text).map(({ id }) => id)).toEqual(['linkedin', 'github']);
   });
 
+  test('accepts a shared file with no profile links', () => {
+    expect(parseProfileLinks('[]')).toEqual([]);
+  });
+
   test('rejects a profile link id that appears twice', () => {
     const text = JSON.stringify([
       { id: 'linkedin', name: 'LinkedIn', url: 'https://www.linkedin.com/in/example/' },
