@@ -2,6 +2,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { extname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gzipSync } from 'node:zlib';
+import { imageMetadata } from 'astro/assets/utils';
 import { parse, TEXT_NODE, type ElementNode, type Node } from 'ultrahtml';
 import { querySelectorAll } from 'ultrahtml/selector';
 import { describe, expect, test } from 'vitest';
@@ -164,6 +165,27 @@ describe('404 page', () => {
   test.each([['English Home', '/en/'], ['日本語のホーム', '/ja/']])('labels its home link %s', (label, href) => {
     const homeLinks = anchors(readBuildOutput('404.html')).filter((anchor) => anchor.attributes.href === href);
     expect(homeLinks.map((anchor) => textContentOf(anchor).trim())).toContain(label);
+  });
+});
+
+describe('portfolio favicon', () => {
+  test.each(['index.html', ...supportedLanguages.map((language) => `${language}/index.html`), '404.html'])(
+    '%s links the SVG favicon and Apple touch icon',
+    (path) => {
+      const links = elementsOf(readBuildOutput(path), 'head link');
+      const icon = links.find((link) => relTokens(link).includes('icon'));
+      const touchIcon = links.find((link) => relTokens(link).includes('apple-touch-icon'));
+      expect(icon?.attributes).toMatchObject({ href: '/favicon.svg', type: 'image/svg+xml' });
+      expect(touchIcon?.attributes).toMatchObject({ href: '/apple-touch-icon.png', sizes: '180x180' });
+    },
+  );
+
+  test.each([
+    ['favicon.ico', { format: 'ico' }],
+    ['favicon.svg', { format: 'svg' }],
+    ['apple-touch-icon.png', { format: 'png', width: 180, height: 180 }],
+  ] as const)('%s is served at the root in its declared format', async (path, metadata) => {
+    await expect(imageMetadata(readBuildOutputBytes(path))).resolves.toMatchObject(metadata);
   });
 });
 
