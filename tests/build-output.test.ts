@@ -137,6 +137,11 @@ describe.each(supportedLanguages)('localized home page /%s/', (language) => {
     expect(anchors(html).map((anchor) => anchor.attributes.href).filter((href) => profileLinkUrls.includes(href ?? ''))).toEqual(profileLinkUrls);
   });
 
+  test.each(profileLinks)('shows the $name profile link as its official mark alone', ({ url }) => {
+    const link = anchors(html).find((anchor) => anchor.attributes.href === url);
+    expect(link && textContentOf(link).trim()).toBe('');
+  });
+
   test.each(profileLinks)('links to the $name profile with a localized accessible name', ({ name, url }) => {
     const link = anchors(html).find((anchor) => anchor.attributes.href === url);
     expect(link?.attributes['aria-label']).toBe(profileLinkLabels[language][name as keyof (typeof profileLinkLabels)['en']]);

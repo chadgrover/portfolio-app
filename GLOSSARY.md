@@ -30,6 +30,10 @@ _Avoid_: Contact info, contact details
 A link to the portfolio owner's page on another site, such as GitHub or LinkedIn. A profile link can also serve as a contact method.
 _Avoid_: Social link, social media
 
+**Official mark**:
+The symbol a company publishes to stand for itself, such as GitHub's Invertocat or LinkedIn's "in", shown exactly as that company supplies it. Each profile link is shown as its company's official mark.
+_Avoid_: Icon, logo, brand icon
+
 **Language switch**:
 The control on a page that takes a portfolio visitor to the same page in each language the portfolio supports.
 _Avoid_: Language switcher, language selector, language toggle

@@ -76,7 +76,7 @@ spacing:
   stack-md: "1.25rem"
   stack-lg: "2rem"
   inline: "2rem"
-  mark-clear-space: "max(1em, 21px)"
+  mark-clear-space: "2rem"
 components:
   language-switch-link:
     textColor: "{colors.type}"
@@ -86,12 +86,10 @@ components:
   language-switch-link-current:
     textColor: "{colors.type}"
   profile-link:
-    textColor: "{colors.press}"
-    typography: "{typography.title}"
     rounded: "{rounded.none}"
-    padding: "0.875rem 0 0.5rem"
+    padding: "{spacing.mark-clear-space}"
   profile-link-mark:
-    height: "max(1em, 21px)"
+    height: "2rem"
   inline-link:
     textColor: "{colors.press}"
 ---
@@ -120,7 +118,7 @@ The surface is flat and dark only. Depth is a matter of value steps on one cool 
 One cool blue-slate hue carries every neutral from ground to type; a single light cyan is the only chroma.
 
 ### Primary
-- **Ice Cyan** (press): link names (profile links, the 404's home links, inline links), the 3px rule above a group of links, focus rings, text selection and form `accent-color`. It is the one colour that means "you can act here".
+- **Ice Cyan** (press): link names (the 404's home links, inline links), the 3px rule above a group of links and its 6px segment over a hovered profile link, focus rings, text selection and form `accent-color`. It is the one colour that means "you can act here".
 
 ### Neutral
 - **Blue-Black Ground** (ground): page and body background, browser `theme-color`, the text colour inside a selection.
@@ -130,7 +128,7 @@ One cool blue-slate hue carries every neutral from ground to type; a single ligh
 - **Slate Hairline** (hairline): 1px structural rules (the full-height spine, the rule over the role column, the rule under the flat Latin name) and the scrollbar thumb. Decorative only, never text.
 - **Dim Bar** (bar-dim): one low-contrast counterweight bar beneath the name on wide screens.
 
-The official LinkedIn and GitHub marks render in the white their owners supply, not in a palette token: their brand guidelines forbid recolouring, so they sit outside the One Hue Rule.
+The official LinkedIn and GitHub marks render in the white their owners supply, not in a palette token: their brand guidelines forbid recolouring, so they sit outside the One Hue Rule (ADR 0003).
 
 The Blue-Black & Indigo alternate palette is recorded in the home surface brief; it has not shipped and has no tokens here.
 
@@ -150,7 +148,7 @@ The Blue-Black & Indigo alternate palette is recorded in the home surface brief;
 - **Display** (700, up to 10.75rem, line-height 1, uppercase, -0.01em): the Latin name, one word per line, each line kept unbroken. Japanese variant: 900, up to 8.25rem, line-height 1.02, 0.02em.
 - **Page Heading** (700, `clamp(1.75rem, 1.25rem + 2.2vw, 2.75rem)`, line-height 1.15, 0.02em, uppercase, balanced wrap): the title of a non-home page, such as the 404. Japanese variant: 700 in the system gothic stack, `clamp(1.625rem, 1.2rem + 1.9vw, 2.5rem)`, line-height 1.3, 0.04em, no case change.
 - **Headline** (line-height 1.45, balanced wrap): the role line. Latin 600 at 1.5rem, rising to 1.625rem from 80rem; Japanese 700 at 1.375rem, rising to 1.5rem from 80rem.
-- **Title** (400, line-height 1.3, 0.04em): link names on a rule. `clamp(1.25rem, 0.9rem + 1.6vw, 1.5rem)` below 80rem; from 80rem `clamp(1.5rem, 3.75vw − 1.5rem, 1.875rem)` (24px at 1280px, 30px from 1440px) so both profile links stay on one row beside the name.
+- **Title** (400, line-height 1.3, 0.04em): link names on a rule, such as the 404's home links. `clamp(1.25rem, 0.9rem + 1.6vw, 1.5rem)` below 80rem; from 80rem `clamp(1.5rem, 3.75vw − 1.5rem, 1.875rem)` (24px at 1280px, 30px from 1440px).
 - **Body** (400, 1.0625rem, line-height 1.7 Latin; 1rem, line-height 1.95 Japanese; pretty wrap; max 34em): the introduction and the 404 explanations.
 - **Label** (400, 0.875–0.9375rem, 0.16em, uppercase): language switch and the English gloss under a Japanese role. Japanese labels keep their case and tighten to 0.08em.
 - **Spine** (400, 1.875rem, 0.42em, uppercase, vertical-rl rotated to read bottom-up): the Latin name running up the spine on the Japanese page. Below 80rem it lies flat at 0.9375rem and 0.3em in Slate Secondary.
@@ -164,13 +162,13 @@ The Blue-Black & Indigo alternate palette is recorded in the home surface brief;
 
 Below 80rem the home page is a single column with a responsive gutter (`gutter`) and content capped at the reading measure (`measure`, 36rem). The opening Ice White bar bleeds off the left edge into the gutter at 0.875rem thick and min(70%, measure + gutter) long, followed by name, flat Latin name over a hairline, role column, then profile links. Stacks step at 0.875rem, 1.25rem and 2rem.
 
-Short viewports below 80rem (height 36rem or less) tighten so both profile links land inside the first screen even at 320×568 and 390×450: the masthead drops into normal flow (right-aligned, 1rem top padding) so content always starts below it at any text size; the opening bar thins to 0.625rem and shortens to 50% so it ends before the switch; the name is capped at 10svh; stacks close up (spine 0.5rem, about 1rem, introduction 0.75rem with leading 1.8, links 1.25rem, link top padding 0.625rem).
+Short viewports below 80rem (height 36rem or less) tighten so both profile links land inside the first screen even at 320×568 and 390×450: the masthead drops into normal flow (right-aligned, 1rem top padding) so content always starts below it at any text size; the main column's top padding drops to 0; the opening bar thins to 0.625rem, shortens to 50% so it ends before the switch, and sits 0.5rem above the name; the name is capped at 10svh; stacks close up (spine 0.5rem, about 0.75rem, introduction 0.5rem with leading 1.8, links 0.75rem). The profile links keep their full mark size and clear space.
 
 From 80rem the home page becomes a full-viewport six-column grid: gutter, name column, a 3rem spine column, `column-gap`, the text column, gutter. The text column is `clamp(20rem, 100vw − 2·gutter − 3rem − column-gap − 43rem, 30.5rem)`, so the name column always keeps at least 43rem and the name holds roughly 130px Japanese and 164px or more Latin from 1280px. Rows are sized in `svh` so the bar sits near the upper third and the profile links land inside the first screen. The opening bar spans gutter and name column at 88% and 1.375rem thick; the spine column carries a full-height hairline on its right edge; the role column bottom-aligns above the profile links.
 
 The language switch sits in a masthead absolutely placed top-right on the gutter, outside the grid (except on short viewports, above).
 
-Links on a rule lay out as a wrapping flex row (2rem column gap) on a 3px Ice Cyan top rule; the same pattern serves the home's profile links and the 404's home links.
+Links on a rule lay out as a wrapping flex row (2rem column gap) on a 3px Ice Cyan top rule; the same pattern serves the home's profile links and the 404's home links. Profile links set their clear-space boxes edge to edge instead of using the column gap.
 
 The 404 has its own layout rather than the home grid: flush-left, max 64rem, top padding `clamp(4rem, 14svh, 8rem)`, the opening Ice White bar bleeding into the gutter (0.875rem, 1.375rem from 80rem). Below 48rem it is one column. From 48rem it is an explicit two-column grid (column gap `clamp(2rem, 6vw, 5rem)`) with the English and Japanese blocks side by side as equals, their home links aligned beneath in the same columns, and the bar ending exactly at the first column's edge. Later pages get their own layouts in the same vocabulary rather than reusing the home grid.
 
@@ -185,7 +183,7 @@ Flat. There are no shadows, glows, blurs or gradients. Depth is tonal only: Blue
 
 ## Shapes
 
-Every corner is square (0px). Form comes from solid rectangles and 1px or 3px rules set strictly horizontal or vertical: the opening bar, the dim bar, the spine hairline, the hairline over the role column, the 3px cyan rule above a group of links, and the 3px underline on the current language. The only non-rectangular forms are the official LinkedIn and GitHub marks, shown exactly as their owners ship them.
+Every corner is square (0px). Form comes from solid rectangles and 1px or 3px rules set strictly horizontal or vertical: the opening bar, the dim bar, the spine hairline, the hairline over the role column, the 3px cyan rule above a group of links (6px over a hovered profile link), and the 3px underline on the current language. The only non-rectangular forms are the official LinkedIn and GitHub marks, shown exactly as their owners ship them.
 
 ### Named Rules
 **The Right Angle Rule.** Bars and rules run at 0° or 90° and end square. Thickness carries hierarchy: 1px hairlines for structure, 3px for interactive framing, solid bars for the composition's anchors.
@@ -202,20 +200,20 @@ Quiet, typographic, top-right.
 
 ### Links on a Rule
 The shared pattern for a page's way onward, set as type on a rule rather than as buttons.
-- **Structure:** a 3px Ice Cyan rule above a wrapping row; each link is a Title-size name in Ice Cyan. No fill, no border, no radius, no arrow, no secondary line.
+- **Structure:** a 3px Ice Cyan rule above a wrapping row; each link is a Title-size name in Ice Cyan, or an official mark (Profile Links, below). No fill, no border, no radius, no arrow, no secondary line.
 - **Hover:** the name underlines.
 - **Focus:** 3px solid Ice Cyan outline, 5px offset.
-- **Uses:** the home's profile links (with marks, below) and the 404's home links ("English Home", 「日本語のホーム」), which carry no mark.
+- **Uses:** the home's profile links (marks, below) and the 404's home links ("English Home", 「日本語のホーム」), which are names.
 
 ### Profile Links
-The home's call to action: Links on a Rule, each led by its network's official mark.
-- **Mark:** the official white mark, decorative and hidden from assistive tech (the link's accessible name carries the network), 1em of the link name tall with a 21px floor (LinkedIn's stated minimum), width following its own proportions.
-- **Clear space:** the gap between mark and name equals the mark height (`mark-clear-space`), so the mark never reads as a lockup with the word.
-- **Width:** from 80rem the link size steps up to Title's wide clamp so both links still share one row in the text column.
+The home's call to action: Links on a Rule where each link is its company's official mark alone, with no name beside it (ADR 0003 records why and the brand terms behind it).
+- **Mark:** the official white mark, 2rem tall (never below the 21px floor), width following its own proportions, decorative and hidden from assistive tech; the link's accessible name comes from interface text.
+- **Clear space:** one mark height (`mark-clear-space`) on every side holds only the ground. Each link's box is the mark plus that clear space, so the rule sits one mark height above the mark, neighbouring marks sit two clear spaces apart, and every link is 96px tall.
+- **Hover:** the link's segment of the rule thickens from 3px to 6px, upward, away from the clear space, over 200ms on the shared ease-out.
+- **Focus:** 3px solid Ice Cyan outline drawn on the edge of the clear space (inset 3px into the link's box), not 5px from the mark.
 - **Provenance:** both files live in `src/assets/profile-link-marks/` and ship unmodified; both were downloaded 2026-11-22.
   - `GitHub_Invertocat_White.svg`: byte-for-byte from GitHub's official logo package (https://brand.github.com/GitHub_Logos.zip, `GitHub Logos/SVG/GitHub_Invertocat_White.svg`), inlined as-is. Guidelines: https://brand.github.com/foundations/logo.
-  - `InBug-White.png`: byte-for-byte from LinkedIn's official in-logo package (https://content.linkedin.com/content/dam/me/business/en-us/amp/xbu/linkedin-revised-brand-guidelines/logos/in-logo.zip, `in-logo/InBug-White.png`, 840×779; LinkedIn ships no SVG), served as-is with no resizing. Guidelines: https://brand.linkedin.com/in-logo.
-- **Brand terms:** use the white variants; never modify or recolour a mark, or combine it with words into a lockup.
+  - `InBug-White.png`: byte-for-byte from LinkedIn's official in-logo package (https://content.linkedin.com/content/dam/me/business/en-us/amp/xbu/linkedin-revised-brand-guidelines/logos/in-logo.zip, `in-logo/InBug-White.png`, 840×779, including its ®; LinkedIn ships no SVG), served as-is with no resizing. Guidelines: https://brand.linkedin.com/in-logo.
 
 ### Inline Links
 Ice Cyan text with the browser underline offset 0.2em; focus is a 3px Ice Cyan outline at 5px offset.
@@ -230,10 +228,10 @@ The signature device on the Japanese page: the Latin name, hidden from assistive
 - **Do** keep Ice Cyan for pressable elements, their framing rule, focus rings and selection.
 - **Do** size the display name with the container-query formula and per-script advance (0.7 Latin, 1.05 Japanese), capped at 10.75rem Latin and 8.25rem Japanese, with each name line unbroken.
 - **Do** switch face, weight, leading and tracking by `:lang()`; give Japanese `line-break: strict` and `word-break: auto-phrase`.
-- **Do** use a 3px Ice Cyan outline with a 5–6px offset for every focus state.
+- **Do** use a 3px Ice Cyan outline with a 5–6px offset for every focus state; a profile link draws it on its clear-space edge instead.
 - **Do** run state transitions at 200ms on `cubic-bezier(0.16, 1, 0.3, 1)` and turn them off under `prefers-reduced-motion`.
-- **Do** put a page's onward links on a 3px Ice Cyan rule as Title-size cyan names, using the shared links-on-rule pattern.
-- **Do** show a third-party mark only as its owner's official file, unmodified, at no less than its stated minimum size, with clear space equal to its height.
+- **Do** put a page's onward links on a 3px Ice Cyan rule as Title-size cyan names or official marks, using the shared links-on-rule pattern.
+- **Do** show a profile link as its official mark alone (ADR 0003): the owner's file unmodified, 2rem tall, with one mark height of empty clear space on every side.
 
 ### Don't:
 - **Don't** round corners, or add shadows, glows, gradients or grain; depth is a step on the value ladder.
@@ -242,4 +240,4 @@ The signature device on the Japanese page: the Latin name, hidden from assistive
 - **Don't** uppercase or widely track Japanese text; tracking above 0.08em and uppercase transforms are Latin-only.
 - **Don't** wrap content in cards or filled panels; content sits directly on the ground, separated by rules.
 - **Don't** set Slate Hairline or Dim Bar as a text colour.
-- **Don't** recolour, redraw or resize-and-re-export an official mark, or set it against its name as a lockup.
+- **Don't** recolour, redraw or resize-and-re-export an official mark; keep its name, rules and state indicators outside its clear space.
