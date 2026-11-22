@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-22T07:16:41Z",
+  "generatedAt": "2026-11-22T10:57:50Z",
   "title": "Design System: Portfolio",
   "extensions": {
     "colorMeta": {
@@ -157,12 +157,32 @@
       {
         "name": "ease-out",
         "value": "cubic-bezier(0.16, 1, 0.3, 1)",
-        "purpose": "Every state transition."
+        "purpose": "Every state transition and the bars' entrance."
       },
       {
         "name": "duration-color",
         "value": "200ms",
         "purpose": "Language switch underline colour change and profile link rule segment thickening on hover."
+      },
+      {
+        "name": "bar-entrance",
+        "value": "700ms",
+        "purpose": "Home: the opening bar slides in from the left edge on load while the type stays still."
+      },
+      {
+        "name": "dim-bar-entrance",
+        "value": "600ms after 120ms",
+        "purpose": "Home, from 80rem: the Dim Bar follows the opening bar in from the left edge."
+      },
+      {
+        "name": "language-crossfade",
+        "value": "@view-transition { navigation: auto; }",
+        "purpose": "Home: cross-document view transition between the English and Japanese pages."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "prefers-reduced-motion: reduce",
+        "purpose": "Turns off every transition, the bars' entrance and the language crossfade."
       }
     ],
     "breakpoints": [
@@ -174,7 +194,7 @@
       {
         "name": "wide",
         "value": "80rem",
-        "purpose": "Home: single column becomes the full-viewport six-column grid with vertical spine; link names and the 404 bar step up."
+        "purpose": "Home: single column becomes the full-viewport six-column grid with vertical spine; the name column stops widening at the name's largest size so the spine stays beside the name; link names and the 404 bar step up."
       },
       {
         "name": "short",
@@ -185,12 +205,20 @@
   },
   "components": [
     {
+      "name": "Portfolio Favicon",
+      "kind": "custom",
+      "refersTo": "display",
+      "description": "The C one step above and to the left of the G, echoing the two-line Latin name; Ice White initials on a square Blue-Black Ground.",
+      "html": "<div class=\"ds-favicon\"><span class=\"ds-favicon-large\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 64 64\"> <rect width=\"64\" height=\"64\" fill=\"#0b0e12\"/> <g fill=\"#e8eef2\"> <path transform=\"translate(2.5 1)\" d=\"M28 6v9c-3-3-5.5-4.5-9-4.5-5 0-8 3.6-8 8.5s3 8.5 8 8.5c3.5 0 6-1.5 9-4.5v6l-4 4.5c-1.5.6-3.2 1-5.5 1C9.5 34.5 3 28 3 19S9.5 3 18.5 3C22.3 3 25.4 4 28 6Z\"/> <path transform=\"translate(-2.5 -1)\" d=\"M59.5 35l-7 4c-1.5-2.6-3.8-4-6.5-4-5 0-8 3.8-8 9s3.3 9.5 8.2 9.5c3.8 0 6.6-2 7.8-5.5h-9v-6h16v2c0 10-6 17-15 17-9.3 0-16-7.1-16-17s6.7-16.5 16-16.5c5.9 0 10.6 2.6 13.5 7.5Z\"/> </g> </svg></span><span class=\"ds-favicon-tab\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 64 64\"> <rect width=\"64\" height=\"64\" fill=\"#0b0e12\"/> <g fill=\"#e8eef2\"> <path transform=\"translate(2.5 1)\" d=\"M28 6v9c-3-3-5.5-4.5-9-4.5-5 0-8 3.6-8 8.5s3 8.5 8 8.5c3.5 0 6-1.5 9-4.5v6l-4 4.5c-1.5.6-3.2 1-5.5 1C9.5 34.5 3 28 3 19S9.5 3 18.5 3C22.3 3 25.4 4 28 6Z\"/> <path transform=\"translate(-2.5 -1)\" d=\"M59.5 35l-7 4c-1.5-2.6-3.8-4-6.5-4-5 0-8 3.8-8 9s3.3 9.5 8.2 9.5c3.8 0 6.6-2 7.8-5.5h-9v-6h16v2c0 10-6 17-15 17-9.3 0-16-7.1-16-17s6.7-16.5 16-16.5c5.9 0 10.6 2.6 13.5 7.5Z\"/> </g> </svg></span></div>",
+      "css": ".ds-favicon { display:flex; align-items:end; gap:1.5rem; padding:1rem; background:var(--ground,#0b0e12); } .ds-favicon svg { display:block; width:100%; height:100%; } .ds-favicon-large { width:64px; height:64px; outline:1px solid var(--hairline,#2c3540); } .ds-favicon-tab { width:16px; height:16px; }"
+    },
+    {
       "name": "Language Switch",
       "kind": "nav",
       "refersTo": "language-switch-link",
       "description": "Top-right autonym switch; Ice White underline marks the current language.",
       "html": "<nav class=\"ds-lang-switch\" aria-label=\"Language\"><a href=\"#\" lang=\"en\" class=\"ds-lang-link\">English</a><a href=\"#\" lang=\"ja\" class=\"ds-lang-link\" aria-current=\"page\">日本語</a></nav>",
-      "css": ".ds-lang-switch { display:flex; gap:1.75rem; background:var(--ground,#0b0e12); padding:1rem; } .ds-lang-link { display:block; padding-block:0.5rem 0.375rem; color:var(--type,#e8eef2); font-family:\"Jost\", sans-serif; font-size:0.9375rem; font-weight:400; letter-spacing:0.16em; text-transform:uppercase; text-decoration:none; border-bottom:3px solid transparent; transition:border-color 200ms cubic-bezier(0.16,1,0.3,1); } .ds-lang-link:lang(ja) { font-family:\"Hiragino Kaku Gothic ProN\", \"Noto Sans JP\", sans-serif; letter-spacing:0.08em; } .ds-lang-link:hover { border-bottom-color:var(--secondary,#93a3b1); } .ds-lang-link[aria-current=\"page\"] { border-bottom-color:var(--type,#e8eef2); } .ds-lang-link:focus-visible { outline:3px solid var(--press,#7fd4f5); outline-offset:6px; } @media (prefers-reduced-motion: reduce) { .ds-lang-link { transition:none; } }"
+      "css": ".ds-lang-switch { display:flex; gap:1.75rem; background:var(--ground,#0b0e12); padding:1rem; } .ds-lang-link { display:block; padding-block:0.5rem 0.375rem; color:var(--type,#e8eef2); font-family:\"Jost\", sans-serif; font-size:0.9375rem; font-weight:400; letter-spacing:0.16em; padding-inline-start:0.16em; text-transform:uppercase; text-decoration:none; border-bottom:3px solid transparent; transition:border-color 200ms cubic-bezier(0.16,1,0.3,1); } .ds-lang-link:lang(ja) { font-family:\"Hiragino Kaku Gothic ProN\", \"Noto Sans JP\", sans-serif; letter-spacing:0.08em; padding-inline-start:0.08em; } .ds-lang-link:hover { border-bottom-color:var(--secondary,#93a3b1); } .ds-lang-link[aria-current=\"page\"] { border-bottom-color:var(--type,#e8eef2); } .ds-lang-link:focus-visible { outline:3px solid var(--press,#7fd4f5); outline-offset:6px; } @media (prefers-reduced-motion: reduce) { .ds-lang-link { transition:none; } }"
     },
     {
       "name": "Profile Links",
@@ -220,9 +248,9 @@
       "name": "Constructed Name",
       "kind": "custom",
       "refersTo": "display",
-      "description": "Opening bar bleeding off the left edge above the uppercase display name, one unbroken word per line.",
+      "description": "Opening bar bleeding off the left edge above the uppercase display name, one unbroken word per line; on load the bars slide in from the left edge while the name stays still.",
       "html": "<div class=\"ds-name-block\"><div class=\"ds-bar\"></div><h1 class=\"ds-name\"><span>Chad</span> <span>Grover</span></h1><div class=\"ds-bar-dim\"></div></div>",
-      "css": ".ds-name-block { background:var(--ground,#0b0e12); padding:1.5rem 2rem 2rem 0; } .ds-bar { height:0.875rem; width:70%; margin-bottom:1.75rem; background:var(--type,#e8eef2); } .ds-name { margin:0 0 1.5rem 2rem; font-family:\"Jost\", sans-serif; font-size:5rem; font-weight:700; line-height:1; letter-spacing:-0.01em; text-transform:uppercase; color:var(--type,#e8eef2); } .ds-name span { display:block; white-space:nowrap; } .ds-bar-dim { margin-left:2rem; width:60%; height:6px; background:var(--bar-dim,#1c232c); }"
+      "css": ".ds-name-block { background:var(--ground,#0b0e12); padding:1.5rem 2rem 2rem 0; } .ds-bar { height:0.875rem; width:70%; margin-bottom:1.75rem; background:var(--type,#e8eef2); animation:ds-slide-bar-in 700ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-name { margin:0 0 1.5rem 2rem; font-family:\"Jost\", sans-serif; font-size:5rem; font-weight:700; line-height:1; letter-spacing:-0.01em; text-transform:uppercase; color:var(--type,#e8eef2); } .ds-name span { display:block; white-space:nowrap; } .ds-bar-dim { margin-left:2rem; width:60%; height:6px; background:var(--bar-dim,#1c232c); animation:ds-slide-bar-in 600ms cubic-bezier(0.16, 1, 0.3, 1) 120ms backwards; } @keyframes ds-slide-bar-in { from { translate:calc(-100% - 2rem) 0; } } @media (prefers-reduced-motion: reduce) { .ds-bar, .ds-bar-dim { animation:none; } }"
     },
     {
       "name": "Role Column",
@@ -290,6 +318,7 @@
       "**Do** switch face, weight, leading and tracking by `:lang()`; give Japanese `line-break: strict` and `word-break: auto-phrase`.",
       "**Do** use a 3px Ice Cyan outline with a 5–6px offset for every focus state; a profile link draws it on its clear-space edge instead.",
       "**Do** run state transitions at 200ms on `cubic-bezier(0.16, 1, 0.3, 1)` and turn them off under `prefers-reduced-motion`.",
+      "**Do** let the home page's bars slide in from the left edge on load (the opening bar over 700ms; the Dim Bar over 600ms after 120ms, on the shared ease-out) while the type stays still, and crossfade between languages with a cross-document view transition; turn both off under `prefers-reduced-motion`.",
       "**Do** put a page's onward links on a 3px Ice Cyan rule as Title-size cyan names or official marks, using the shared links-on-rule pattern.",
       "**Do** show a profile link as its official mark alone (ADR 0003): the owner's file unmodified, 2rem tall, with one mark height of empty clear space on every side."
     ],
