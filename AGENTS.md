@@ -2,6 +2,8 @@
 
 Write self-documenting code: names, types, and structure carry the intent, and the code holds no comments.
 
+Name each function verb-noun: read `docs/agents/function-verbs.md` before you name a function or change one.
+
 ## Domain and decisions
 
 `GLOSSARY.md` defines the domain terms: use them when naming concepts, and check every commit against its **Private information** entry.
