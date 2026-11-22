@@ -1,5 +1,6 @@
 import { getEntry } from 'astro:content';
 import type { Language } from '../i18n/types';
+import { profileLinksPath } from './profile-links';
 import type { PortfolioContent } from './types';
 
 export const portfolioContentFor = async (language: Language) => {
@@ -10,7 +11,7 @@ export const portfolioContentFor = async (language: Language) => {
 
 const profileLinkFor = async (id: string) => {
   const entry = await getEntry('profileLinks', id);
-  if (!entry) throw new Error(`Unknown profile link "${id}": add it to src/content/portfolio/profile-links.json`);
+  if (!entry) throw new Error(`Unknown profile link "${id}": add it to ${profileLinksPath}`);
   return entry.data;
 };
 

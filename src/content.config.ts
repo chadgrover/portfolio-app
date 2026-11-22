@@ -1,6 +1,8 @@
+import { readFile } from 'node:fs/promises';
 import { defineCollection } from 'astro:content';
 import { file, glob } from 'astro/loaders';
 import { supportedLanguages } from './lib/i18n/constants';
+import { parseProfileLinks, profileLinksPath } from './lib/portfolio-content/profile-links';
 import { portfolioContentSchema, profileLinkSchema } from './lib/portfolio-content/schema';
 
 const portfolioFiles = glob({
@@ -22,8 +24,16 @@ const portfolio = defineCollection({
   schema: portfolioContentSchema,
 });
 
+const profileLinksFile = file(profileLinksPath);
+
 const profileLinks = defineCollection({
-  loader: file('./src/content/portfolio/profile-links.json'),
+  loader: {
+    name: 'profileLinks',
+    async load(context) {
+      parseProfileLinks(await readFile(profileLinksPath, 'utf8'));
+      await profileLinksFile.load(context);
+    },
+  },
   schema: profileLinkSchema,
 });
 

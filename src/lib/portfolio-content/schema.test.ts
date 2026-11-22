@@ -38,6 +38,13 @@ describe('portfolioContentSchema', () => {
     expect(result.error?.issues[0]?.path).toEqual(['home', 'profileLinks']);
   });
 
+  test('rejects a profile link listed twice', () => {
+    const repeated = [...profileLinks, { profileLink: 'example', purpose: 'Source code' }];
+    const result = portfolioContentSchema.safeParse({ home: { hero, profileLinks: repeated } });
+    expect(result.success).toBe(false);
+    expect(result.error?.issues[0]?.path).toEqual(['home', 'profileLinks', 1, 'profileLink']);
+  });
+
   describe.each(requiredProfileLinkFields)('profile link %s', (field) => {
     test.each(invalidTextValues)('rejects a value that is %s', (_, value) => {
       const result = portfolioContentSchema.safeParse({ home: { hero, profileLinks: [{ ...profileLinks[0], [field]: value }] } });
@@ -56,6 +63,7 @@ describe('profileLinkSchema', () => {
     ['plain HTTP', 'http://github.com/example'],
     ['not a URL', 'github.com/example'],
     ['a script URL', 'javascript:alert(1)'],
+    ['carrying user info that hides its real host', 'https://github.com@example.com/'],
   ])('rejects a URL that is %s', (_, url) => {
     const result = profileLinkSchema.safeParse({ name: 'GitHub', url });
     expect(result.success).toBe(false);
