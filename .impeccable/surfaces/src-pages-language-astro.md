@@ -28,7 +28,7 @@ OWN-WORLD: Ink & Ice. Near-black blue ground, ice-white type, one cyan reserved 
 
 STORY: The visitor reads a name built at architectural scale, understands a software engineer who cares about craft, and presses LinkedIn or GitHub.
 
-FIRST VIEWPORT: A flush-left bar at the upper third; the name at 130–170px set in two lines beneath it; a full-height vertical hairline right of the name (the JA page sets the Latin name vertically beside it); role and introduction in a right column; both profile links on a cyan rule at its foot, inside the first screen on desktop and phone. Each profile link leads with the official LinkedIn or GitHub mark, unmodified, in its official white version, followed by its name in cyan. The English / 日本語 switch sits top right on the gutter, uppercase Latin with a white underline on the current language.
+FIRST VIEWPORT: A flush-left bar at the upper third; the name at 130–170px set in two lines beneath it; a full-height vertical hairline right of the name (the JA page sets the Latin name vertically beside it); role and introduction in a right column; both profile links on a cyan rule at its foot, inside the first screen on desktop and phone. Each profile link is the official LinkedIn or GitHub mark alone, unmodified, in its official white version, with one mark height of empty clear space around it (ADR 0003). The English / 日本語 switch sits top right on the gutter, uppercase Latin with a white underline on the current language.
 
 FORM: Constructed Type, first on the ordered list after the user's narrowing steers (dark, bolder, less metaphor, Ink & Ice); seed:92cc99a75a0a8533.
 
