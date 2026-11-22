@@ -164,7 +164,7 @@ Below 80rem the home page is a single column with a responsive gutter (`gutter`)
 
 Short viewports below 80rem (height 36rem or less) tighten so both profile links land inside the first screen even at 320×568 and 390×450: the masthead drops into normal flow (right-aligned, 1rem top padding) so content always starts below it at any text size; the main column's top padding drops to 0; the opening bar thins to 0.625rem, shortens to 50% so it ends before the switch, and sits 0.5rem above the name; the name is capped at 10svh; stacks close up (spine 0.5rem, about 0.75rem, introduction 0.5rem with leading 1.8, links 0.75rem). The profile links keep their full mark size and clear space.
 
-From 80rem the home page becomes a full-viewport six-column grid: gutter, name column, a 3rem spine column, `column-gap`, the text column, gutter. The text column is `clamp(20rem, 100vw − 2·gutter − 3rem − column-gap − 43rem, 30.5rem)`, so the name column always keeps at least 43rem and the name holds roughly 130px Japanese and 164px or more Latin from 1280px. Rows are sized in `svh` so the bar sits near the upper third and the profile links land inside the first screen. The opening bar spans gutter and name column at 88% and 1.375rem thick; the spine column carries a full-height hairline on its right edge; the role column bottom-aligns above the profile links.
+From 80rem the home page becomes a full-viewport six-column grid: gutter, name column, a 3rem spine column, `column-gap`, the text column, gutter. The text column is `clamp(20rem, 100vw − 2·gutter − 3rem − column-gap − 43rem, 30.5rem)`, so the name column always keeps at least 43rem and the name holds roughly 130px Japanese and 164px or more Latin from 1280px. The name column stops widening at the name's largest size (longest line's character count × per-script advance × display maximum), so on very wide screens the spine stays beside the name and the extra width goes to `column-gap`, which never shrinks below `clamp(3rem, 8vw, 7.5rem)`. Rows are sized in `svh` so the bar sits near the upper third and the profile links land inside the first screen. The opening bar spans gutter and name column at 88% and 1.375rem thick; the spine column carries a full-height hairline on its right edge; the role column bottom-aligns above the profile links.
 
 The language switch sits in a masthead absolutely placed top-right on the gutter, outside the grid (except on short viewports, above).
 
@@ -200,7 +200,7 @@ The C sits one step above and to the left of the G, echoing the two lines of the
 
 ### Language Switch
 Quiet, typographic, top-right.
-- **Style:** each language's autonym in its own script, Label type in Ice White, no underline, a 3px transparent bottom border, 1.75rem apart.
+- **Style:** each language's autonym in its own script, Label type in Ice White, no underline, a 3px transparent bottom border, 1.75rem apart. Start padding equal to the tracking balances the trailing letter space, so the border overhangs both ends of the word equally.
 - **Hover:** border turns Slate Secondary over 200ms on the shared ease-out.
 - **Current:** border turns Ice White; `aria-current="page"`.
 - **Focus:** 3px solid Ice Cyan outline, 6px offset.
