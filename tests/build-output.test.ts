@@ -44,6 +44,7 @@ const scriptEnabledTextOf = (node: Node): string =>
       : (node.children ?? []).map(scriptEnabledTextOf).join('');
 const metaContent = (html: string, name: string) => elementsOf(html, `meta[name="${name}"]`)[0]?.attributes.content;
 const anchors = (html: string) => elementsOf(html, 'a');
+const toWords = (text: string) => text.trim().split(/\s+/u);
 const portfolioContentOf = (language: string) =>
   JSON.parse(readFileSync(new URL(`../src/content/portfolio/${language}.json`, import.meta.url), 'utf8'));
 const profileLinks: { name: string; url: string }[] = JSON.parse(
@@ -119,6 +120,14 @@ describe.each(supportedLanguages)('localized home page /%s/', (language) => {
     expect(textOf(html, 'title')).toEqual(['Chad Grover']);
   });
 
+  test('shows the name from its portfolio content', () => {
+    expect(textOf(html, 'h1').map(toWords)).toEqual([toWords(portfolioContentOf(language).home.hero.displayName)]);
+  });
+
+  test('shows the role from its portfolio content', () => {
+    expect(textOf(html, '.role')[0]).toContain(portfolioContentOf(language).home.hero.role);
+  });
+
   test('describes itself with its introduction', () => {
     expect(metaContent(html, 'description')).toBe(portfolioContentOf(language).home.hero.introduction);
   });
@@ -152,8 +161,18 @@ describe.each(supportedLanguages)('localized home page /%s/', (language) => {
 describe('Japanese home page /ja/', () => {
   const html = readBuildOutput('ja/index.html');
 
+  test('shows the name in katakana', () => {
+    expect(textOf(html, 'h1').map(toWords)).toEqual([['グローヴァ', 'チャッド']]);
+  });
+
   test('shows the Latin-script name from the English portfolio content', () => {
     expect(textOf(html, '.spine-name')).toEqual([portfolioContentOf('en').home.hero.displayName]);
+  });
+});
+
+describe.each(buildOutputFiles.filter((path) => extname(path) === '.html'))('page %s', (path) => {
+  test('carries no fictional placeholder notice', () => {
+    expect(readBuildOutput(path)).not.toMatch(/fictional/i);
   });
 });
 
