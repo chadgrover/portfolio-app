@@ -1,19 +1,24 @@
 ---
 import type { Language } from '../lib/i18n/types';
+import { fontFaceCss } from '../lib/fonts/faces';
 import '../styles/global.css';
 interface Props {
   language: Language;
   title: string;
+  class?: string;
 }
-const { language, title } = Astro.props;
+const { language, title, class: mainClass } = Astro.props;
 ---
 <!doctype html>
 <html lang={language}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#0b0e12" />
     <title>{title}</title>
+    <style is:inline set:html={fontFaceCss}></style>
     <slot name="head" />
   </head>
-  <body><main><slot /></main></body>
+  <body><slot name="header" /><main class={mainClass}><slot /></main></body>
 </html>

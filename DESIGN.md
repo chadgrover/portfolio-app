@@ -1,0 +1,214 @@
+---
+name: Portfolio
+description: A bilingual EN/JA developer portfolio built as constructed type on a near-black ground.
+colors:
+  press: "#7fd4f5"
+  ground: "#0b0e12"
+  type: "#e8eef2"
+  body: "#c9d3db"
+  secondary: "#93a3b1"
+  hairline: "#2c3540"
+  bar-dim: "#1c232c"
+typography:
+  display:
+    fontFamily: "Jost, Hiragino Kaku Gothic ProN, Hiragino Sans, Noto Sans JP, sans-serif"
+    fontSize: "min(10.75rem, 100cqi / (columns * 0.7))"
+    fontWeight: 700
+    lineHeight: 1
+    letterSpacing: "-0.01em"
+  display-ja:
+    fontFamily: "Noto Sans JP Name, Hiragino Kaku Gothic ProN, Hiragino Sans, Noto Sans JP, sans-serif"
+    fontSize: "min(8.25rem, 100cqi / (columns * 1.02))"
+    fontWeight: 900
+    lineHeight: 1.02
+    letterSpacing: "0.02em"
+  headline:
+    fontFamily: "Jost, Hiragino Kaku Gothic ProN, Hiragino Sans, Noto Sans JP, sans-serif"
+    fontSize: "1.5rem"
+    fontWeight: 600
+    lineHeight: 1.45
+  title:
+    fontFamily: "Jost, Hiragino Kaku Gothic ProN, Hiragino Sans, Noto Sans JP, sans-serif"
+    fontSize: "1.875rem"
+    fontWeight: 400
+    lineHeight: 1.3
+    letterSpacing: "0.04em"
+  body:
+    fontFamily: "Jost, Hiragino Kaku Gothic ProN, Hiragino Sans, Noto Sans JP, sans-serif"
+    fontSize: "1.0625rem"
+    fontWeight: 400
+    lineHeight: 1.7
+  body-ja:
+    fontFamily: "Jost, Hiragino Kaku Gothic ProN, Hiragino Sans, Noto Sans JP, sans-serif"
+    fontSize: "1rem"
+    fontWeight: 400
+    lineHeight: 1.95
+  label:
+    fontFamily: "Jost, Hiragino Kaku Gothic ProN, Hiragino Sans, Noto Sans JP, sans-serif"
+    fontSize: "0.9375rem"
+    fontWeight: 400
+    lineHeight: 1.7
+    letterSpacing: "0.16em"
+  caption:
+    fontFamily: "Jost, Hiragino Kaku Gothic ProN, Hiragino Sans, Noto Sans JP, sans-serif"
+    fontSize: "0.875rem"
+    fontWeight: 400
+    lineHeight: 1.7
+    letterSpacing: "0.04em"
+rounded:
+  none: "0px"
+spacing:
+  gutter: "clamp(1rem, 5vw, 4.5rem)"
+  column-gap: "clamp(3rem, 8vw, 7.5rem)"
+  measure: "36rem"
+  stack-sm: "0.875rem"
+  stack-md: "1.25rem"
+  stack-lg: "2rem"
+  inline: "1.5rem"
+components:
+  language-link:
+    textColor: "{colors.type}"
+    typography: "{typography.label}"
+    rounded: "{rounded.none}"
+    padding: "0.5rem 0 0.375rem"
+  language-link-current:
+    textColor: "{colors.type}"
+  profile-link:
+    textColor: "{colors.type}"
+    typography: "{typography.title}"
+    rounded: "{rounded.none}"
+    padding: "1rem 0 0.5rem"
+  profile-link-active:
+    textColor: "{colors.press}"
+  inline-link:
+    textColor: "{colors.press}"
+---
+
+# Design System: Portfolio
+
+## Overview
+
+**Creative North Star: "Constructed Type"**
+
+The page is built out of the name. Heavy display type, solid bars and thin rules, all set at 0° and 90°, carry the composition; there are no cards, panels or decorative surfaces to hold content. A near-black, faintly blue ground recedes and ice-white type stands forward, with a single cyan kept for whatever can be pressed. Density is low and the scale contrast is extreme: a display name sized to fill its column against small, widely tracked labels.
+
+Japanese and English are set as equals, each in its own setting rather than one script borrowing the other's. Japanese gets a heavy gothic face, looser leading and phrase-aware breaking; Latin gets a geometric sans, uppercase for labels and the name. On the Japanese page the Latin name turns vertical and runs up a full-height rule beside the Japanese name, a device native to Japanese typesetting.
+
+The surface is flat and dark only. Depth is a matter of value steps on one cool hue, never light effects.
+
+**Key Characteristics:**
+- Solid bars and hairline rules at right angles do the structural work.
+- Display name sized by container query to fill its column.
+- One cyan, reserved for pressable things and the rule that frames them.
+- Per-script typesetting: face, weight, leading and tracking change with `lang`.
+- Flat, square, dark: no radius, shadow, glow, gradient or grain anywhere in the build.
+
+## Colors
+
+One cool blue-slate hue carries every neutral from ground to type; a single light cyan is the only chroma.
+
+### Primary
+- **Ice Cyan** (press): links, the link arrows, the rule above the profile links, focus rings, text selection and form `accent-color`. It is the one colour that means "you can act here".
+
+### Neutral
+- **Blue-Black Ground** (ground): page and body background, browser `theme-color`, the text colour inside a selection.
+- **Ice White** (type): display name, role, link names, the current-language underline, and the solid bar that opens the composition.
+- **Frost Body** (body): running introduction text, one step down from Ice White so the paragraph sits behind the name and role.
+- **Slate Secondary** (secondary): small supporting text (link purposes, the English gloss under a Japanese role, the vertical name on narrow screens) and the hover underline on the language switcher.
+- **Slate Hairline** (hairline): 1px structural rules (the full-height spine, the rule over the role column) and the scrollbar thumb. Decorative only, never text.
+- **Dim Bar** (bar-dim): one low-contrast counterweight bar beneath the name on wide screens.
+
+The Blue-Black & Indigo alternate palette is recorded in the home surface brief; it has not shipped and has no tokens here.
+
+### Named Rules
+**The Pressable Cyan Rule.** Ice Cyan marks what can be pressed and the rule that frames a group of pressables. Static text, headings and decorative bars never take it.
+
+**The One Hue Rule.** Every neutral is a value step on the same cool blue-slate hue. A new neutral is a new step on that hue, not a warm grey or a pure grey.
+
+## Typography
+
+**Display Font:** Jost (variable, 100–900, self-hosted) for Latin; Noto Sans JP Name (Noto Sans JP 900, self-hosted) for the Japanese name
+**Body Font:** Jost, falling back per glyph to the system Japanese gothic stack (Hiragino Kaku Gothic ProN, Hiragino Sans, Noto Sans JP, Yu Gothic, Meiryo)
+
+**Character:** A geometric Latin sans paired with a black-weight Japanese gothic. Latin brings precise circles and an uppercase, widely tracked voice for labels; the Japanese face brings mass.
+
+### Hierarchy
+- **Display** (700, up to 10.75rem, line-height 1, uppercase, -0.01em): the Latin name, one word per line. Japanese variant: 900, up to 8.25rem, line-height 1.02, 0.02em.
+- **Headline** (600 Latin / 700 Japanese, 1.5–1.625rem, line-height 1.45, balanced wrap): the role line.
+- **Title** (400, 1.5rem rising to 1.875rem on wide screens, line-height 1.3, 0.04em): profile link names.
+- **Body** (400, 1.0625rem, line-height 1.7 Latin; 1rem, line-height 1.95 Japanese; pretty wrap; max 34em): the introduction.
+- **Label** (400, 0.875–0.9375rem, 0.16em, uppercase): language switcher and the English gloss under a Japanese role. Japanese labels keep their case and tighten to 0.08em.
+- **Caption** (400, 0.875rem, 0.04em): link purposes.
+- **Spine** (400, 1.875rem, 0.42em, uppercase, vertical-rl rotated to read bottom-up): the Latin name running up the spine on the Japanese page. Below 72rem it lies flat at 0.9375rem and 0.3em in Slate Secondary.
+
+### Named Rules
+**The Fill-the-Column Rule.** The display name's size is computed from its column width divided by its longest line's character count times a per-script advance (0.7 Latin, 1.02 Japanese), capped at the display maximum. Never set the name at a fixed breakpoint size.
+
+**The Script Owns Its Setting Rule.** Face, weight, leading and tracking are chosen by `:lang()`, not by page. Japanese text runs `line-break: strict` and phrase-aware `word-break: auto-phrase`; uppercase transforms and wide tracking are Latin-only.
+
+## Layout
+
+Below 72rem the page is a single column with a responsive gutter (`gutter`) and content capped at the reading measure (`measure`, 36rem). The opening Ice White bar bleeds off the left edge into the gutter at 0.875rem thick and min(70%, measure + gutter) long, followed by name, flat Latin name over a hairline, role column, then profile links. Stacks step at 0.875rem, 1.25rem and 2rem.
+
+From 72rem the page becomes a full-viewport six-column grid: gutter, name column, a 3rem spine column, `column-gap`, a 20–30.5rem text column, gutter. Rows are sized in `svh` so the bar sits near the upper third and the profile links land inside the first screen. The opening bar spans gutter and name column at 88% and 1.375rem thick; the spine column carries a full-height hairline on its right edge; the role column bottom-aligns above the profile links.
+
+The language switcher is absolutely placed top-right, outside the grid.
+
+Profile links lay out as an auto-fit grid (minimum 9rem per item, 1.5rem column gap), so they sit side by side and wrap only when the measure cannot hold two.
+
+The shared base for non-home pages (the 404) is a centred 44rem column with 3rem/1.5rem padding, a 1.2 line-height `clamp(2rem, 7vw, 3rem)` heading and underlined cyan links.
+
+## Elevation & Depth
+
+Flat. There are no shadows, glows, blurs or gradients. Depth is tonal only: Blue-Black Ground, Dim Bar, Slate Hairline, Slate Secondary, Frost Body and Ice White form a value ladder, and an element's importance is its step on that ladder. Layering is limited to the switcher sitting above the grid with `z-index: 1`.
+
+### Named Rules
+**The Value Ladder Rule.** To make something recede, step it down the ladder; to bring it forward, step it up. Never add a shadow or a lighter surface panel.
+
+## Shapes
+
+Every corner is square (0px). Form comes from solid rectangles and 1px or 3px rules set strictly horizontal or vertical: the opening bar, the dim bar, the spine hairline, the hairline over the role column, the 3px cyan rule over the profile links, and the 3px underline on the current language. The only non-rectangular mark is the link arrow, a stroked SVG with square caps and mitred joins so it matches the square geometry.
+
+### Named Rules
+**The Right Angle Rule.** Bars and rules run at 0° or 90° and end square. Thickness carries hierarchy: 1px hairlines for structure, 3px for interactive framing, solid bars for the composition's anchors.
+
+## Components
+
+### Language Switcher
+Quiet, typographic, top-right.
+- **Style:** each language's autonym in its own script, Label type in Ice White, no underline, a 3px transparent bottom border.
+- **Hover:** border turns Slate Secondary over 200ms on the shared ease-out.
+- **Current:** border turns Ice White; `aria-current="page"`.
+- **Focus:** 3px solid Ice Cyan outline, 6px offset.
+
+### Profile Links
+The page's call to action, set as type on a rule rather than as buttons.
+- **Structure:** a 3px Ice Cyan rule above the group; each link is a Title-size name with a stroked arrow (0.8em, 2.5 stroke, Ice Cyan) and a Caption-size purpose line in Slate Secondary below. No fill, no border, no radius.
+- **Hover:** the arrow slides 0.375rem right over 240ms; the purpose brightens to Ice White over 200ms.
+- **Active:** the arrow travels 0.625rem and the name turns Ice Cyan.
+- **Focus:** 3px solid Ice Cyan outline, 6px offset.
+- **Reduced motion:** all transitions off.
+
+### Inline Links
+Ice Cyan text with the browser underline offset 0.2em; focus is a 3px Ice Cyan outline at 5px offset.
+
+### Spine Name
+The signature device on the Japanese page: the Latin name, hidden from assistive tech as a duplicate, runs vertically up a full-height hairline between the Japanese name and the role column. On narrow screens it lies flat beneath the name over a hairline.
+
+## Do's and Don'ts
+
+### Do:
+- **Do** build structure from solid bars and 1px/3px rules at 0° and 90°, ending square.
+- **Do** keep Ice Cyan for pressable elements, their framing rule, focus rings and selection.
+- **Do** size the display name with the container-query formula and per-script advance, capped at 10.75rem Latin and 8.25rem Japanese.
+- **Do** switch face, weight, leading and tracking by `:lang()`; give Japanese `line-break: strict` and `word-break: auto-phrase`.
+- **Do** use a 3px Ice Cyan outline with a 5–6px offset for every focus state.
+- **Do** run state transitions at 200–240ms on `cubic-bezier(0.16, 1, 0.3, 1)` and turn them off under `prefers-reduced-motion`.
+
+### Don't:
+- **Don't** round corners, or add shadows, glows, gradients or grain; depth is a step on the value ladder.
+- **Don't** use Ice Cyan on static text, headings or decorative bars.
+- **Don't** introduce a neutral off the cool blue-slate hue.
+- **Don't** uppercase or widely track Japanese text; tracking above 0.08em and uppercase transforms are Latin-only.
+- **Don't** wrap content in cards or filled panels; content sits directly on the ground, separated by rules.
+- **Don't** set Slate Hairline or Dim Bar as a text colour.

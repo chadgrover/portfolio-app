@@ -1,0 +1,274 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-22T03:00:27Z",
+  "title": "Design System: Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "press": {
+        "role": "primary",
+        "displayName": "Ice Cyan",
+        "canonical": "oklch(82.8% 0.095 225)",
+        "tonalRamp": [
+          "#000e1a",
+          "#002a3b",
+          "#004a5f",
+          "#136b87",
+          "#3f8daa",
+          "#70afc8",
+          "#9fd2e7",
+          "#cef6ff"
+        ]
+      },
+      "ground": {
+        "role": "neutral",
+        "displayName": "Blue-Black Ground",
+        "canonical": "oklch(16.2% 0.010 256)",
+        "tonalRamp": [
+          "#090b0f",
+          "#22252a",
+          "#3f4247",
+          "#5e6267",
+          "#7e8388",
+          "#a1a5ab",
+          "#c5c9d0",
+          "#eaeff5"
+        ]
+      },
+      "type": {
+        "role": "neutral",
+        "displayName": "Ice White",
+        "canonical": "oklch(94.6% 0.008 237)",
+        "tonalRamp": [
+          "#080c0e",
+          "#212629",
+          "#3e4346",
+          "#5d6265",
+          "#7e8387",
+          "#a0a6aa",
+          "#c4cace",
+          "#e9eff3"
+        ]
+      },
+      "body": {
+        "role": "neutral",
+        "displayName": "Frost Body",
+        "canonical": "oklch(86.2% 0.016 242)",
+        "tonalRamp": [
+          "#060c11",
+          "#1f262c",
+          "#3b434a",
+          "#5a6369",
+          "#7b848b",
+          "#9da6ae",
+          "#c1cbd3",
+          "#e6f0f8"
+        ]
+      },
+      "secondary": {
+        "role": "neutral",
+        "displayName": "Slate Secondary",
+        "canonical": "oklch(70.7% 0.027 245)",
+        "tonalRamp": [
+          "#030c16",
+          "#1a2732",
+          "#364450",
+          "#556370",
+          "#758492",
+          "#97a7b5",
+          "#bbccda",
+          "#e0f1ff"
+        ]
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Slate Hairline",
+        "canonical": "oklch(32.5% 0.023 254)",
+        "tonalRamp": [
+          "#050c15",
+          "#1d2630",
+          "#3a434e",
+          "#58626e",
+          "#798390",
+          "#9ba6b4",
+          "#bfcad8",
+          "#e4f0fe"
+        ]
+      },
+      "bar-dim": {
+        "role": "neutral",
+        "displayName": "Dim Bar",
+        "canonical": "oklch(25.3% 0.020 255)",
+        "tonalRamp": [
+          "#060c13",
+          "#1f262f",
+          "#3b434d",
+          "#5a626d",
+          "#7b838e",
+          "#9da6b2",
+          "#c1cad6",
+          "#e6effc"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The Latin name; size computed from column width and longest line, capped at 10.75rem."
+      },
+      "display-ja": {
+        "displayName": "Display (Japanese)",
+        "purpose": "The Japanese name in Noto Sans JP 900; capped at 8.25rem."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "The role line; 700 when Japanese."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Profile link names; 1.5rem below 72rem."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Latin running text, max 34em."
+      },
+      "body-ja": {
+        "displayName": "Body (Japanese)",
+        "purpose": "Japanese running text with looser leading."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Uppercase tracked Latin labels: language switcher, English role gloss. Japanese labels tighten to 0.08em."
+      },
+      "caption": {
+        "displayName": "Caption",
+        "purpose": "Link purposes in Slate Secondary."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Every state transition."
+      },
+      {
+        "name": "duration-color",
+        "value": "200ms",
+        "purpose": "Border and text colour changes on hover."
+      },
+      {
+        "name": "duration-travel",
+        "value": "240ms",
+        "purpose": "Arrow translate on hover and press."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "wide",
+        "value": "72rem",
+        "purpose": "Single column becomes the full-viewport six-column grid with vertical spine."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Language Switcher",
+      "kind": "nav",
+      "refersTo": "language-link",
+      "description": "Top-right autonym switcher; Ice White underline marks the current language.",
+      "html": "<nav class=\"ds-lang\" aria-label=\"Language\"><a href=\"#\" lang=\"en\" class=\"ds-lang-link\">English</a><a href=\"#\" lang=\"ja\" class=\"ds-lang-link\" aria-current=\"page\">日本語</a></nav>",
+      "css": ".ds-lang { display:flex; gap:1.75rem; background:var(--ground,#0b0e12); padding:1rem; } .ds-lang-link { display:block; padding-block:0.5rem 0.375rem; color:var(--type,#e8eef2); font-family:\"Jost\", sans-serif; font-size:0.9375rem; font-weight:400; letter-spacing:0.16em; text-transform:uppercase; text-decoration:none; border-bottom:3px solid transparent; transition:border-color 200ms cubic-bezier(0.16,1,0.3,1); } .ds-lang-link:lang(ja) { font-family:\"Hiragino Kaku Gothic ProN\", \"Noto Sans JP\", sans-serif; letter-spacing:0.08em; } .ds-lang-link:hover { border-bottom-color:var(--secondary,#93a3b1); } .ds-lang-link[aria-current=\"page\"] { border-bottom-color:var(--type,#e8eef2); } .ds-lang-link:focus-visible { outline:3px solid var(--press,#7fd4f5); outline-offset:6px; }"
+    },
+    {
+      "name": "Profile Links",
+      "kind": "custom",
+      "refersTo": "profile-link",
+      "description": "The call to action: link names with a sliding arrow on a 3px Ice Cyan rule.",
+      "html": "<ul class=\"ds-profile\" role=\"list\"><li><a href=\"#\" class=\"ds-profile-link\"><span class=\"ds-profile-name\">LinkedIn<svg class=\"ds-arrow\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M3 12h17M13 5l7 7-7 7\"/></svg></span><span class=\"ds-purpose\">Get in touch</span></a></li><li><a href=\"#\" class=\"ds-profile-link\"><span class=\"ds-profile-name\">GitHub<svg class=\"ds-arrow\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M3 12h17M13 5l7 7-7 7\"/></svg></span><span class=\"ds-purpose\">Source code</span></a></li></ul>",
+      "css": ".ds-profile { display:grid; grid-template-columns:repeat(auto-fit, minmax(9rem, 1fr)); gap:0 1.5rem; max-width:36rem; margin:0; padding:0 1rem 1rem; list-style:none; border-top:3px solid var(--press,#7fd4f5); background:var(--ground,#0b0e12); } .ds-profile-link { display:block; padding-block:1rem 0.5rem; color:var(--type,#e8eef2); text-decoration:none; } .ds-profile-name { display:flex; align-items:center; gap:0.625rem; font-family:\"Jost\", sans-serif; font-size:1.875rem; font-weight:400; line-height:1.3; letter-spacing:0.04em; } .ds-arrow { width:0.8em; height:0.8em; flex:none; fill:none; stroke:var(--press,#7fd4f5); stroke-width:2.5; stroke-linecap:square; stroke-linejoin:miter; transition:translate 240ms cubic-bezier(0.16,1,0.3,1); } .ds-purpose { display:block; margin-top:0.25rem; font-family:\"Jost\", sans-serif; font-size:0.875rem; letter-spacing:0.04em; color:var(--secondary,#93a3b1); transition:color 200ms cubic-bezier(0.16,1,0.3,1); } .ds-profile-link:hover .ds-arrow { translate:0.375rem 0; } .ds-profile-link:hover .ds-purpose { color:var(--type,#e8eef2); } .ds-profile-link:active .ds-arrow { translate:0.625rem 0; } .ds-profile-link:active .ds-profile-name { color:var(--press,#7fd4f5); } .ds-profile-link:focus-visible { outline:3px solid var(--press,#7fd4f5); outline-offset:6px; } @media (prefers-reduced-motion: reduce) { .ds-arrow, .ds-purpose { transition:none; } }"
+    },
+    {
+      "name": "Inline Link",
+      "kind": "custom",
+      "refersTo": "inline-link",
+      "description": "Running-text link: Ice Cyan with an offset underline.",
+      "html": "<p class=\"ds-text\">The requested page could not be found. <a href=\"#\" class=\"ds-inline-link\">English home</a></p>",
+      "css": ".ds-text { margin:0; padding:1rem; background:var(--ground,#0b0e12); color:var(--type,#e8eef2); font-family:\"Jost\", sans-serif; line-height:1.7; } .ds-inline-link { color:var(--press,#7fd4f5); text-underline-offset:0.2em; } .ds-inline-link:focus-visible { outline:3px solid var(--press,#7fd4f5); outline-offset:5px; }"
+    },
+    {
+      "name": "Constructed Name",
+      "kind": "custom",
+      "refersTo": "display",
+      "description": "Opening bar bleeding off the left edge above the uppercase display name, one word per line.",
+      "html": "<div class=\"ds-name-block\"><div class=\"ds-bar\"></div><h1 class=\"ds-name\"><span>Chad</span> <span>Grover</span></h1><div class=\"ds-bar-dim\"></div></div>",
+      "css": ".ds-name-block { background:var(--ground,#0b0e12); padding:1.5rem 2rem 2rem 0; } .ds-bar { height:0.875rem; width:70%; margin-bottom:1.75rem; background:var(--type,#e8eef2); } .ds-name { margin:0 0 1.5rem 2rem; font-family:\"Jost\", sans-serif; font-size:5rem; font-weight:700; line-height:1; letter-spacing:-0.01em; text-transform:uppercase; color:var(--type,#e8eef2); } .ds-name span { display:block; } .ds-bar-dim { margin-left:2rem; width:60%; height:6px; background:var(--bar-dim,#1c232c); }"
+    },
+    {
+      "name": "Role Column",
+      "kind": "card",
+      "refersTo": "headline",
+      "description": "Role and introduction on the ground under a hairline; no panel, no fill.",
+      "html": "<div class=\"ds-about\"><p class=\"ds-role\">Software Engineer</p><p class=\"ds-intro\">I build software that is accessible and fast, with close attention to the details that make it easy to use.</p></div>",
+      "css": ".ds-about { max-width:36rem; padding:1.875rem 1rem 1rem; border-top:1px solid var(--hairline,#2c3540); background:var(--ground,#0b0e12); } .ds-role { margin:0; font-family:\"Jost\", sans-serif; font-size:1.625rem; font-weight:600; line-height:1.45; color:var(--type,#e8eef2); text-wrap:balance; } .ds-intro { max-width:34em; margin:1.25rem 0 0; font-family:\"Jost\", sans-serif; font-size:1.0625rem; line-height:1.7; color:var(--body,#c9d3db); text-wrap:pretty; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Constructed Type",
+    "overview": "**Creative North Star: \"Constructed Type\"**\n\nThe page is built out of the name. Heavy display type, solid bars and thin rules, all set at 0° and 90°, carry the composition; there are no cards, panels or decorative surfaces to hold content. A near-black, faintly blue ground recedes and ice-white type stands forward, with a single cyan kept for whatever can be pressed. Density is low and the scale contrast is extreme: a display name sized to fill its column against small, widely tracked labels.\n\nJapanese and English are set as equals, each in its own setting rather than one script borrowing the other's. Japanese gets a heavy gothic face, looser leading and phrase-aware breaking; Latin gets a geometric sans, uppercase for labels and the name. On the Japanese page the Latin name turns vertical and runs up a full-height rule beside the Japanese name, a device native to Japanese typesetting.\n\nThe surface is flat and dark only. Depth is a matter of value steps on one cool hue, never light effects.",
+    "keyCharacteristics": [
+      "Solid bars and hairline rules at right angles do the structural work.",
+      "Display name sized by container query to fill its column.",
+      "One cyan, reserved for pressable things and the rule that frames them.",
+      "Per-script typesetting: face, weight, leading and tracking change with `lang`.",
+      "Flat, square, dark: no radius, shadow, glow, gradient or grain anywhere in the build."
+    ],
+    "rules": [
+      {
+        "name": "The Pressable Cyan Rule",
+        "body": "Ice Cyan marks what can be pressed and the rule that frames a group of pressables. Static text, headings and decorative bars never take it.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Hue Rule",
+        "body": "Every neutral is a value step on the same cool blue-slate hue. A new neutral is a new step on that hue, not a warm grey or a pure grey.",
+        "section": "colors"
+      },
+      {
+        "name": "The Fill-the-Column Rule",
+        "body": "The display name's size is computed from its column width divided by its longest line's character count times a per-script advance (0.7 Latin, 1.02 Japanese), capped at the display maximum. Never set the name at a fixed breakpoint size.",
+        "section": "typography"
+      },
+      {
+        "name": "The Script Owns Its Setting Rule",
+        "body": "Face, weight, leading and tracking are chosen by `:lang()`, not by page. Japanese text runs `line-break: strict` and phrase-aware `word-break: auto-phrase`; uppercase transforms and wide tracking are Latin-only.",
+        "section": "typography"
+      },
+      {
+        "name": "The Value Ladder Rule",
+        "body": "To make something recede, step it down the ladder; to bring it forward, step it up. Never add a shadow or a lighter surface panel.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Right Angle Rule",
+        "body": "Bars and rules run at 0° or 90° and end square. Thickness carries hierarchy: 1px hairlines for structure, 3px for interactive framing, solid bars for the composition's anchors.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "**Do** build structure from solid bars and 1px/3px rules at 0° and 90°, ending square.",
+      "**Do** keep Ice Cyan for pressable elements, their framing rule, focus rings and selection.",
+      "**Do** size the display name with the container-query formula and per-script advance, capped at 10.75rem Latin and 8.25rem Japanese.",
+      "**Do** switch face, weight, leading and tracking by `:lang()`; give Japanese `line-break: strict` and `word-break: auto-phrase`.",
+      "**Do** use a 3px Ice Cyan outline with a 5–6px offset for every focus state.",
+      "**Do** run state transitions at 200–240ms on `cubic-bezier(0.16, 1, 0.3, 1)` and turn them off under `prefers-reduced-motion`."
+    ],
+    "donts": [
+      "**Don't** round corners, or add shadows, glows, gradients or grain; depth is a step on the value ladder.",
+      "**Don't** use Ice Cyan on static text, headings or decorative bars.",
+      "**Don't** introduce a neutral off the cool blue-slate hue.",
+      "**Don't** uppercase or widely track Japanese text; tracking above 0.08em and uppercase transforms are Latin-only.",
+      "**Don't** wrap content in cards or filled panels; content sits directly on the ground, separated by rules.",
+      "**Don't** set Slate Hairline or Dim Bar as a text colour."
+    ]
+  }
+}
