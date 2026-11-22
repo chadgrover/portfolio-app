@@ -12,3 +12,8 @@ export const parseProfileLinks = (text: string) => {
   });
   return entries;
 };
+
+export const toProfileLinkAddress = (url: string) => {
+  const { hostname, pathname } = new URL(url);
+  return `${hostname.replace(/^www\./u, '')}${decodeURI(pathname).replace(/\/$/u, '')}`;
+};

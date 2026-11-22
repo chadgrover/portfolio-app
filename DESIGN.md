@@ -132,6 +132,8 @@ The official LinkedIn and GitHub marks render in the white their owners supply, 
 
 The Blue-Black & Indigo alternate palette is recorded in the home surface brief; it has not shipped and has no tokens here.
 
+On paper the value ladder turns over so the page prints as ink: the ground becomes the paper (#fff), and each role takes the step from the other end of the ladder. Type takes Blue-Black Ground, running text Dim Bar, supporting text Slate Hairline, rules Slate Secondary and the dim bar Frost Body. Ice Cyan's role goes to Blue-Black Ground, because nothing on paper can be pressed.
+
 ### Named Rules
 **The Pressable Cyan Rule.** Ice Cyan marks what can be pressed and the rule that frames a group of pressables. Static text, headings and decorative bars never take it.
 
@@ -168,6 +170,8 @@ From 80rem the home page becomes a full-viewport six-column grid: gutter, name c
 
 The language switch sits in a masthead absolutely placed top-right on the gutter, outside the grid (except on short viewports, above).
 
+In print the home page takes the single-column layout with 15mm margins on whatever paper the visitor chooses, and fits one A4 or Letter page. The masthead is left out, the main column drops its top padding and full-height minimum, and the opening bar prints solid.
+
 Links on a rule lay out as a wrapping flex row (2rem column gap) on a 3px Ice Cyan top rule; the same pattern serves the home's profile links and the 404's home links. Profile links set their clear-space boxes edge to edge instead of using the column gap.
 
 The 404 has its own layout rather than the home grid: flush-left, max 64rem, top padding `clamp(4rem, 14svh, 8rem)`, the opening Ice White bar bleeding into the gutter (0.875rem, 1.375rem from 80rem). Below 48rem it is one column. From 48rem it is an explicit two-column grid (column gap `clamp(2rem, 6vw, 5rem)`) with the English and Japanese blocks side by side as equals, their home links aligned beneath in the same columns, and the bar ending exactly at the first column's edge. Later pages get their own layouts in the same vocabulary rather than reusing the home grid.
@@ -202,9 +206,10 @@ The C sits one step above and to the left of the G, echoing the two lines of the
 Quiet, typographic, top-right.
 - **Style:** each language's autonym in its own script, Label type in Ice White, no underline, a 3px transparent bottom border, 1.75rem apart. Start padding equal to the tracking balances the trailing letter space, so the border overhangs both ends of the word equally.
 - **Hover:** border turns Slate Secondary over 200ms on the shared ease-out.
-- **Current:** border turns Ice White; `aria-current="page"`.
+- **Current:** a 3px Ice White underline laid over the border; `aria-current="page"`. When the visitor switches language, the cross-document view transition carries the underline to the other autonym over 300ms on the shared ease-out.
 - **Focus:** 3px solid Ice Cyan outline, 6px offset.
-- **Reduced motion:** transition off.
+- **Reduced motion:** transition off, and the underline does not travel.
+- **Forced colours:** the bottom border is removed, because a contrast theme would draw the transparent border under every autonym; the current-language underline is drawn in the theme's link colour (`LinkText`) and is the only line.
 
 ### Links on a Rule
 The shared pattern for a page's way onward, set as type on a rule rather than as buttons.
@@ -217,8 +222,9 @@ The shared pattern for a page's way onward, set as type on a rule rather than as
 The home's call to action: Links on a Rule where each link is its company's official mark alone, with no name beside it (ADR 0003 records why and the brand terms behind it).
 - **Mark:** the official white mark, 2rem tall (never below the 21px floor), width following its own proportions, decorative and hidden from assistive tech; the link's accessible name comes from interface text.
 - **Clear space:** one mark height (`mark-clear-space`) on every side holds only the ground. Each link's box is the mark plus that clear space, so the rule sits one mark height above the mark, neighbouring marks sit two clear spaces apart, and every link is 96px tall.
-- **Hover:** the link's segment of the rule thickens from 3px to 6px, upward, away from the clear space, over 200ms on the shared ease-out.
+- **Hover:** the link's segment of the rule thickens from 3px to 6px, upward, away from the clear space, over 200ms on the shared ease-out. Under forced colours the segment is drawn in the theme's link colour (`LinkText`).
 - **Focus:** 3px solid Ice Cyan outline drawn on the edge of the clear space (inset 3px into the link's box), not 5px from the mark.
+- **Print:** the mark is left out and the link prints its address (the URL without scheme, `www` or trailing slash, with a non-Latin path in its own script) in Title type on the rule, so a printed page still shows the way to each profile and a saved PDF keeps the link. The mark and the address never appear together (ADR 0003).
 - **Provenance:** both files live in `src/assets/profile-link-marks/` and ship unmodified; both were downloaded 2026-11-22.
   - `GitHub_Invertocat_White.svg`: byte-for-byte from GitHub's official logo package (https://brand.github.com/GitHub_Logos.zip, `GitHub Logos/SVG/GitHub_Invertocat_White.svg`), inlined as-is. Guidelines: https://brand.github.com/foundations/logo.
   - `InBug-White.png`: byte-for-byte from LinkedIn's official in-logo package (https://content.linkedin.com/content/dam/me/business/en-us/amp/xbu/linkedin-revised-brand-guidelines/logos/in-logo.zip, `in-logo/InBug-White.png`, 840×779, including its ®; LinkedIn ships no SVG), served as-is with no resizing. Guidelines: https://brand.linkedin.com/in-logo.
@@ -238,7 +244,8 @@ The signature device on the Japanese page: the Latin name, hidden from assistive
 - **Do** switch face, weight, leading and tracking by `:lang()`; give Japanese `line-break: strict` and `word-break: auto-phrase`.
 - **Do** use a 3px Ice Cyan outline with a 5–6px offset for every focus state; a profile link draws it on its clear-space edge instead.
 - **Do** run state transitions at 200ms on `cubic-bezier(0.16, 1, 0.3, 1)` and turn them off under `prefers-reduced-motion`.
-- **Do** let the home page's bars slide in from the left edge on load (the opening bar over 700ms; the Dim Bar over 600ms after 120ms, on the shared ease-out) while the type stays still, and crossfade between languages with a cross-document view transition; turn both off under `prefers-reduced-motion`.
+- **Do** let the home page's bars slide in from the left edge on load (the opening bar over 700ms; the Dim Bar over 600ms after 120ms, on the shared ease-out) while the type stays still, and crossfade between languages with a cross-document view transition that carries the current-language underline to the other autonym; turn both off under `prefers-reduced-motion`.
+- **Do** print in ink: turn the value ladder over on white paper, print the bars solid, leave out controls that only work on screen, and print an address wherever a link shows only a mark.
 - **Do** put a page's onward links on a 3px Ice Cyan rule as Title-size cyan names or official marks, using the shared links-on-rule pattern.
 - **Do** show a profile link as its official mark alone (ADR 0003): the owner's file unmodified, 2rem tall, with one mark height of empty clear space on every side.
 

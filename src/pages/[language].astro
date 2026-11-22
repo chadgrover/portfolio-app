@@ -7,6 +7,7 @@ import type { Language } from '../lib/i18n/types';
 import { fontFaceUrl, type FontFace } from '../lib/fonts/faces';
 import { createHomePageMetadata } from '../lib/page-metadata';
 import { getLatinScriptName, getProfileLinks, portfolioContentFor } from '../lib/portfolio-content/entries';
+import { toProfileLinkAddress } from '../lib/portfolio-content/profile-links';
 
 export const getStaticPaths = () => supportedLanguages.map((language) => ({ params: { language } }));
 
@@ -28,7 +29,9 @@ const fontFacesUsed: FontFace[] = language === 'ja' ? ['japanese-name', 'latin']
     <nav aria-label={text.languageSwitchLabel} class="language-switch">
       {supportedLanguages.map((destination) => (
         <a href={`/${destination}/`} lang={destination} hreflang={destination}
-          aria-current={language === destination ? 'page' : undefined}>{languageNames[destination]}</a>
+          aria-current={language === destination ? 'page' : undefined}>
+          {languageNames[destination]}{language === destination && <span class="current-language-underline" />}
+        </a>
       ))}
     </nav>
   </header>
@@ -49,7 +52,7 @@ const fontFacesUsed: FontFace[] = language === 'ja' ? ['japanese-name', 'latin']
     <ul class="profile-links links-on-rule" role="list">
       {profileLinks.map(({ id, name, url }) => (
         <li>
-          <a href={url} aria-label={text.profileLinkLabel({ profileLink: name })}>
+          <a href={url} aria-label={text.profileLinkLabel({ profileLink: name })} data-printed-address={toProfileLinkAddress(url)}>
             <ProfileLinkMark profileLinkId={id} />
           </a>
         </li>
@@ -108,6 +111,7 @@ const fontFacesUsed: FontFace[] = language === 'ja' ? ['japanese-name', 'latin']
   }
 
   .language-switch a {
+    position: relative;
     display: block;
     padding-block: 0.5rem 0.375rem;
     color: var(--type);
@@ -132,8 +136,18 @@ const fontFacesUsed: FontFace[] = language === 'ja' ? ['japanese-name', 'latin']
     border-block-end-color: var(--secondary);
   }
 
-  .language-switch a[aria-current="page"] {
-    border-block-end-color: var(--type);
+  .current-language-underline {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: -3px;
+    block-size: 3px;
+    background: var(--type);
+    view-transition-name: current-language;
+  }
+
+  :global(::view-transition-group(current-language)) {
+    animation-duration: 300ms;
+    animation-timing-function: var(--ease-out);
   }
 
   .language-switch a:focus-visible {
@@ -397,6 +411,59 @@ const fontFacesUsed: FontFace[] = language === 'ja' ? ['japanese-name', 'latin']
       grid-column: 5;
       grid-row: 6;
       margin: 0;
+    }
+  }
+
+  @media print {
+    @page {
+      margin: 15mm;
+    }
+
+    :global(main.home) {
+      min-height: auto;
+      padding-block: 0;
+    }
+
+    :global(main.home)::before {
+      animation: none;
+      print-color-adjust: exact;
+    }
+
+    .masthead,
+    .profile-links a::before,
+    .profile-links :global(.profile-link-mark) {
+      display: none;
+    }
+
+    .profile-links {
+      column-gap: 2rem;
+    }
+
+    .profile-links a {
+      padding: 0.875rem 0 0.5rem;
+    }
+
+    .profile-links a::after {
+      content: attr(data-printed-address);
+      overflow-wrap: anywhere;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .language-switch a {
+      border-block-end: 0;
+      padding-block-end: calc(0.375rem + 3px);
+    }
+
+    .current-language-underline {
+      inset-block-end: 0;
+      forced-color-adjust: none;
+      background: LinkText;
+    }
+
+    .profile-links a::before {
+      forced-color-adjust: none;
+      background: LinkText;
     }
   }
 

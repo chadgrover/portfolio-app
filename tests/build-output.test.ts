@@ -7,6 +7,7 @@ import { parse, TEXT_NODE, type ElementNode, type Node } from 'ultrahtml';
 import { querySelectorAll } from 'ultrahtml/selector';
 import { describe, expect, test } from 'vitest';
 import { supportedLanguages } from '../src/lib/i18n/constants';
+import { toProfileLinkAddress } from '../src/lib/portfolio-content/profile-links';
 
 const distDirectory = fileURLToPath(new URL('../dist/', import.meta.url));
 const surfaceBriefDirectory = fileURLToPath(new URL('../.impeccable/surfaces/', import.meta.url));
@@ -153,6 +154,11 @@ describe.each(supportedLanguages)('localized home page /%s/', (language) => {
     expect(link && textContentOf(link).trim()).toBe('');
     expect(link && querySelectorAll(link, decorativeMarkSelectors[id])).toHaveLength(1);
     expect(link && (querySelectorAll(link, 'img') as ElementNode[]).filter((image) => image.attributes.alt !== '')).toEqual([]);
+  });
+
+  test.each(profileLinks)('gives the $name profile link its address to print in place of the mark', ({ url }) => {
+    const link = anchors(html).find((anchor) => anchor.attributes.href === url);
+    expect(link?.attributes['data-printed-address']).toBe(toProfileLinkAddress(url));
   });
 
   test.each(profileLinks)('links to the $name profile with a localized accessible name', ({ name, url }) => {
