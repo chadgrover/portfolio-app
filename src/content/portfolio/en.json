@@ -4,10 +4,6 @@
       "displayName": "Chad Grover",
       "role": "Software Engineer",
       "introduction": "I build software that is accessible and fast, with close attention to the details that make it easy to use."
-    },
-    "profileLinks": [
-      { "profileLink": "linkedin", "purpose": "Get in touch" },
-      { "profileLink": "github", "purpose": "Source code" }
-    ]
+    }
   }
 }

@@ -9,13 +9,6 @@ export const portfolioContentSchema = z.object({
       role: text,
       introduction: text,
     }),
-    profileLinks: z.array(z.object({ profileLink: text, purpose: text })).min(1).superRefine((links, context) => {
-      links.forEach(({ profileLink }, index) => {
-        if (links.findIndex((link) => link.profileLink === profileLink) < index) {
-          context.addIssue({ code: 'custom', message: `Profile link "${profileLink}" is listed twice`, path: [index, 'profileLink'] });
-        }
-      });
-    }),
   }),
 });
 
