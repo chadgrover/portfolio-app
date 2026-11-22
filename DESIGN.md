@@ -238,6 +238,7 @@ The signature device on the Japanese page: the Latin name, hidden from assistive
 - **Do** switch face, weight, leading and tracking by `:lang()`; give Japanese `line-break: strict` and `word-break: auto-phrase`.
 - **Do** use a 3px Ice Cyan outline with a 5–6px offset for every focus state; a profile link draws it on its clear-space edge instead.
 - **Do** run state transitions at 200ms on `cubic-bezier(0.16, 1, 0.3, 1)` and turn them off under `prefers-reduced-motion`.
+- **Do** let the home page's bars slide in from the left edge on load (the opening bar over 700ms; the Dim Bar over 600ms after 120ms, on the shared ease-out) while the type stays still, and crossfade between languages with a cross-document view transition; turn both off under `prefers-reduced-motion`.
 - **Do** put a page's onward links on a 3px Ice Cyan rule as Title-size cyan names or official marks, using the shared links-on-rule pattern.
 - **Do** show a profile link as its official mark alone (ADR 0003): the owner's file unmodified, 2rem tall, with one mark height of empty clear space on every side.
 

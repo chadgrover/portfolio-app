@@ -16,7 +16,8 @@ Mode: Persuade (this surface only).
 - Proof: the page's own craft and accessibility. No invented claims; the differentiator stays open.
 - Scope now: `/en/` and `/ja/` hero plus profile links. A hub list (Work, About, Writing) is planned, not built, and must fit below the links later without a redesign.
 - Each language has its own arrangement. The EN page shows no Japanese strings, except the 日本語 autonym in the language switch.
-- Later: a professional photo takes a solid rectangular slot in the composition; motion is bars sliding in on load plus a cross-document view transition between languages, both off under reduced motion.
+- Later: a professional photo takes a solid rectangular slot in the composition.
+- Motion: bars sliding in on load plus a cross-document view transition between languages, both off under reduced motion.
 - Constraints: WCAG 2.2 AA in both languages, no first-party JavaScript, dark only.
 - Alternate palette on record: Blue-Black & Indigo.
 
