@@ -15,6 +15,7 @@ const { hero } = (await portfolioContentFor(language)).home;
 const englishHero = language === 'en' ? undefined : (await portfolioContentFor('en')).home.hero;
 const latinScriptName = englishHero && await getLatinScriptName();
 const text = interfaceText[language];
+const profileLinks = await getProfileLinks();
 const nameLines = hero.displayName.split(/\s+/u);
 const nameColumns = Math.max(...nameLines.map((line) => [...line].length));
 const fontFacesUsed: FontFace[] = language === 'ja' ? ['japanese-name', 'latin'] : ['latin'];
@@ -44,15 +45,17 @@ const fontFacesUsed: FontFace[] = language === 'ja' ? ['japanese-name', 'latin']
     </p>
     <p class="introduction">{hero.introduction}</p>
   </div>
-  <ul class="profile-links links-on-rule" role="list">
-    {(await getProfileLinks()).map(({ id, name, url }) => (
-      <li>
-        <a href={url} aria-label={text.profileLinkLabel({ profileLink: name })}>
-          <ProfileLinkMark profileLinkId={id} />
-        </a>
-      </li>
-    ))}
-  </ul>
+  {profileLinks.length > 0 && (
+    <ul class="profile-links links-on-rule" role="list">
+      {profileLinks.map(({ id, name, url }) => (
+        <li>
+          <a href={url} aria-label={text.profileLinkLabel({ profileLink: name })}>
+            <ProfileLinkMark profileLinkId={id} />
+          </a>
+        </li>
+      ))}
+    </ul>
+  )}
 </Page>
 
 <style>
