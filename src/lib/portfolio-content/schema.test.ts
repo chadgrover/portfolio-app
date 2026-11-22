@@ -31,8 +31,16 @@ describe('portfolioContentSchema', () => {
 });
 
 describe('profileLinkSchema', () => {
-  test('accepts a named HTTPS profile link', () => {
-    expect(profileLinkSchema.safeParse({ name: 'GitHub', url: 'https://github.com/example' }).success).toBe(true);
+  const profileLink = { id: 'github', name: 'GitHub', url: 'https://github.com/example' };
+
+  test.each(['linkedin', 'github'])('accepts a named HTTPS %s profile link', (id) => {
+    expect(profileLinkSchema.safeParse({ ...profileLink, id }).success).toBe(true);
+  });
+
+  test('rejects a profile link for an unknown platform', () => {
+    const result = profileLinkSchema.safeParse({ ...profileLink, id: 'mastodon' });
+    expect(result.success).toBe(false);
+    expect(result.error?.issues[0]?.path).toEqual(['id']);
   });
 
   test.each([
@@ -41,12 +49,12 @@ describe('profileLinkSchema', () => {
     ['a script URL', 'javascript:alert(1)'],
     ['carrying user info that hides its real host', 'https://github.com@example.com/'],
   ])('rejects a URL that is %s', (_, url) => {
-    const result = profileLinkSchema.safeParse({ name: 'GitHub', url });
+    const result = profileLinkSchema.safeParse({ ...profileLink, url });
     expect(result.success).toBe(false);
     expect(result.error?.issues[0]?.path).toEqual(['url']);
   });
 
   test('rejects a profile link without a name', () => {
-    expect(profileLinkSchema.safeParse({ name: ' ', url: 'https://github.com/example' }).success).toBe(false);
+    expect(profileLinkSchema.safeParse({ ...profileLink, name: ' ' }).success).toBe(false);
   });
 });

@@ -6,7 +6,7 @@ import { interfaceText, languageNames } from '../lib/i18n/interface-text';
 import type { Language } from '../lib/i18n/types';
 import { fontFaceUrl, type FontFace } from '../lib/fonts/faces';
 import { createHomePageMetadata } from '../lib/page-metadata';
-import { getLatinScriptName, portfolioContentFor, profileLinks } from '../lib/portfolio-content/entries';
+import { getLatinScriptName, getProfileLinks, portfolioContentFor } from '../lib/portfolio-content/entries';
 
 export const getStaticPaths = () => supportedLanguages.map((language) => ({ params: { language } }));
 
@@ -45,7 +45,7 @@ const fontFacesUsed: FontFace[] = language === 'ja' ? ['japanese-name', 'latin']
     <p class="introduction">{hero.introduction}</p>
   </div>
   <ul class="profile-links links-on-rule" role="list">
-    {(await profileLinks()).map(({ id, name, url }) => (
+    {(await getProfileLinks()).map(({ id, name, url }) => (
       <li>
         <a href={url} aria-label={text.profileLinkLabel({ profileLink: name })}>
           <ProfileLinkMark profileLinkId={id} />
