@@ -50,6 +50,10 @@ _Avoid_: Personal content
 The complete set of files the production build produces, which the host serves to portfolio visitors exactly as built.
 _Avoid_: Built site, build artifact
 
+**Preview**:
+A public build of a pushed branch other than the one the live site serves, at its own address, which tells search engines not to index it.
+_Avoid_: Staging, preview URL, preview deployment, preview environment
+
 **Maintainer**:
 A person who works on the portfolio's source through its issues and pull requests, such as the portfolio owner.
 _Avoid_: Contributor, collaborator
