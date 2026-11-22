@@ -149,6 +149,14 @@ describe.each(supportedLanguages)('localized home page /%s/', (language) => {
   });
 });
 
+describe('Japanese home page /ja/', () => {
+  const html = readBuildOutput('ja/index.html');
+
+  test('shows the Latin-script name from the English portfolio content', () => {
+    expect(textOf(html, '.spine-name')).toEqual([portfolioContentOf('en').home.hero.displayName]);
+  });
+});
+
 describe('404 page', () => {
   test('exists in the build output', () => {
     expect(buildOutputFiles).toContain('404.html');

@@ -2,9 +2,9 @@
 import Page from '../layouts/Page.astro';
 import { supportedLanguages } from '../lib/i18n/constants';
 import { interfaceText, languageNames } from '../lib/i18n/interface-text';
-import { pageMetadata } from '../lib/page-metadata';
+import { createPageMetadata } from '../lib/page-metadata';
 ---
-<Page language="en" metadata={await pageMetadata(interfaceText.en.pageNames.notFound)} class="not-found">
+<Page language="en" metadata={await createPageMetadata(interfaceText.en.pageNames.notFound)} class="not-found">
   <div class="messages">
     {supportedLanguages.map((language, index) => {
       const Heading = index === 0 ? 'h1' : 'h2';
