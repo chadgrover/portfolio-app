@@ -2,6 +2,8 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { extname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gzipSync } from 'node:zlib';
+import { parse, TEXT_NODE, type ElementNode, type Node } from 'ultrahtml';
+import { querySelectorAll } from 'ultrahtml/selector';
 import { describe, expect, test } from 'vitest';
 import { supportedLanguages } from '../src/lib/i18n/constants';
 
@@ -25,25 +27,16 @@ const readBuildOutput = (path: string) => readBuildOutputBytes(path).toString('u
 const compressedSize = (content: string | Buffer) => gzipSync(content, { level: 9 }).length;
 const inKilobytes = (bytes: number) => `${bytes / bytesPerKilobyte} KB`;
 
-const tags = (html: string, name: string) => html.match(new RegExp(`<${name}\\b[^>]*>`, 'gi')) ?? [];
-const attributes = (tag: string) =>
-  new Map(
-    [...tag.matchAll(/\s([^\s=/>]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g)].map(
-      ([, name, doubleQuoted, singleQuoted, unquoted]) => [
-        name.toLowerCase(),
-        doubleQuoted ?? singleQuoted ?? unquoted ?? '',
-      ],
-    ),
-  );
-const relTokens = (tag: string) => (attributes(tag).get('rel') ?? '').toLowerCase().split(/\s+/);
+const elementsOf = (html: string, selector: string) => querySelectorAll(parse(html), selector) as ElementNode[];
+const textContentOf = (node: Node): string =>
+  node.type === TEXT_NODE ? node.value : (node.children ?? []).map(textContentOf).join('');
+const relTokens = (element: ElementNode) => (element.attributes.rel ?? '').toLowerCase().split(/\s+/);
 const isThirdParty = (url: string) => /^(?:[a-z][a-z\d+.-]*:)?\/\//i.test(url.trim());
 const isJavaScriptType = (type: string) =>
   ['', 'module'].includes(type.trim().toLowerCase()) || /(?:java|ecma)script/i.test(type);
-const textOf = (html: string, name: string) =>
-  [...html.matchAll(new RegExp(`<${name}\\b[^>]*>([\\s\\S]*?)</${name}>`, 'gi'))].map(([, inner]) => inner.replace(/<[^>]+>/g, '').trim());
-const metaContent = (html: string, name: string) =>
-  tags(html, 'meta').map(attributes).find((meta) => meta.get('name') === name)?.get('content');
-const anchors = (html: string) => tags(html, 'a').map(attributes);
+const textOf = (html: string, selector: string) => elementsOf(html, selector).map((element) => textContentOf(element).trim());
+const metaContent = (html: string, name: string) => elementsOf(html, `meta[name="${name}"]`)[0]?.attributes.content;
+const anchors = (html: string) => elementsOf(html, 'a');
 const portfolioContentOf = (language: string) =>
   JSON.parse(readFileSync(new URL(`../src/content/portfolio/${language}.json`, import.meta.url), 'utf8'));
 const profileLinks: { name: string; url: string }[] = JSON.parse(
@@ -70,20 +63,19 @@ const distinctiveContractPhrases = (surfaceBrief: string) => {
 };
 
 const firstPartyJavaScript = (html: string) => [
-  ...tags(html, 'script').filter((tag) => {
-    const scriptAttributes = attributes(tag);
-    return isJavaScriptType(scriptAttributes.get('type') ?? '') && !isThirdParty(scriptAttributes.get('src') ?? '');
-  }),
-  ...tags(html, 'link').filter(
-    (tag) => relTokens(tag).includes('modulepreload') && !isThirdParty(attributes(tag).get('href') ?? ''),
+  ...elementsOf(html, 'script').filter(
+    ({ attributes }) => isJavaScriptType(attributes.type ?? '') && !isThirdParty(attributes.src ?? ''),
   ),
-];
+  ...elementsOf(html, 'link').filter(
+    (link) => relTokens(link).includes('modulepreload') && !isThirdParty(link.attributes.href ?? ''),
+  ),
+].map(({ attributes }) => attributes);
 
 const deliveredCss = (html: string, pagePath: string) => {
-  const inlineStyles = [...html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)].map((match) => match[1]);
-  const linkedStylesheets = tags(html, 'link')
-    .filter((tag) => relTokens(tag).includes('stylesheet'))
-    .map((tag) => attributes(tag).get('href') ?? '')
+  const inlineStyles = elementsOf(html, 'style').map(textContentOf);
+  const linkedStylesheets = elementsOf(html, 'link')
+    .filter((link) => relTokens(link).includes('stylesheet'))
+    .map((link) => link.attributes.href ?? '')
     .filter((href) => href !== '' && !isThirdParty(href))
     .map((href) => readBuildOutput(buildOutputPathOf(href, pagePath)));
   return [...inlineStyles, ...linkedStylesheets].join('\n');
@@ -93,7 +85,7 @@ describe.each(supportedLanguages)('localized home page /%s/', (language) => {
   const html = readBuildOutput(`${language}/index.html`);
 
   test('declares its page language', () => {
-    expect(html).toMatch(new RegExp(`<html[^>]*\\slang="${language}"`));
+    expect(elementsOf(html, 'html')[0]?.attributes.lang).toBe(language);
   });
 
   test('loads no first-party JavaScript', () => {
@@ -109,21 +101,23 @@ describe.each(supportedLanguages)('localized home page /%s/', (language) => {
   });
 
   test('has a language switch that marks the current language', () => {
-    const [languageSwitchNav = ''] = html.match(/<nav\b[^>]*>[\s\S]*?<\/nav>/i) ?? [];
-    const languageSwitch = anchors(languageSwitchNav);
-    expect(languageSwitch.map((anchor) => anchor.get('href'))).toEqual(supportedLanguages.map((destination) => `/${destination}/`));
-    expect(languageSwitch.filter((anchor) => anchor.get('aria-current') === 'page').map((anchor) => anchor.get('href'))).toEqual([`/${language}/`]);
-    expect(html).toMatch(new RegExp(`aria-current="page"[^>]*>${languageSwitchCurrentLabels[language]}<`));
+    const languageSwitch = elementsOf(html, 'nav a');
+    expect(languageSwitch.map((anchor) => anchor.attributes.href)).toEqual(supportedLanguages.map((destination) => `/${destination}/`));
+    expect(
+      languageSwitch
+        .filter((anchor) => anchor.attributes['aria-current'] === 'page')
+        .map((anchor) => [anchor.attributes.href, textContentOf(anchor)]),
+    ).toEqual([[`/${language}/`, languageSwitchCurrentLabels[language]]]);
   });
 
   test('lists the profile links in their shared file order', () => {
     const profileLinkUrls = profileLinks.map(({ url }) => url);
-    expect(anchors(html).map((anchor) => anchor.get('href')).filter((href) => profileLinkUrls.includes(href ?? ''))).toEqual(profileLinkUrls);
+    expect(anchors(html).map((anchor) => anchor.attributes.href).filter((href) => profileLinkUrls.includes(href ?? ''))).toEqual(profileLinkUrls);
   });
 
   test.each(profileLinks)('links to the $name profile with a localized accessible name', ({ name, url }) => {
-    const link = anchors(html).find((anchor) => anchor.get('href') === url);
-    expect(link?.get('aria-label')).toBe(profileLinkLabels[language][name as keyof (typeof profileLinkLabels)['en']]);
+    const link = anchors(html).find((anchor) => anchor.attributes.href === url);
+    expect(link?.attributes['aria-label']).toBe(profileLinkLabels[language][name as keyof (typeof profileLinkLabels)['en']]);
   });
 });
 
@@ -141,7 +135,8 @@ describe('404 page', () => {
   });
 
   test.each([['English Home', '/en/'], ['日本語のホーム', '/ja/']])('labels its home link %s', (label, href) => {
-    expect(readBuildOutput('404.html')).toMatch(new RegExp(`href="${href}"[^>]*>${label}<`));
+    const homeLinks = anchors(readBuildOutput('404.html')).filter((anchor) => anchor.attributes.href === href);
+    expect(homeLinks.map((anchor) => textContentOf(anchor).trim())).toContain(label);
   });
 });
 

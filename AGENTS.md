@@ -16,6 +16,16 @@ Keep each fact in one place and point to it from everywhere else. Code, config, 
 
 Tests assert what a portfolio visitor, a search engine, or the host receives: the language a browser tag selects, whether content passes validation, and in the build output the text, page language, link targets, accessible names, and metadata such as the page title and description.
 
+## Libraries
+
+Solve parsing, sanitizing, validating, encoding and file formats with an established library. Take the first that fits:
+
+1. a direct dependency;
+2. a package a dependency already installs, pinned in `package.json` before you import it;
+3. a new package that is widely used, actively maintained and from a known publisher.
+
+Write your own only when none fits, and name the gap in the PR.
+
 ## UI work
 
 Before any UI change, load the `impeccable` skill.
