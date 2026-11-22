@@ -159,3 +159,6 @@ vite.config.ts.timestamp-*
 
 # Local research notes
 docs/research/
+
+# Local scripts
+scripts/
