@@ -5,20 +5,21 @@ import { supportedLanguages } from '../lib/i18n/constants';
 import { interfaceText, languageNames } from '../lib/i18n/interface-text';
 import type { Language } from '../lib/i18n/types';
 import { fontFaceUrl, type FontFace } from '../lib/fonts/faces';
-import { homePageMetadata } from '../lib/page-metadata';
-import { portfolioContentFor, profileLinks } from '../lib/portfolio-content/entries';
+import { createHomePageMetadata } from '../lib/page-metadata';
+import { getLatinScriptName, portfolioContentFor, profileLinks } from '../lib/portfolio-content/entries';
 
 export const getStaticPaths = () => supportedLanguages.map((language) => ({ params: { language } }));
 
 const language = Astro.params.language as Language;
 const { hero } = (await portfolioContentFor(language)).home;
 const englishHero = language === 'en' ? undefined : (await portfolioContentFor('en')).home.hero;
+const latinScriptName = englishHero && await getLatinScriptName();
 const text = interfaceText[language];
 const nameLines = hero.displayName.split(/\s+/u);
 const nameColumns = Math.max(...nameLines.map((line) => [...line].length));
 const fontFacesUsed: FontFace[] = language === 'ja' ? ['japanese-name', 'latin'] : ['latin'];
 ---
-<Page language={language} metadata={await homePageMetadata(language)} class="home">
+<Page language={language} metadata={await createHomePageMetadata(language)} class="home">
   {fontFacesUsed.map((face) => (
     <link slot="head" rel="preload" href={fontFaceUrl(face)} as="font" type="font/woff2" crossorigin />
   ))}
@@ -34,7 +35,7 @@ const fontFacesUsed: FontFace[] = language === 'ja' ? ['japanese-name', 'latin']
     <h1 class="name">{nameLines.map((line, index) => <>{index > 0 && ' '}<span class="name-line">{line}</span></>)}</h1>
   </div>
   <div class="spine">
-    {englishHero && <p class="spine-name" lang="en" aria-hidden="true" translate="no">{englishHero.displayName}</p>}
+    {latinScriptName && <p class="spine-name" lang="en" aria-hidden="true" translate="no">{latinScriptName}</p>}
   </div>
   <div class="about">
     <p class="role">
