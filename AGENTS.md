@@ -10,6 +10,10 @@ Name each function verb-noun: read `docs/agents/function-verbs.md` before you na
 
 Before you commit portfolio content, change hosting or deployment, or change which files reach the upload (what the build puts in `dist/`), scan the ADR filenames in `docs/adr/` and read every ADR that bears on the change.
 
+## Commits and pull requests
+
+Title commits and pull requests as [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/). A pull request ends its Summary section with the issue line (`Closes #N` or `Part of #N`) and carries labels from the repository's set.
+
 ## Single source of truth
 
 Keep each fact in one place and point to it from everywhere else. Code, config, and the directory layout are sources too: a document names them instead of restating what they contain. Colocate what changes together: portfolio content lives in the per-language files in `src/content/portfolio/`, and interface text lives in `src/lib/i18n/interface-text.ts`. A value that is identical in every language, such as a profile link's URL, lives once in a shared file in that folder rather than copied into each language file.
