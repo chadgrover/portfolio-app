@@ -14,6 +14,13 @@ describe('parseProfileLinks', () => {
     expect(parseProfileLinks('[]')).toEqual([]);
   });
 
+  test('rejects a profile link without an id, naming the entry and field', () => {
+    const text = JSON.stringify([{ name: 'LinkedIn', url: 'https://www.linkedin.com/in/example/' }]);
+    expect(() => parseProfileLinks(text)).toThrow(
+      expect.objectContaining({ issues: [expect.objectContaining({ path: [0, 'id'] })] }),
+    );
+  });
+
   test('rejects a profile link id that appears twice', () => {
     const text = JSON.stringify([
       { id: 'linkedin', name: 'LinkedIn', url: 'https://www.linkedin.com/in/example/' },
