@@ -1,0 +1,35 @@
+---
+import githubInvertocat from '../assets/profile-link-marks/GitHub_Invertocat_White.svg?raw';
+import linkedinInBug from '../assets/profile-link-marks/InBug-White.png';
+
+interface Props {
+  profileLinkId: string;
+}
+
+const officialMarks: Record<string, { svg: string } | { image: ImageMetadata }> = {
+  github: { svg: githubInvertocat },
+  linkedin: { image: linkedinInBug },
+};
+
+const { profileLinkId } = Astro.props;
+const mark = officialMarks[profileLinkId];
+if (!mark) throw new Error(`No official mark for profile link "${profileLinkId}": add it to src/assets/profile-link-marks/`);
+---
+{'svg' in mark
+  ? <span class="profile-link-mark" aria-hidden="true" set:html={mark.svg} />
+  : <img class="profile-link-mark" src={mark.image.src} width={mark.image.width} height={mark.image.height} alt="" />}
+
+<style>
+  .profile-link-mark {
+    display: block;
+    flex: none;
+    block-size: max(1em, 21px);
+    inline-size: auto;
+  }
+
+  .profile-link-mark :global(svg) {
+    display: block;
+    block-size: 100%;
+    inline-size: auto;
+  }
+</style>

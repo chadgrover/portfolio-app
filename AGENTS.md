@@ -10,7 +10,11 @@ Before you commit portfolio content, change hosting or deployment, or change whi
 
 ## Single source of truth
 
-Keep each fact in one place and point to it from everywhere else. Code, config, and the directory layout are sources too: a document names them instead of restating what they contain. Colocate what changes together: portfolio wording lives in the per-language files in `src/content/portfolio/`. A value that is identical in every language, such as a profile link's URL, lives once in a shared file in that folder rather than copied into each language file.
+Keep each fact in one place and point to it from everywhere else. Code, config, and the directory layout are sources too: a document names them instead of restating what they contain. Colocate what changes together: portfolio content lives in the per-language files in `src/content/portfolio/`, and interface text lives in `src/lib/i18n/interface-text.ts`. A value that is identical in every language, such as a profile link's URL, lives once in a shared file in that folder rather than copied into each language file.
+
+## Tests
+
+Tests assert what a portfolio visitor, a search engine, or the host receives: the language a browser tag selects, whether content passes validation, and in the build output the text, page language, link targets, accessible names, and metadata such as the page title and description.
 
 ## UI work
 

@@ -1,7 +1,7 @@
-import { getEntry } from 'astro:content';
+import { readFile } from 'node:fs/promises';
+import { getCollection, getEntry } from 'astro:content';
 import type { Language } from '../i18n/types';
-import { profileLinksPath } from './profile-links';
-import type { PortfolioContent } from './types';
+import { parseProfileLinks, profileLinksPath } from './profile-links';
 
 export const portfolioContentFor = async (language: Language) => {
   const entry = await getEntry('portfolio', language);
@@ -9,12 +9,9 @@ export const portfolioContentFor = async (language: Language) => {
   return entry.data;
 };
 
-const profileLinkFor = async (id: string) => {
-  const entry = await getEntry('profileLinks', id);
-  if (!entry) throw new Error(`Unknown profile link "${id}": add it to ${profileLinksPath}`);
-  return entry.data;
+export const profileLinks = async () => {
+  const fileOrder = parseProfileLinks(await readFile(profileLinksPath, 'utf8')).map(({ id }) => id);
+  return (await getCollection('profileLinks'))
+    .sort((first, second) => fileOrder.indexOf(first.id) - fileOrder.indexOf(second.id))
+    .map(({ id, data }) => ({ id, ...data }));
 };
-
-export const profileLinksFor = (content: PortfolioContent) =>
-  Promise.all(content.home.profileLinks.map(async ({ profileLink, purpose }) =>
-    ({ ...(await profileLinkFor(profileLink)), purpose })));

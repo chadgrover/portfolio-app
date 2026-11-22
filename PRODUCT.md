@@ -25,7 +25,8 @@ Recruiters and hiring managers in Japan scan quickly, often in Japanese, sometim
 ## Capabilities and Constraints
 
 - Static site; hosting and what reaches the upload are governed by `docs/adr/`.
-- Portfolio wording lives in the per-language files in `src/content/portfolio/`, validated by `src/lib/portfolio-content/schema.ts`.
+- Portfolio content lives in the per-language files in `src/content/portfolio/`, validated by `src/lib/portfolio-content/schema.ts`.
+- Page titles: the home page's title is the portfolio owner's Latin-script name. Each other page's title is its page name in the page's language, then ` | `, then the Latin-script name.
 - Nothing in the portfolio or its source may include private information as defined in `GLOSSARY.md`.
 - Undecided: the differentiator beyond accessibility and craft (specific stack, seniority, or domain) has not been stated.
 

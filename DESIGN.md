@@ -18,18 +18,35 @@ typography:
     letterSpacing: "-0.01em"
   display-ja:
     fontFamily: "Noto Sans JP Name, Hiragino Kaku Gothic ProN, Hiragino Sans, Noto Sans JP, sans-serif"
-    fontSize: "min(8.25rem, 100cqi / (columns * 1.02))"
+    fontSize: "min(8.25rem, 100cqi / (columns * 1.05))"
     fontWeight: 900
     lineHeight: 1.02
     letterSpacing: "0.02em"
+  page-heading:
+    fontFamily: "Jost, Hiragino Kaku Gothic ProN, Hiragino Sans, Noto Sans JP, sans-serif"
+    fontSize: "clamp(1.75rem, 1.25rem + 2.2vw, 2.75rem)"
+    fontWeight: 700
+    lineHeight: 1.15
+    letterSpacing: "0.02em"
+  page-heading-ja:
+    fontFamily: "Hiragino Kaku Gothic ProN, Hiragino Sans, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"
+    fontSize: "clamp(1.625rem, 1.2rem + 1.9vw, 2.5rem)"
+    fontWeight: 700
+    lineHeight: 1.3
+    letterSpacing: "0.04em"
   headline:
     fontFamily: "Jost, Hiragino Kaku Gothic ProN, Hiragino Sans, Noto Sans JP, sans-serif"
     fontSize: "1.5rem"
     fontWeight: 600
     lineHeight: 1.45
+  headline-ja:
+    fontFamily: "Hiragino Kaku Gothic ProN, Hiragino Sans, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"
+    fontSize: "1.375rem"
+    fontWeight: 700
+    lineHeight: 1.45
   title:
     fontFamily: "Jost, Hiragino Kaku Gothic ProN, Hiragino Sans, Noto Sans JP, sans-serif"
-    fontSize: "1.875rem"
+    fontSize: "clamp(1.25rem, 0.9rem + 1.6vw, 1.5rem)"
     fontWeight: 400
     lineHeight: 1.3
     letterSpacing: "0.04em"
@@ -49,12 +66,6 @@ typography:
     fontWeight: 400
     lineHeight: 1.7
     letterSpacing: "0.16em"
-  caption:
-    fontFamily: "Jost, Hiragino Kaku Gothic ProN, Hiragino Sans, Noto Sans JP, sans-serif"
-    fontSize: "0.875rem"
-    fontWeight: 400
-    lineHeight: 1.7
-    letterSpacing: "0.04em"
 rounded:
   none: "0px"
 spacing:
@@ -64,22 +75,23 @@ spacing:
   stack-sm: "0.875rem"
   stack-md: "1.25rem"
   stack-lg: "2rem"
-  inline: "1.5rem"
+  inline: "2rem"
+  mark-clear-space: "max(1em, 21px)"
 components:
-  language-link:
+  language-switch-link:
     textColor: "{colors.type}"
     typography: "{typography.label}"
     rounded: "{rounded.none}"
     padding: "0.5rem 0 0.375rem"
-  language-link-current:
+  language-switch-link-current:
     textColor: "{colors.type}"
   profile-link:
-    textColor: "{colors.type}"
+    textColor: "{colors.press}"
     typography: "{typography.title}"
     rounded: "{rounded.none}"
-    padding: "1rem 0 0.5rem"
-  profile-link-active:
-    textColor: "{colors.press}"
+    padding: "0.875rem 0 0.5rem"
+  profile-link-mark:
+    height: "max(1em, 21px)"
   inline-link:
     textColor: "{colors.press}"
 ---
@@ -108,15 +120,17 @@ The surface is flat and dark only. Depth is a matter of value steps on one cool 
 One cool blue-slate hue carries every neutral from ground to type; a single light cyan is the only chroma.
 
 ### Primary
-- **Ice Cyan** (press): links, the link arrows, the rule above the profile links, focus rings, text selection and form `accent-color`. It is the one colour that means "you can act here".
+- **Ice Cyan** (press): link names (profile links, the 404's home links, inline links), the 3px rule above a group of links, focus rings, text selection and form `accent-color`. It is the one colour that means "you can act here".
 
 ### Neutral
 - **Blue-Black Ground** (ground): page and body background, browser `theme-color`, the text colour inside a selection.
-- **Ice White** (type): display name, role, link names, the current-language underline, and the solid bar that opens the composition.
-- **Frost Body** (body): running introduction text, one step down from Ice White so the paragraph sits behind the name and role.
-- **Slate Secondary** (secondary): small supporting text (link purposes, the English gloss under a Japanese role, the vertical name on narrow screens) and the hover underline on the language switcher.
-- **Slate Hairline** (hairline): 1px structural rules (the full-height spine, the rule over the role column) and the scrollbar thumb. Decorative only, never text.
+- **Ice White** (type): display name, role, 404 headings, the language switch's autonyms and current-language underline, the vertical spine name on wide screens, and the solid bar that opens each page.
+- **Frost Body** (body): running text (the home introduction, the 404 explanations), one step down from Ice White so a paragraph sits behind the heading above it.
+- **Slate Secondary** (secondary): small supporting text (the English gloss under a Japanese role, the flat Latin name on narrow screens) and the hover underline on the language switch.
+- **Slate Hairline** (hairline): 1px structural rules (the full-height spine, the rule over the role column, the rule under the flat Latin name) and the scrollbar thumb. Decorative only, never text.
 - **Dim Bar** (bar-dim): one low-contrast counterweight bar beneath the name on wide screens.
+
+The official LinkedIn and GitHub marks render in the white their owners supply, not in a palette token: their brand guidelines forbid recolouring, so they sit outside the One Hue Rule.
 
 The Blue-Black & Indigo alternate palette is recorded in the home surface brief; it has not shipped and has no tokens here.
 
@@ -128,66 +142,80 @@ The Blue-Black & Indigo alternate palette is recorded in the home surface brief;
 ## Typography
 
 **Display Font:** Jost (variable, 100–900, self-hosted) for Latin; Noto Sans JP Name (Noto Sans JP 900, self-hosted) for the Japanese name
-**Body Font:** Jost, falling back per glyph to the system Japanese gothic stack (Hiragino Kaku Gothic ProN, Hiragino Sans, Noto Sans JP, Yu Gothic, Meiryo)
+**Body Font:** Jost, falling back per glyph to the system Japanese gothic stack (Hiragino Kaku Gothic ProN, Hiragino Sans, Noto Sans JP, Noto Sans CJK JP, Yu Gothic UI, Yu Gothic, Meiryo); Japanese-only settings (the role, 404 headings, the language switch's 日本語) use that system stack directly
 
 **Character:** A geometric Latin sans paired with a black-weight Japanese gothic. Latin brings precise circles and an uppercase, widely tracked voice for labels; the Japanese face brings mass.
 
 ### Hierarchy
-- **Display** (700, up to 10.75rem, line-height 1, uppercase, -0.01em): the Latin name, one word per line. Japanese variant: 900, up to 8.25rem, line-height 1.02, 0.02em.
-- **Headline** (600 Latin / 700 Japanese, 1.5–1.625rem, line-height 1.45, balanced wrap): the role line.
-- **Title** (400, 1.5rem rising to 1.875rem on wide screens, line-height 1.3, 0.04em): profile link names.
-- **Body** (400, 1.0625rem, line-height 1.7 Latin; 1rem, line-height 1.95 Japanese; pretty wrap; max 34em): the introduction.
-- **Label** (400, 0.875–0.9375rem, 0.16em, uppercase): language switcher and the English gloss under a Japanese role. Japanese labels keep their case and tighten to 0.08em.
-- **Caption** (400, 0.875rem, 0.04em): link purposes.
-- **Spine** (400, 1.875rem, 0.42em, uppercase, vertical-rl rotated to read bottom-up): the Latin name running up the spine on the Japanese page. Below 72rem it lies flat at 0.9375rem and 0.3em in Slate Secondary.
+- **Display** (700, up to 10.75rem, line-height 1, uppercase, -0.01em): the Latin name, one word per line, each line kept unbroken. Japanese variant: 900, up to 8.25rem, line-height 1.02, 0.02em.
+- **Page Heading** (700, `clamp(1.75rem, 1.25rem + 2.2vw, 2.75rem)`, line-height 1.15, 0.02em, uppercase, balanced wrap): the title of a non-home page, such as the 404. Japanese variant: 700 in the system gothic stack, `clamp(1.625rem, 1.2rem + 1.9vw, 2.5rem)`, line-height 1.3, 0.04em, no case change.
+- **Headline** (line-height 1.45, balanced wrap): the role line. Latin 600 at 1.5rem, rising to 1.625rem from 80rem; Japanese 700 at 1.375rem, rising to 1.5rem from 80rem.
+- **Title** (400, line-height 1.3, 0.04em): link names on a rule. `clamp(1.25rem, 0.9rem + 1.6vw, 1.5rem)` below 80rem; from 80rem `clamp(1.5rem, 3.75vw − 1.5rem, 1.875rem)` (24px at 1280px, 30px from 1440px) so both profile links stay on one row beside the name.
+- **Body** (400, 1.0625rem, line-height 1.7 Latin; 1rem, line-height 1.95 Japanese; pretty wrap; max 34em): the introduction and the 404 explanations.
+- **Label** (400, 0.875–0.9375rem, 0.16em, uppercase): language switch and the English gloss under a Japanese role. Japanese labels keep their case and tighten to 0.08em.
+- **Spine** (400, 1.875rem, 0.42em, uppercase, vertical-rl rotated to read bottom-up): the Latin name running up the spine on the Japanese page. Below 80rem it lies flat at 0.9375rem and 0.3em in Slate Secondary.
 
 ### Named Rules
-**The Fill-the-Column Rule.** The display name's size is computed from its column width divided by its longest line's character count times a per-script advance (0.7 Latin, 1.02 Japanese), capped at the display maximum. Never set the name at a fixed breakpoint size.
+**The Fill-the-Column Rule.** The display name's size is computed from its column width divided by its longest line's character count times a per-script advance (0.7 Latin, 1.05 Japanese), capped at the display maximum (and at 10svh on short viewports). Name lines never wrap. Never set the name at a fixed breakpoint size.
 
 **The Script Owns Its Setting Rule.** Face, weight, leading and tracking are chosen by `:lang()`, not by page. Japanese text runs `line-break: strict` and phrase-aware `word-break: auto-phrase`; uppercase transforms and wide tracking are Latin-only.
 
 ## Layout
 
-Below 72rem the page is a single column with a responsive gutter (`gutter`) and content capped at the reading measure (`measure`, 36rem). The opening Ice White bar bleeds off the left edge into the gutter at 0.875rem thick and min(70%, measure + gutter) long, followed by name, flat Latin name over a hairline, role column, then profile links. Stacks step at 0.875rem, 1.25rem and 2rem.
+Below 80rem the home page is a single column with a responsive gutter (`gutter`) and content capped at the reading measure (`measure`, 36rem). The opening Ice White bar bleeds off the left edge into the gutter at 0.875rem thick and min(70%, measure + gutter) long, followed by name, flat Latin name over a hairline, role column, then profile links. Stacks step at 0.875rem, 1.25rem and 2rem.
 
-From 72rem the page becomes a full-viewport six-column grid: gutter, name column, a 3rem spine column, `column-gap`, a 20–30.5rem text column, gutter. Rows are sized in `svh` so the bar sits near the upper third and the profile links land inside the first screen. The opening bar spans gutter and name column at 88% and 1.375rem thick; the spine column carries a full-height hairline on its right edge; the role column bottom-aligns above the profile links.
+Short viewports below 80rem (height 36rem or less) tighten so both profile links land inside the first screen even at 320×568 and 390×450: the masthead drops into normal flow (right-aligned, 1rem top padding) so content always starts below it at any text size; the opening bar thins to 0.625rem and shortens to 50% so it ends before the switch; the name is capped at 10svh; stacks close up (spine 0.5rem, about 1rem, introduction 0.75rem with leading 1.8, links 1.25rem, link top padding 0.625rem).
 
-The language switcher is absolutely placed top-right, outside the grid.
+From 80rem the home page becomes a full-viewport six-column grid: gutter, name column, a 3rem spine column, `column-gap`, the text column, gutter. The text column is `clamp(20rem, 100vw − 2·gutter − 3rem − column-gap − 43rem, 30.5rem)`, so the name column always keeps at least 43rem and the name holds roughly 130px Japanese and 164px or more Latin from 1280px. Rows are sized in `svh` so the bar sits near the upper third and the profile links land inside the first screen. The opening bar spans gutter and name column at 88% and 1.375rem thick; the spine column carries a full-height hairline on its right edge; the role column bottom-aligns above the profile links.
 
-Profile links lay out as an auto-fit grid (minimum 9rem per item, 1.5rem column gap), so they sit side by side and wrap only when the measure cannot hold two.
+The language switch sits in a masthead absolutely placed top-right on the gutter, outside the grid (except on short viewports, above).
 
-The shared base for non-home pages (the 404) is a centred 44rem column with 3rem/1.5rem padding, a 1.2 line-height `clamp(2rem, 7vw, 3rem)` heading and underlined cyan links.
+Links on a rule lay out as a wrapping flex row (2rem column gap) on a 3px Ice Cyan top rule; the same pattern serves the home's profile links and the 404's home links.
+
+The 404 has its own layout rather than the home grid: flush-left, max 64rem, top padding `clamp(4rem, 14svh, 8rem)`, the opening Ice White bar bleeding into the gutter (0.875rem, 1.375rem from 80rem). Below 48rem it is one column. From 48rem it is an explicit two-column grid (column gap `clamp(2rem, 6vw, 5rem)`) with the English and Japanese blocks side by side as equals, their home links aligned beneath in the same columns, and the bar ending exactly at the first column's edge. Later pages get their own layouts in the same vocabulary rather than reusing the home grid.
+
+The base `main` rule (a centred 44rem column, 3rem/1.5rem padding, `clamp(2rem, 7vw, 3rem)` heading at line-height 1.2) still styles pages with no layout of their own, such as the root language-redirect page.
 
 ## Elevation & Depth
 
-Flat. There are no shadows, glows, blurs or gradients. Depth is tonal only: Blue-Black Ground, Dim Bar, Slate Hairline, Slate Secondary, Frost Body and Ice White form a value ladder, and an element's importance is its step on that ladder. Layering is limited to the switcher sitting above the grid with `z-index: 1`.
+Flat. There are no shadows, glows, blurs or gradients. Depth is tonal only: Blue-Black Ground, Dim Bar, Slate Hairline, Slate Secondary, Frost Body and Ice White form a value ladder, and an element's importance is its step on that ladder. Layering is limited to the masthead sitting above the grid with `z-index: 1`.
 
 ### Named Rules
 **The Value Ladder Rule.** To make something recede, step it down the ladder; to bring it forward, step it up. Never add a shadow or a lighter surface panel.
 
 ## Shapes
 
-Every corner is square (0px). Form comes from solid rectangles and 1px or 3px rules set strictly horizontal or vertical: the opening bar, the dim bar, the spine hairline, the hairline over the role column, the 3px cyan rule over the profile links, and the 3px underline on the current language. The only non-rectangular mark is the link arrow, a stroked SVG with square caps and mitred joins so it matches the square geometry.
+Every corner is square (0px). Form comes from solid rectangles and 1px or 3px rules set strictly horizontal or vertical: the opening bar, the dim bar, the spine hairline, the hairline over the role column, the 3px cyan rule above a group of links, and the 3px underline on the current language. The only non-rectangular forms are the official LinkedIn and GitHub marks, shown exactly as their owners ship them.
 
 ### Named Rules
 **The Right Angle Rule.** Bars and rules run at 0° or 90° and end square. Thickness carries hierarchy: 1px hairlines for structure, 3px for interactive framing, solid bars for the composition's anchors.
 
 ## Components
 
-### Language Switcher
+### Language Switch
 Quiet, typographic, top-right.
-- **Style:** each language's autonym in its own script, Label type in Ice White, no underline, a 3px transparent bottom border.
+- **Style:** each language's autonym in its own script, Label type in Ice White, no underline, a 3px transparent bottom border, 1.75rem apart.
 - **Hover:** border turns Slate Secondary over 200ms on the shared ease-out.
 - **Current:** border turns Ice White; `aria-current="page"`.
 - **Focus:** 3px solid Ice Cyan outline, 6px offset.
+- **Reduced motion:** transition off.
+
+### Links on a Rule
+The shared pattern for a page's way onward, set as type on a rule rather than as buttons.
+- **Structure:** a 3px Ice Cyan rule above a wrapping row; each link is a Title-size name in Ice Cyan. No fill, no border, no radius, no arrow, no secondary line.
+- **Hover:** the name underlines.
+- **Focus:** 3px solid Ice Cyan outline, 5px offset.
+- **Uses:** the home's profile links (with marks, below) and the 404's home links ("English Home", 「日本語のホーム」), which carry no mark.
 
 ### Profile Links
-The page's call to action, set as type on a rule rather than as buttons.
-- **Structure:** a 3px Ice Cyan rule above the group; each link is a Title-size name with a stroked arrow (0.8em, 2.5 stroke, Ice Cyan) and a Caption-size purpose line in Slate Secondary below. No fill, no border, no radius.
-- **Hover:** the arrow slides 0.375rem right over 240ms; the purpose brightens to Ice White over 200ms.
-- **Active:** the arrow travels 0.625rem and the name turns Ice Cyan.
-- **Focus:** 3px solid Ice Cyan outline, 6px offset.
-- **Reduced motion:** all transitions off.
+The home's call to action: Links on a Rule, each led by its network's official mark.
+- **Mark:** the official white mark, decorative and hidden from assistive tech (the link's accessible name carries the network), 1em of the link name tall with a 21px floor (LinkedIn's stated minimum), width following its own proportions.
+- **Clear space:** the gap between mark and name equals the mark height (`mark-clear-space`), so the mark never reads as a lockup with the word.
+- **Width:** from 80rem the link size steps up to Title's wide clamp so both links still share one row in the text column.
+- **Provenance:** both files live in `src/assets/profile-link-marks/` and ship unmodified; both were downloaded 2026-11-22.
+  - `GitHub_Invertocat_White.svg`: byte-for-byte from GitHub's official logo package (https://brand.github.com/GitHub_Logos.zip, `GitHub Logos/SVG/GitHub_Invertocat_White.svg`), inlined as-is. Guidelines: https://brand.github.com/foundations/logo.
+  - `InBug-White.png`: byte-for-byte from LinkedIn's official in-logo package (https://content.linkedin.com/content/dam/me/business/en-us/amp/xbu/linkedin-revised-brand-guidelines/logos/in-logo.zip, `in-logo/InBug-White.png`, 840×779; LinkedIn ships no SVG), served as-is with no resizing. Guidelines: https://brand.linkedin.com/in-logo.
+- **Brand terms:** use the white variants; never modify or recolour a mark, or combine it with words into a lockup.
 
 ### Inline Links
 Ice Cyan text with the browser underline offset 0.2em; focus is a 3px Ice Cyan outline at 5px offset.
@@ -200,10 +228,12 @@ The signature device on the Japanese page: the Latin name, hidden from assistive
 ### Do:
 - **Do** build structure from solid bars and 1px/3px rules at 0° and 90°, ending square.
 - **Do** keep Ice Cyan for pressable elements, their framing rule, focus rings and selection.
-- **Do** size the display name with the container-query formula and per-script advance, capped at 10.75rem Latin and 8.25rem Japanese.
+- **Do** size the display name with the container-query formula and per-script advance (0.7 Latin, 1.05 Japanese), capped at 10.75rem Latin and 8.25rem Japanese, with each name line unbroken.
 - **Do** switch face, weight, leading and tracking by `:lang()`; give Japanese `line-break: strict` and `word-break: auto-phrase`.
 - **Do** use a 3px Ice Cyan outline with a 5–6px offset for every focus state.
-- **Do** run state transitions at 200–240ms on `cubic-bezier(0.16, 1, 0.3, 1)` and turn them off under `prefers-reduced-motion`.
+- **Do** run state transitions at 200ms on `cubic-bezier(0.16, 1, 0.3, 1)` and turn them off under `prefers-reduced-motion`.
+- **Do** put a page's onward links on a 3px Ice Cyan rule as Title-size cyan names, using the shared links-on-rule pattern.
+- **Do** show a third-party mark only as its owner's official file, unmodified, at no less than its stated minimum size, with clear space equal to its height.
 
 ### Don't:
 - **Don't** round corners, or add shadows, glows, gradients or grain; depth is a step on the value ladder.
@@ -212,3 +242,4 @@ The signature device on the Japanese page: the Latin name, hidden from assistive
 - **Don't** uppercase or widely track Japanese text; tracking above 0.08em and uppercase transforms are Latin-only.
 - **Don't** wrap content in cards or filled panels; content sits directly on the ground, separated by rules.
 - **Don't** set Slate Hairline or Dim Bar as a text colour.
+- **Don't** recolour, redraw or resize-and-re-export an official mark, or set it against its name as a lockup.

@@ -4,10 +4,6 @@
       "displayName": "グローヴァ　チャッド",
       "role": "ソフトウェアエンジニア",
       "introduction": "使いやすさを左右する細部にまで気を配り、アクセシブルで高速なソフトウェアを開発しています。"
-    },
-    "profileLinks": [
-      { "profileLink": "linkedin", "purpose": "連絡する" },
-      { "profileLink": "github", "purpose": "ソースコード" }
-    ]
+    }
   }
 }

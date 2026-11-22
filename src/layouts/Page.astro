@@ -1,13 +1,14 @@
 ---
 import type { Language } from '../lib/i18n/types';
 import { fontFaceCss } from '../lib/fonts/faces';
+import type { PageMetadata } from '../lib/page-metadata';
 import '../styles/global.css';
 interface Props {
   language: Language;
-  title: string;
+  metadata: PageMetadata;
   class?: string;
 }
-const { language, title, class: mainClass } = Astro.props;
+const { language, metadata, class: mainClass } = Astro.props;
 ---
 <!doctype html>
 <html lang={language}>
@@ -16,7 +17,8 @@ const { language, title, class: mainClass } = Astro.props;
     <meta name="viewport" content="width=device-width" />
     <meta name="color-scheme" content="dark" />
     <meta name="theme-color" content="#0b0e12" />
-    <title>{title}</title>
+    <title>{metadata.title}</title>
+    {metadata.description && <meta name="description" content={metadata.description} />}
     <style is:inline set:html={fontFaceCss}></style>
     <slot name="head" />
   </head>

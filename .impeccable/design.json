@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-22T03:00:27Z",
+  "generatedAt": "2026-11-22T06:40:11Z",
   "title": "Design System: Portfolio",
   "extensions": {
     "colorMeta": {
@@ -117,19 +117,31 @@
       },
       "display-ja": {
         "displayName": "Display (Japanese)",
-        "purpose": "The Japanese name in Noto Sans JP 900; capped at 8.25rem."
+        "purpose": "The Japanese name in Noto Sans JP 900; advance 1.05, capped at 8.25rem."
+      },
+      "page-heading": {
+        "displayName": "Page Heading",
+        "purpose": "Uppercase Latin title of a non-home page, such as the 404."
+      },
+      "page-heading-ja": {
+        "displayName": "Page Heading (Japanese)",
+        "purpose": "Japanese title of a non-home page in the system gothic stack."
       },
       "headline": {
         "displayName": "Headline",
-        "purpose": "The role line; 700 when Japanese."
+        "purpose": "The Latin role line; 1.625rem from 80rem."
+      },
+      "headline-ja": {
+        "displayName": "Headline (Japanese)",
+        "purpose": "The Japanese role line; 1.5rem from 80rem."
       },
       "title": {
         "displayName": "Title",
-        "purpose": "Profile link names; 1.5rem below 72rem."
+        "purpose": "Link names on a rule; clamp(1.25rem, 0.9rem + 1.6vw, 1.5rem), stepping to clamp(1.5rem, 3.75vw - 1.5rem, 1.875rem) from 80rem."
       },
       "body": {
         "displayName": "Body",
-        "purpose": "Latin running text, max 34em."
+        "purpose": "Latin running text (introduction, 404 explanations), max 34em."
       },
       "body-ja": {
         "displayName": "Body (Japanese)",
@@ -137,11 +149,7 @@
       },
       "label": {
         "displayName": "Label",
-        "purpose": "Uppercase tracked Latin labels: language switcher, English role gloss. Japanese labels tighten to 0.08em."
-      },
-      "caption": {
-        "displayName": "Caption",
-        "purpose": "Link purposes in Slate Secondary."
+        "purpose": "Uppercase tracked Latin labels: language switch, English role gloss. Japanese labels tighten to 0.08em."
       }
     },
     "shadows": [],
@@ -154,54 +162,67 @@
       {
         "name": "duration-color",
         "value": "200ms",
-        "purpose": "Border and text colour changes on hover."
-      },
-      {
-        "name": "duration-travel",
-        "value": "240ms",
-        "purpose": "Arrow translate on hover and press."
+        "purpose": "Language switch underline colour change on hover."
       }
     ],
     "breakpoints": [
       {
+        "name": "two-column",
+        "value": "48rem",
+        "purpose": "404: English and Japanese blocks and their home links side by side."
+      },
+      {
         "name": "wide",
-        "value": "72rem",
-        "purpose": "Single column becomes the full-viewport six-column grid with vertical spine."
+        "value": "80rem",
+        "purpose": "Home: single column becomes the full-viewport six-column grid with vertical spine; link names and the 404 bar step up."
+      },
+      {
+        "name": "short",
+        "value": "(width < 80rem) and (height <= 36rem)",
+        "purpose": "Home: masthead joins the flow, bar and name shrink, stacks tighten so both profile links fit the first screen."
       }
     ]
   },
   "components": [
     {
-      "name": "Language Switcher",
+      "name": "Language Switch",
       "kind": "nav",
-      "refersTo": "language-link",
-      "description": "Top-right autonym switcher; Ice White underline marks the current language.",
-      "html": "<nav class=\"ds-lang\" aria-label=\"Language\"><a href=\"#\" lang=\"en\" class=\"ds-lang-link\">English</a><a href=\"#\" lang=\"ja\" class=\"ds-lang-link\" aria-current=\"page\">日本語</a></nav>",
-      "css": ".ds-lang { display:flex; gap:1.75rem; background:var(--ground,#0b0e12); padding:1rem; } .ds-lang-link { display:block; padding-block:0.5rem 0.375rem; color:var(--type,#e8eef2); font-family:\"Jost\", sans-serif; font-size:0.9375rem; font-weight:400; letter-spacing:0.16em; text-transform:uppercase; text-decoration:none; border-bottom:3px solid transparent; transition:border-color 200ms cubic-bezier(0.16,1,0.3,1); } .ds-lang-link:lang(ja) { font-family:\"Hiragino Kaku Gothic ProN\", \"Noto Sans JP\", sans-serif; letter-spacing:0.08em; } .ds-lang-link:hover { border-bottom-color:var(--secondary,#93a3b1); } .ds-lang-link[aria-current=\"page\"] { border-bottom-color:var(--type,#e8eef2); } .ds-lang-link:focus-visible { outline:3px solid var(--press,#7fd4f5); outline-offset:6px; }"
+      "refersTo": "language-switch-link",
+      "description": "Top-right autonym switch; Ice White underline marks the current language.",
+      "html": "<nav class=\"ds-lang-switch\" aria-label=\"Language\"><a href=\"#\" lang=\"en\" class=\"ds-lang-link\">English</a><a href=\"#\" lang=\"ja\" class=\"ds-lang-link\" aria-current=\"page\">日本語</a></nav>",
+      "css": ".ds-lang-switch { display:flex; gap:1.75rem; background:var(--ground,#0b0e12); padding:1rem; } .ds-lang-link { display:block; padding-block:0.5rem 0.375rem; color:var(--type,#e8eef2); font-family:\"Jost\", sans-serif; font-size:0.9375rem; font-weight:400; letter-spacing:0.16em; text-transform:uppercase; text-decoration:none; border-bottom:3px solid transparent; transition:border-color 200ms cubic-bezier(0.16,1,0.3,1); } .ds-lang-link:lang(ja) { font-family:\"Hiragino Kaku Gothic ProN\", \"Noto Sans JP\", sans-serif; letter-spacing:0.08em; } .ds-lang-link:hover { border-bottom-color:var(--secondary,#93a3b1); } .ds-lang-link[aria-current=\"page\"] { border-bottom-color:var(--type,#e8eef2); } .ds-lang-link:focus-visible { outline:3px solid var(--press,#7fd4f5); outline-offset:6px; } @media (prefers-reduced-motion: reduce) { .ds-lang-link { transition:none; } }"
     },
     {
       "name": "Profile Links",
       "kind": "custom",
       "refersTo": "profile-link",
-      "description": "The call to action: link names with a sliding arrow on a 3px Ice Cyan rule.",
-      "html": "<ul class=\"ds-profile\" role=\"list\"><li><a href=\"#\" class=\"ds-profile-link\"><span class=\"ds-profile-name\">LinkedIn<svg class=\"ds-arrow\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M3 12h17M13 5l7 7-7 7\"/></svg></span><span class=\"ds-purpose\">Get in touch</span></a></li><li><a href=\"#\" class=\"ds-profile-link\"><span class=\"ds-profile-name\">GitHub<svg class=\"ds-arrow\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M3 12h17M13 5l7 7-7 7\"/></svg></span><span class=\"ds-purpose\">Source code</span></a></li></ul>",
-      "css": ".ds-profile { display:grid; grid-template-columns:repeat(auto-fit, minmax(9rem, 1fr)); gap:0 1.5rem; max-width:36rem; margin:0; padding:0 1rem 1rem; list-style:none; border-top:3px solid var(--press,#7fd4f5); background:var(--ground,#0b0e12); } .ds-profile-link { display:block; padding-block:1rem 0.5rem; color:var(--type,#e8eef2); text-decoration:none; } .ds-profile-name { display:flex; align-items:center; gap:0.625rem; font-family:\"Jost\", sans-serif; font-size:1.875rem; font-weight:400; line-height:1.3; letter-spacing:0.04em; } .ds-arrow { width:0.8em; height:0.8em; flex:none; fill:none; stroke:var(--press,#7fd4f5); stroke-width:2.5; stroke-linecap:square; stroke-linejoin:miter; transition:translate 240ms cubic-bezier(0.16,1,0.3,1); } .ds-purpose { display:block; margin-top:0.25rem; font-family:\"Jost\", sans-serif; font-size:0.875rem; letter-spacing:0.04em; color:var(--secondary,#93a3b1); transition:color 200ms cubic-bezier(0.16,1,0.3,1); } .ds-profile-link:hover .ds-arrow { translate:0.375rem 0; } .ds-profile-link:hover .ds-purpose { color:var(--type,#e8eef2); } .ds-profile-link:active .ds-arrow { translate:0.625rem 0; } .ds-profile-link:active .ds-profile-name { color:var(--press,#7fd4f5); } .ds-profile-link:focus-visible { outline:3px solid var(--press,#7fd4f5); outline-offset:6px; } @media (prefers-reduced-motion: reduce) { .ds-arrow, .ds-purpose { transition:none; } }"
+      "description": "The call to action: official white mark plus Ice Cyan name, clear space equal to the mark height, on a 3px Ice Cyan rule.",
+      "html": "<ul class=\"ds-links\" role=\"list\"><li><a href=\"#\" class=\"ds-link\" aria-label=\"GitHub\"><span class=\"ds-mark\" aria-hidden=\"true\"><svg width=\"98\" height=\"96\" viewBox=\"0 0 98 96\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<g clip-path=\"url(#clip0_730_27136)\">\n<path d=\"M41.4395 69.3848C28.8066 67.8535 19.9062 58.7617 19.9062 46.9902C19.9062 42.2051 21.6289 37.0371 24.5 33.5918C23.2559 30.4336 23.4473 23.7344 24.8828 20.959C28.7109 20.4805 33.8789 22.4902 36.9414 25.2656C40.5781 24.1172 44.4062 23.543 49.0957 23.543C53.7852 23.543 57.6133 24.1172 61.0586 25.1699C64.0254 22.4902 69.2891 20.4805 73.1172 20.959C74.457 23.543 74.6484 30.2422 73.4043 33.4961C76.4668 37.1328 78.0937 42.0137 78.0937 46.9902C78.0937 58.7617 69.1934 67.6621 56.3691 69.2891C59.623 71.3945 61.8242 75.9883 61.8242 81.252L61.8242 91.2051C61.8242 94.0762 64.2168 95.7031 67.0879 94.5547C84.4102 87.9512 98 70.6289 98 49.1914C98 22.1074 75.9883 6.69539e-07 48.9043 4.309e-07C21.8203 1.92261e-07 -1.9479e-07 22.1074 -4.3343e-07 49.1914C-6.20631e-07 70.4375 13.4941 88.0469 31.6777 94.6504C34.2617 95.6074 36.75 93.8848 36.75 91.3008L36.75 83.6445C35.4102 84.2188 33.6875 84.6016 32.1562 84.6016C25.8398 84.6016 22.1074 81.1563 19.4277 74.7441C18.375 72.1602 17.2266 70.6289 15.0254 70.3418C13.877 70.2461 13.4941 69.7676 13.4941 69.1934C13.4941 68.0449 15.4082 67.1836 17.3223 67.1836C20.0977 67.1836 22.4902 68.9063 24.9785 72.4473C26.8926 75.2227 28.9023 76.4668 31.2949 76.4668C33.6875 76.4668 35.2187 75.6055 37.4199 73.4043C39.0469 71.7773 40.291 70.3418 41.4395 69.3848Z\" fill=\"white\"/>\n</g>\n<defs>\n<clipPath id=\"clip0_730_27136\">\n<rect width=\"98\" height=\"96\" fill=\"white\"/>\n</clipPath>\n</defs>\n</svg></span><span lang=\"en\">GitHub</span></a></li></ul>",
+      "css": ".ds-links { display:flex; flex-wrap:wrap; gap:0 2rem; max-width:36rem; margin:0; padding:0 1rem 1rem; list-style:none; border-top:3px solid var(--press,#7fd4f5); background:var(--ground,#0b0e12); } .ds-link { display:flex; width:fit-content; align-items:center; gap:max(1em, 21px); padding-block:0.875rem 0.5rem; font-family:\"Jost\", sans-serif; font-size:clamp(1.25rem, 0.9rem + 1.6vw, 1.5rem); font-weight:400; line-height:1.3; letter-spacing:0.04em; color:var(--press,#7fd4f5); text-decoration:none; } .ds-link:hover { text-decoration-line:underline; } .ds-link:focus-visible { outline:3px solid var(--press,#7fd4f5); outline-offset:5px; } .ds-mark { display:block; flex:none; height:max(1em, 21px); } .ds-mark svg { display:block; height:100%; width:auto; }"
+    },
+    {
+      "name": "Links on a Rule",
+      "kind": "custom",
+      "refersTo": "profile-link",
+      "description": "Shared onward-link row without marks, as on the 404: Ice Cyan names on a 3px Ice Cyan rule.",
+      "html": "<ul class=\"ds-rule-links\" role=\"list\"><li lang=\"en\"><a href=\"#\" class=\"ds-rule-link\">English Home</a></li><li lang=\"ja\"><a href=\"#\" class=\"ds-rule-link\">日本語のホーム</a></li></ul>",
+      "css": ".ds-rule-links { display:flex; flex-wrap:wrap; gap:0 2rem; margin:0; padding:0 1rem 1rem; list-style:none; border-top:3px solid var(--press,#7fd4f5); background:var(--ground,#0b0e12); } .ds-rule-link { display:block; padding-block:0.875rem 0.5rem; font-family:\"Jost\", \"Hiragino Kaku Gothic ProN\", \"Noto Sans JP\", sans-serif; font-size:1.5rem; font-weight:400; line-height:1.3; letter-spacing:0.04em; color:var(--press,#7fd4f5); text-decoration:none; } .ds-rule-link:hover { text-decoration-line:underline; } .ds-rule-link:focus-visible { outline:3px solid var(--press,#7fd4f5); outline-offset:5px; }"
     },
     {
       "name": "Inline Link",
       "kind": "custom",
       "refersTo": "inline-link",
       "description": "Running-text link: Ice Cyan with an offset underline.",
-      "html": "<p class=\"ds-text\">The requested page could not be found. <a href=\"#\" class=\"ds-inline-link\">English home</a></p>",
+      "html": "<p class=\"ds-text\"><a href=\"#\" lang=\"en\" class=\"ds-inline-link\">Continue in English</a></p>",
       "css": ".ds-text { margin:0; padding:1rem; background:var(--ground,#0b0e12); color:var(--type,#e8eef2); font-family:\"Jost\", sans-serif; line-height:1.7; } .ds-inline-link { color:var(--press,#7fd4f5); text-underline-offset:0.2em; } .ds-inline-link:focus-visible { outline:3px solid var(--press,#7fd4f5); outline-offset:5px; }"
     },
     {
       "name": "Constructed Name",
       "kind": "custom",
       "refersTo": "display",
-      "description": "Opening bar bleeding off the left edge above the uppercase display name, one word per line.",
+      "description": "Opening bar bleeding off the left edge above the uppercase display name, one unbroken word per line.",
       "html": "<div class=\"ds-name-block\"><div class=\"ds-bar\"></div><h1 class=\"ds-name\"><span>Chad</span> <span>Grover</span></h1><div class=\"ds-bar-dim\"></div></div>",
-      "css": ".ds-name-block { background:var(--ground,#0b0e12); padding:1.5rem 2rem 2rem 0; } .ds-bar { height:0.875rem; width:70%; margin-bottom:1.75rem; background:var(--type,#e8eef2); } .ds-name { margin:0 0 1.5rem 2rem; font-family:\"Jost\", sans-serif; font-size:5rem; font-weight:700; line-height:1; letter-spacing:-0.01em; text-transform:uppercase; color:var(--type,#e8eef2); } .ds-name span { display:block; } .ds-bar-dim { margin-left:2rem; width:60%; height:6px; background:var(--bar-dim,#1c232c); }"
+      "css": ".ds-name-block { background:var(--ground,#0b0e12); padding:1.5rem 2rem 2rem 0; } .ds-bar { height:0.875rem; width:70%; margin-bottom:1.75rem; background:var(--type,#e8eef2); } .ds-name { margin:0 0 1.5rem 2rem; font-family:\"Jost\", sans-serif; font-size:5rem; font-weight:700; line-height:1; letter-spacing:-0.01em; text-transform:uppercase; color:var(--type,#e8eef2); } .ds-name span { display:block; white-space:nowrap; } .ds-bar-dim { margin-left:2rem; width:60%; height:6px; background:var(--bar-dim,#1c232c); }"
     },
     {
       "name": "Role Column",
@@ -210,6 +231,14 @@
       "description": "Role and introduction on the ground under a hairline; no panel, no fill.",
       "html": "<div class=\"ds-about\"><p class=\"ds-role\">Software Engineer</p><p class=\"ds-intro\">I build software that is accessible and fast, with close attention to the details that make it easy to use.</p></div>",
       "css": ".ds-about { max-width:36rem; padding:1.875rem 1rem 1rem; border-top:1px solid var(--hairline,#2c3540); background:var(--ground,#0b0e12); } .ds-role { margin:0; font-family:\"Jost\", sans-serif; font-size:1.625rem; font-weight:600; line-height:1.45; color:var(--type,#e8eef2); text-wrap:balance; } .ds-intro { max-width:34em; margin:1.25rem 0 0; font-family:\"Jost\", sans-serif; font-size:1.0625rem; line-height:1.7; color:var(--body,#c9d3db); text-wrap:pretty; }"
+    },
+    {
+      "name": "Bilingual Page Heading",
+      "kind": "custom",
+      "refersTo": "page-heading",
+      "description": "404 block: uppercase Latin heading and Japanese heading side by side as equals, explanations in Frost Body.",
+      "html": "<div class=\"ds-nf\"><section lang=\"en\"><h1 class=\"ds-nf-h\">Page not found</h1><p class=\"ds-nf-p\">The requested page could not be found.</p></section><section lang=\"ja\"><h2 class=\"ds-nf-h\">ページが見つかりません</h2><p class=\"ds-nf-p\">お探しのページは見つかりませんでした。</p></section></div>",
+      "css": ".ds-nf { display:grid; grid-template-columns:1fr 1fr; column-gap:clamp(2rem, 6vw, 5rem); padding:1rem; background:var(--ground,#0b0e12); } .ds-nf-h { margin:0; font-family:\"Jost\", sans-serif; font-size:clamp(1.75rem, 1.25rem + 2.2vw, 2.75rem); font-weight:700; line-height:1.15; letter-spacing:0.02em; text-transform:uppercase; text-wrap:balance; color:var(--type,#e8eef2); } .ds-nf-h:lang(ja) { font-family:\"Hiragino Kaku Gothic ProN\", \"Noto Sans JP\", sans-serif; font-size:clamp(1.625rem, 1.2rem + 1.9vw, 2.5rem); letter-spacing:0.04em; line-height:1.3; text-transform:none; } .ds-nf-p { margin:1rem 0 0; font-family:\"Jost\", sans-serif; font-size:1.0625rem; line-height:1.7; color:var(--body,#c9d3db); } .ds-nf-p:lang(ja) { font-family:\"Hiragino Kaku Gothic ProN\", \"Noto Sans JP\", sans-serif; font-size:1rem; line-height:1.95; }"
     }
   ],
   "narrative": {
@@ -235,7 +264,7 @@
       },
       {
         "name": "The Fill-the-Column Rule",
-        "body": "The display name's size is computed from its column width divided by its longest line's character count times a per-script advance (0.7 Latin, 1.02 Japanese), capped at the display maximum. Never set the name at a fixed breakpoint size.",
+        "body": "The display name's size is computed from its column width divided by its longest line's character count times a per-script advance (0.7 Latin, 1.05 Japanese), capped at the display maximum (and at 10svh on short viewports). Name lines never wrap. Never set the name at a fixed breakpoint size.",
         "section": "typography"
       },
       {
@@ -257,10 +286,12 @@
     "dos": [
       "**Do** build structure from solid bars and 1px/3px rules at 0° and 90°, ending square.",
       "**Do** keep Ice Cyan for pressable elements, their framing rule, focus rings and selection.",
-      "**Do** size the display name with the container-query formula and per-script advance, capped at 10.75rem Latin and 8.25rem Japanese.",
+      "**Do** size the display name with the container-query formula and per-script advance (0.7 Latin, 1.05 Japanese), capped at 10.75rem Latin and 8.25rem Japanese, with each name line unbroken.",
       "**Do** switch face, weight, leading and tracking by `:lang()`; give Japanese `line-break: strict` and `word-break: auto-phrase`.",
       "**Do** use a 3px Ice Cyan outline with a 5–6px offset for every focus state.",
-      "**Do** run state transitions at 200–240ms on `cubic-bezier(0.16, 1, 0.3, 1)` and turn them off under `prefers-reduced-motion`."
+      "**Do** run state transitions at 200ms on `cubic-bezier(0.16, 1, 0.3, 1)` and turn them off under `prefers-reduced-motion`.",
+      "**Do** put a page's onward links on a 3px Ice Cyan rule as Title-size cyan names, using the shared links-on-rule pattern.",
+      "**Do** show a third-party mark only as its owner's official file, unmodified, at no less than its stated minimum size, with clear space equal to its height."
     ],
     "donts": [
       "**Don't** round corners, or add shadows, glows, gradients or grain; depth is a step on the value ladder.",
@@ -268,7 +299,8 @@
       "**Don't** introduce a neutral off the cool blue-slate hue.",
       "**Don't** uppercase or widely track Japanese text; tracking above 0.08em and uppercase transforms are Latin-only.",
       "**Don't** wrap content in cards or filled panels; content sits directly on the ground, separated by rules.",
-      "**Don't** set Slate Hairline or Dim Bar as a text colour."
+      "**Don't** set Slate Hairline or Dim Bar as a text colour.",
+      "**Don't** recolour, redraw or resize-and-re-export an official mark, or set it against its name as a lockup."
     ]
   }
 }
