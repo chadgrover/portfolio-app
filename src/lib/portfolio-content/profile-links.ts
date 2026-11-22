@@ -14,6 +14,7 @@ export const parseProfileLinks = (text: string) => {
 };
 
 export const toProfileLinkAddress = (url: string) => {
-  const { hostname, pathname } = new URL(url);
-  return `${hostname.replace(/^www\./u, '')}${decodeURI(pathname).replace(/\/$/u, '')}`;
+  const { host, pathname, search, hash } = new URL(url);
+  const path = search || hash ? pathname : pathname.replace(/\/$/u, '');
+  return `${host.replace(/^www\./u, '')}${path}${search}${hash}`;
 };

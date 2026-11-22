@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-22T12:57:32Z",
+  "generatedAt": "2026-11-22T13:05:41Z",
   "title": "Design System: Portfolio",
   "extensions": {
     "colorMeta": {
@@ -198,7 +198,7 @@
       },
       {
         "name": "wide",
-        "value": "80rem",
+        "value": "screen and (min-width: 80rem)",
         "purpose": "Home: single column becomes the full-viewport six-column grid with vertical spine; the name column stops widening at the name's largest size so the spine stays beside the name; link names and the 404 bar step up."
       },
       {

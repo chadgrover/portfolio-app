@@ -39,7 +39,22 @@ describe('toProfileLinkAddress', () => {
     expect(toProfileLinkAddress('https://github.com/example')).toBe('github.com/example');
   });
 
-  test('prints a non-Latin path in its own script rather than as percent-encoding', () => {
-    expect(toProfileLinkAddress('https://www.linkedin.com/in/%E5%B1%B1%E7%94%B0/')).toBe('linkedin.com/in/山田');
+  test('keeps the port, so a typed address reaches the same server', () => {
+    expect(toProfileLinkAddress('https://github.com:8443/example')).toBe('github.com:8443/example');
+  });
+
+  test('keeps the query and fragment, so a typed address opens the same view', () => {
+    expect(toProfileLinkAddress('https://github.com/example?tab=repositories#projects')).toBe(
+      'github.com/example?tab=repositories#projects',
+    );
+  });
+
+  test('keeps the final slash of a path that a query follows', () => {
+    expect(toProfileLinkAddress('https://www.linkedin.com/in/example/?trk=profile')).toBe('linkedin.com/in/example/?trk=profile');
+  });
+
+  test('keeps percent-encoding as written, so a typed address reaches the same page', () => {
+    expect(toProfileLinkAddress('https://github.com/example%FF')).toBe('github.com/example%FF');
+    expect(toProfileLinkAddress('https://example.com/a%252Fb')).toBe('example.com/a%252Fb');
   });
 });
