@@ -183,12 +183,20 @@ Flat. There are no shadows, glows, blurs or gradients. Depth is tonal only: Blue
 
 ## Shapes
 
-Every corner is square (0px). Form comes from solid rectangles and 1px or 3px rules set strictly horizontal or vertical: the opening bar, the dim bar, the spine hairline, the hairline over the role column, the 3px cyan rule above a group of links (6px over a hovered profile link), and the 3px underline on the current language. The only non-rectangular forms are the official LinkedIn and GitHub marks, shown exactly as their owners ship them.
+Every corner is square (0px). Form comes from solid rectangles and 1px or 3px rules set strictly horizontal or vertical: the opening bar, the dim bar, the spine hairline, the hairline over the role column, the 3px cyan rule above a group of links (6px over a hovered profile link), and the 3px underline on the current language. The favicon takes its curves from the display lettering. The official LinkedIn and GitHub marks retain the forms their owners supply.
 
 ### Named Rules
 **The Right Angle Rule.** Bars and rules run at 0° or 90° and end square. Thickness carries hierarchy: 1px hairlines for structure, 3px for interactive framing, solid bars for the composition's anchors.
 
 ## Components
+
+### Portfolio Favicon
+
+The C sits one step above and to the left of the G, echoing the two lines of the Latin-script display name. Both initials use Ice White on a square Blue-Black Ground. The gap between the letters keeps them distinct at browser-tab size.
+
+- `public/favicon.svg` is the master artwork. The portfolio owner selected the “Compact step” concept from image-generated studies based on the site's Jost 700 nameplate. The two outlines were redrawn as SVG paths and spaced for 16×16 display.
+- `public/favicon.ico` contains 16×16, 32×32 and 48×48 rasterizations of the SVG. Sharp rendered each size and Pillow packaged them into the ICO for the browser's default icon request.
+- `public/apple-touch-icon.png` is an opaque 180×180 PNG rendered from the same SVG with Sharp.
 
 ### Language Switch
 Quiet, typographic, top-right.

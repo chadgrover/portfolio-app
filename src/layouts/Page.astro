@@ -17,6 +17,8 @@ const { language, metadata, class: mainClass } = Astro.props;
     <meta name="viewport" content="width=device-width" />
     <meta name="color-scheme" content="dark" />
     <meta name="theme-color" content="#0b0e12" />
+    <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <title>{metadata.title}</title>
     {metadata.description && <meta name="description" content={metadata.description} />}
     <style is:inline set:html={fontFaceCss}></style>
