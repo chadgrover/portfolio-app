@@ -59,6 +59,16 @@ const fontFacesUsed: FontFace[] = language === 'ja' ? ['japanese-name', 'latin']
 </Page>
 
 <style>
+  @view-transition {
+    navigation: auto;
+  }
+
+  @keyframes slide-bar-in {
+    from {
+      translate: calc(-100% - var(--gutter)) 0;
+    }
+  }
+
   :global(main.home) {
     --measure: 36rem;
     --name-advance: 0.7;
@@ -81,6 +91,7 @@ const fontFacesUsed: FontFace[] = language === 'ja' ? ['japanese-name', 'latin']
     margin-inline-start: calc(-1 * var(--gutter));
     margin-block-end: 1.75rem;
     background: var(--type);
+    animation: slide-bar-in 700ms var(--ease-out);
   }
 
   .masthead {
@@ -331,6 +342,7 @@ const fontFacesUsed: FontFace[] = language === 'ja' ? ['japanese-name', 'latin']
       inline-size: 78%;
       block-size: 6px;
       background: var(--bar-dim);
+      animation: slide-bar-in 600ms var(--ease-out) 120ms backwards;
     }
 
     .masthead {
@@ -389,9 +401,18 @@ const fontFacesUsed: FontFace[] = language === 'ja' ? ['japanese-name', 'latin']
   }
 
   @media (prefers-reduced-motion: reduce) {
+    @view-transition {
+      navigation: none;
+    }
+
     .language-switch a,
     .profile-links a::before {
       transition: none;
+    }
+
+    :global(main.home)::before,
+    :global(main.home)::after {
+      animation: none;
     }
   }
 </style>
