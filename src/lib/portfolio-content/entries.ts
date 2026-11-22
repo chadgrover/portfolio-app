@@ -14,6 +14,6 @@ export const getLatinScriptName = async () => (await portfolioContentFor('en')).
 export const getProfileLinks = async () => {
   const fileOrder = parseProfileLinks(await readFile(profileLinksPath, 'utf8')).map(({ id }) => id);
   return (await getCollection('profileLinks'))
-    .sort((first, second) => fileOrder.indexOf(first.id) - fileOrder.indexOf(second.id))
+    .sort((first, second) => fileOrder.indexOf(first.data.id) - fileOrder.indexOf(second.data.id))
     .map(({ data }) => data);
 };
