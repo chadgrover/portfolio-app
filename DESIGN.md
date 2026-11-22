@@ -174,7 +174,7 @@ Links on a rule lay out as a wrapping flex row (2rem column gap) on a 3px Ice Cy
 
 The 404 has its own layout rather than the home grid: flush-left, max 64rem, top padding `clamp(4rem, 14svh, 8rem)`, the opening Ice White bar bleeding into the gutter (0.875rem, 1.375rem from 80rem). Below 48rem it is one column. From 48rem it is an explicit two-column grid (column gap `clamp(2rem, 6vw, 5rem)`) with the English and Japanese blocks side by side as equals, their home links aligned beneath in the same columns, and the bar ending exactly at the first column's edge. Later pages get their own layouts in the same vocabulary rather than reusing the home grid.
 
-The base `main` rule (a centred 44rem column, 3rem/1.5rem padding, `clamp(2rem, 7vw, 3rem)` heading at line-height 1.2) still styles pages with no layout of their own, such as the root language-redirect page.
+The base `main` rule (a centred 44rem column, 3rem/1.5rem padding, `clamp(2rem, 7vw, 3rem)` heading at line-height 1.2) still styles pages with no layout of their own, such as the fallback the entry page shows a portfolio visitor without JavaScript.
 
 ## Elevation & Depth
 

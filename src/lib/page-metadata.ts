@@ -16,3 +16,5 @@ export const homePageMetadata = async (language: Language): Promise<PageMetadata
 export const pageMetadata = async (pageName: string): Promise<PageMetadata> => ({
   title: `${pageName} | ${await latinScriptName()}`,
 });
+
+export const entryPageMetadata = async (): Promise<PageMetadata> => ({ title: await latinScriptName() });

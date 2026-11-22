@@ -34,6 +34,10 @@ _Avoid_: Social link, social media
 The control on a page that takes a portfolio visitor to the same page in each language the portfolio supports.
 _Avoid_: Language switcher, language selector, language toggle
 
+**Entry page**:
+The page at the portfolio's root address that sends a portfolio visitor to the home page in their browser's language.
+_Avoid_: Splash page, language selection page
+
 **Private information**:
 Information that must never appear in the portfolio or its source, such as secrets, personal details the portfolio owner has not chosen to publish, or proprietary client code.
 _Avoid_: Personal content

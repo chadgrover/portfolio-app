@@ -1,10 +1,13 @@
 ---
 import Page from '../layouts/Page.astro';
+import { entryPageMetadata } from '../lib/page-metadata';
 ---
-<Page language="en" metadata={{ title: 'Portfolio language selection' }}>
+<Page language="en" metadata={await entryPageMetadata()}>
   <noscript slot="head"><meta http-equiv="refresh" content="0;url=/en/" /></noscript>
-  <h1>Portfolio</h1>
-  <p><a href="/en/" lang="en">Continue in English</a></p>
+  <noscript>
+    <h1>Portfolio</h1>
+    <p><a href="/en/" lang="en">Continue in English</a></p>
+  </noscript>
   <script>
     import { selectLanguage } from '../lib/i18n/utils';
     window.location.replace(`/${selectLanguage(navigator.language)}/`);
