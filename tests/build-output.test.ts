@@ -35,6 +35,12 @@ const isThirdParty = (url: string) => /^(?:[a-z][a-z\d+.-]*:)?\/\//i.test(url.tr
 const isJavaScriptType = (type: string) =>
   ['', 'module'].includes(type.trim().toLowerCase()) || /(?:java|ecma)script/i.test(type);
 const textOf = (html: string, selector: string) => elementsOf(html, selector).map((element) => textContentOf(element).trim());
+const scriptEnabledTextOf = (node: Node): string =>
+  node.type === TEXT_NODE
+    ? node.value
+    : ['script', 'style', 'noscript', 'template'].includes(node.name)
+      ? ''
+      : (node.children ?? []).map(scriptEnabledTextOf).join('');
 const metaContent = (html: string, name: string) => elementsOf(html, `meta[name="${name}"]`)[0]?.attributes.content;
 const anchors = (html: string) => elementsOf(html, 'a');
 const portfolioContentOf = (language: string) =>
@@ -80,6 +86,22 @@ const deliveredCss = (html: string, pagePath: string) => {
     .map((href) => readBuildOutput(buildOutputPathOf(href, pagePath)));
   return [...inlineStyles, ...linkedStylesheets].join('\n');
 };
+
+describe('entry page /', () => {
+  const html = readBuildOutput('index.html');
+
+  test('is titled with the Latin-script name alone', () => {
+    expect(textOf(html, 'title')).toEqual(['Chad Grover']);
+  });
+
+  test('shows no text while its script chooses a language', () => {
+    expect(scriptEnabledTextOf(elementsOf(html, 'body')[0]).trim()).toBe('');
+  });
+
+  test('links visitors without JavaScript to the English home page', () => {
+    expect(elementsOf(html, 'noscript a').map((anchor) => anchor.attributes.href)).toContain('/en/');
+  });
+});
 
 describe.each(supportedLanguages)('localized home page /%s/', (language) => {
   const html = readBuildOutput(`${language}/index.html`);
