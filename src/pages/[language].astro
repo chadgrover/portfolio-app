@@ -2,33 +2,400 @@
 import Page from '../layouts/Page.astro';
 import { supportedLanguages } from '../lib/i18n/constants';
 import type { Language } from '../lib/i18n/types';
-import { getEntry } from 'astro:content';
-import type { PortfolioContent } from '../lib/portfolio-content/types';
+import { fontFaceUrl, type FontFace } from '../lib/fonts/faces';
+import { portfolioContentFor, profileLinksFor } from '../lib/portfolio-content/entries';
+import type { PortfolioContent, ProfileLink } from '../lib/portfolio-content/types';
 
 export async function getStaticPaths() {
+  const english = await portfolioContentFor('en');
   return Promise.all(supportedLanguages.map(async (language) => {
-    const entry = await getEntry('portfolio', language);
-    if (!entry) throw new Error(`Missing portfolio content: src/content/portfolio/${language}.json`);
-    return { params: { language }, props: { language, content: entry.data } };
+    const content = await portfolioContentFor(language);
+    const profileLinks = await profileLinksFor(content);
+    const englishHero = language === 'en' ? undefined : english.home.hero;
+    return { params: { language }, props: { language, content, profileLinks, englishHero } };
   }));
 }
 interface Props {
   language: Language;
   content: PortfolioContent;
+  profileLinks: (ProfileLink & { purpose: string })[];
+  englishHero?: PortfolioContent['home']['hero'];
 }
-const { language, content } = Astro.props;
+const { language, content, profileLinks, englishHero } = Astro.props;
 const { hero } = content.home;
 const labels = { en: 'English', ja: '日本語' };
+const nameLines = hero.displayName.split(/\s+/u);
+const nameColumns = Math.max(...nameLines.map((line) => [...line].length));
+const fontFacesUsed: FontFace[] = language === 'ja' ? ['japanese-name', 'latin'] : ['latin'];
 ---
-<Page language={language} title={`${hero.displayName} | Portfolio`}>
-  <nav aria-label={language === 'ja' ? '言語' : 'Language'}>
-    {supportedLanguages.map((destination) => (
-      <a href={`/${destination}/`} lang={destination} hreflang={destination}
-        aria-current={language === destination ? 'page' : undefined}>{labels[destination]}</a>
+<Page language={language} title={`${hero.displayName} | ${hero.role}`} class="home">
+  {fontFacesUsed.map((face) => (
+    <link slot="head" rel="preload" href={fontFaceUrl(face)} as="font" type="font/woff2" crossorigin />
+  ))}
+  <header slot="header" class="masthead">
+    <nav aria-label={language === 'ja' ? '言語' : 'Language'} class="language-switcher">
+      {supportedLanguages.map((destination) => (
+        <a href={`/${destination}/`} lang={destination} hreflang={destination}
+          aria-current={language === destination ? 'page' : undefined}>{labels[destination]}</a>
+      ))}
+    </nav>
+  </header>
+  <div class="identity" style={`--name-columns: ${nameColumns}`}>
+    <h1 class="name">{nameLines.map((line, index) => <>{index > 0 && ' '}<span class="name-line">{line}</span></>)}</h1>
+  </div>
+  <div class="spine">
+    {englishHero && <p class="spine-name" lang="en" aria-hidden="true" translate="no">{englishHero.displayName}</p>}
+  </div>
+  <div class="about">
+    <p class="role">
+      {hero.role}
+      {englishHero && <span class="role-english" lang="en">{englishHero.role}</span>}
+    </p>
+    <p class="introduction">{hero.introduction}</p>
+  </div>
+  <ul class="profile-links" role="list">
+    {profileLinks.map(({ name, url, purpose }) => (
+      <li>
+        <a href={url}>
+          <span class="profile-name">{name}<svg class="arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 12h17M13 5l7 7-7 7" /></svg></span>
+          <span class="purpose">{purpose}</span>
+        </a>
+      </li>
     ))}
-  </nav>
-  <p class="notice">{language === 'ja' ? '架空のポートフォリオ・デモ' : 'Fictional portfolio demonstration'}</p>
-  <h1>{hero.displayName}</h1>
-  <p class="role">{hero.role}</p>
-  <p>{hero.introduction}</p>
+  </ul>
 </Page>
+
+<style>
+  :global(main.home) {
+    --press-rule: 3px;
+    --measure: 36rem;
+    max-width: none;
+    margin: 0;
+    padding: 5.5rem var(--gutter) 2.5rem;
+    min-height: 100svh;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    overflow-wrap: normal;
+  }
+
+  :global(main.home)::before {
+    content: "";
+    block-size: 0.875rem;
+    inline-size: min(70%, var(--measure) + var(--gutter));
+    margin-inline-start: calc(-1 * var(--gutter));
+    margin-block-end: 1.75rem;
+    background: var(--type);
+  }
+
+  .masthead {
+    position: absolute;
+    inset-block-start: 1.25rem;
+    inset-inline-end: var(--gutter);
+    z-index: 1;
+  }
+
+  .language-switcher {
+    display: flex;
+    gap: 1.75rem;
+    margin: 0;
+  }
+
+  .language-switcher a {
+    display: block;
+    padding-block: 0.5rem 0.375rem;
+    color: var(--type);
+    font-family: var(--latin);
+    font-size: 0.9375rem;
+    font-weight: 400;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-block-end: 3px solid transparent;
+    transition: border-color 200ms var(--ease-out);
+  }
+
+  .language-switcher a:lang(ja) {
+    font-family: var(--japanese);
+    letter-spacing: 0.08em;
+  }
+
+  .language-switcher a:hover {
+    border-block-end-color: var(--secondary);
+  }
+
+  .language-switcher a[aria-current="page"] {
+    border-block-end-color: var(--type);
+  }
+
+  .language-switcher a:focus-visible {
+    outline: 3px solid var(--press);
+    outline-offset: 6px;
+  }
+
+  .identity {
+    container-type: inline-size;
+  }
+
+  .name {
+    --name-advance: 0.7;
+    --name-max: 10.75rem;
+    margin: 0;
+    font-family: var(--latin);
+    font-size: min(var(--name-max), 100cqi / (var(--name-columns) * var(--name-advance)));
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    color: var(--type);
+  }
+
+  .name:lang(ja) {
+    --name-advance: 1.02;
+    --name-max: 8.25rem;
+    font-family: "Noto Sans JP Name", var(--japanese);
+    font-weight: 900;
+    line-height: 1.02;
+    letter-spacing: 0.02em;
+  }
+
+  .role:lang(ja),
+  .introduction:lang(ja) {
+    word-break: auto-phrase;
+  }
+
+  .name-line {
+    display: block;
+  }
+
+  .spine-name {
+    max-inline-size: var(--measure);
+    margin: 0.875rem 0 0;
+    padding-block-start: 0.75rem;
+    border-block-start: 1px solid var(--hairline);
+    font-family: var(--latin);
+    font-size: 0.9375rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--secondary);
+  }
+
+  .about {
+    max-inline-size: var(--measure);
+    margin-block-start: 2rem;
+  }
+
+  .role {
+    margin: 0;
+    font-size: 1.375rem;
+    font-weight: 700;
+    line-height: 1.45;
+    color: var(--type);
+    text-wrap: balance;
+  }
+
+  .role:lang(en) {
+    font-family: var(--latin);
+    font-weight: 600;
+    font-size: 1.5rem;
+  }
+
+  .role-english {
+    display: block;
+    margin-block-start: 0.375rem;
+    font-family: var(--latin);
+    font-size: 0.875rem;
+    font-weight: 400;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--secondary);
+  }
+
+  .introduction {
+    max-inline-size: 34em;
+    margin: 1.25rem 0 0;
+    font-size: 1rem;
+    line-height: 1.95;
+    color: var(--body);
+    text-wrap: pretty;
+  }
+
+  .introduction:lang(en) {
+    font-size: 1.0625rem;
+    line-height: 1.7;
+  }
+
+  .profile-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    gap: 0 1.5rem;
+    max-inline-size: var(--measure);
+    margin: 2rem 0 0;
+    padding: 0;
+    list-style: none;
+    border-block-start: var(--press-rule) solid var(--press);
+  }
+
+  .profile-links a {
+    display: block;
+    padding-block: 0.875rem 0.5rem;
+    color: var(--type);
+    text-decoration: none;
+  }
+
+  .profile-name {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-family: var(--latin);
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 1.3;
+    letter-spacing: 0.04em;
+  }
+
+  .arrow {
+    inline-size: 0.8em;
+    block-size: 0.8em;
+    flex: none;
+    fill: none;
+    stroke: var(--press);
+    stroke-width: 2.5;
+    stroke-linecap: square;
+    stroke-linejoin: miter;
+    transition: translate 240ms var(--ease-out);
+  }
+
+  .purpose {
+    display: block;
+    margin-block-start: 0.25rem;
+    font-size: 0.875rem;
+    letter-spacing: 0.04em;
+    color: var(--secondary);
+    transition: color 200ms var(--ease-out);
+  }
+
+  .profile-links a:hover .arrow {
+    translate: 0.375rem 0;
+  }
+
+  .profile-links a:hover .purpose {
+    color: var(--type);
+  }
+
+  .profile-links a:active .arrow {
+    translate: 0.625rem 0;
+  }
+
+  .profile-links a:active .profile-name {
+    color: var(--press);
+  }
+
+  .profile-links a:focus-visible {
+    outline: 3px solid var(--press);
+    outline-offset: 6px;
+  }
+
+  @media (min-width: 72rem) {
+    :global(main.home) {
+      --gap: clamp(3rem, 8vw, 7.5rem);
+      padding: 0;
+      grid-template-columns:
+        var(--gutter) minmax(0, 1fr) 3rem var(--gap)
+        minmax(20rem, 30.5rem) var(--gutter);
+      grid-template-rows:
+        clamp(6rem, 14.6svh, 8.25rem) 1.375rem clamp(2.5rem, 7.3svh, 4.125rem)
+        auto 1fr auto clamp(3rem, 10svh, 6rem);
+      align-content: stretch;
+    }
+
+    :global(main.home)::before {
+      grid-column: 1 / 3;
+      grid-row: 2;
+      block-size: auto;
+      inline-size: 88%;
+      margin: 0;
+    }
+
+    :global(main.home)::after {
+      content: "";
+      grid-column: 2;
+      grid-row: 6;
+      align-self: start;
+      inline-size: 78%;
+      block-size: 6px;
+      background: var(--bar-dim);
+    }
+
+    .masthead {
+      inset-block-start: 2.25rem;
+    }
+
+    .identity {
+      grid-column: 2;
+      grid-row: 4;
+      margin-inline-start: -0.375rem;
+    }
+
+    .spine {
+      grid-column: 3;
+      grid-row: 2 / 7;
+      display: flex;
+      align-items: flex-end;
+      border-inline-end: 1px solid var(--hairline);
+    }
+
+    .spine-name {
+      max-inline-size: none;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      writing-mode: vertical-rl;
+      rotate: 180deg;
+      font-size: 1.875rem;
+      letter-spacing: 0.42em;
+      color: var(--type);
+      white-space: nowrap;
+    }
+
+    .about {
+      grid-column: 5;
+      grid-row: 4 / 6;
+      align-self: end;
+      margin-block: 0 clamp(2.5rem, 9svh, 6rem);
+      padding-block-start: 1.875rem;
+      border-block-start: 1px solid var(--hairline);
+    }
+
+    .role {
+      font-size: 1.5rem;
+    }
+
+    .role:lang(en) {
+      font-size: 1.625rem;
+    }
+
+    .profile-links {
+      grid-column: 5;
+      grid-row: 6;
+      margin: 0;
+    }
+
+    .profile-links a {
+      padding-block-start: 1rem;
+    }
+
+    .profile-name {
+      font-size: 1.875rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .language-switcher a,
+    .arrow,
+    .purpose {
+      transition: none;
+    }
+  }
+</style>

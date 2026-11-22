@@ -1,10 +1,31 @@
-:root { font-family: system-ui, sans-serif; color: #20252b; background: #faf9f6; line-height: 1.7; }
-body { margin: 0; }
+:root {
+  --ground: #0b0e12;
+  --type: #e8eef2;
+  --body: #c9d3db;
+  --secondary: #93a3b1;
+  --press: #7fd4f5;
+  --hairline: #2c3540;
+  --bar-dim: #1c232c;
+  --japanese: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Noto Sans JP", "Noto Sans CJK JP", "Yu Gothic UI", "Yu Gothic", Meiryo, sans-serif;
+  --latin: "Jost", var(--japanese);
+  --gutter: clamp(1rem, 5vw, 4.5rem);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  color-scheme: dark;
+  font-family: var(--latin);
+  color: var(--type);
+  background: var(--ground);
+  line-height: 1.7;
+  accent-color: var(--press);
+  scrollbar-color: var(--hairline) var(--ground);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+:lang(ja) { line-break: strict; }
+::selection { background: var(--press); color: var(--ground); }
+body { margin: 0; background: var(--ground); }
 main { max-width: 44rem; margin: 0 auto; padding: 3rem 1.5rem; overflow-wrap: anywhere; }
 nav { display: flex; gap: 1.5rem; margin-bottom: 3rem; }
-a { color: #215b85; text-underline-offset: .2em; }
+a { color: var(--press); text-underline-offset: .2em; }
 a[aria-current="page"] { font-weight: 700; }
-a:focus-visible { outline: 3px solid #215b85; outline-offset: 5px; }
+a:focus-visible { outline: 3px solid var(--press); outline-offset: 5px; }
 h1 { line-height: 1.2; font-size: clamp(2rem, 7vw, 3rem); }
-.notice { font-size: .9rem; }
-.role { font-weight: 600; }

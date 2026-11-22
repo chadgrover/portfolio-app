@@ -35,7 +35,7 @@ None confirmed beyond the bilingual EN/JA presentation.
 
 ## Evidence on Hand
 
-The current content in `src/content/portfolio/` is a fictional placeholder, not real portfolio content.
+The home page display name, role, introduction and profile links in `src/content/portfolio/` are real and reviewed by the portfolio owner.
 
 Planned, not yet written: project case studies, work history, and writing/talks. Contact methods will be profile links to LinkedIn and GitHub; no email is planned.
 
