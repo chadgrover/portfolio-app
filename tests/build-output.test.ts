@@ -47,7 +47,8 @@ const anchors = (html: string) => elementsOf(html, 'a');
 const toWords = (text: string) => text.trim().split(/\s+/u);
 const portfolioContentOf = (language: string) =>
   JSON.parse(readFileSync(new URL(`../src/content/portfolio/${language}.json`, import.meta.url), 'utf8'));
-const profileLinks: { name: string; url: string }[] = JSON.parse(
+const decorativeMarkSelectors = { linkedin: 'img', github: '[aria-hidden="true"] svg' };
+const profileLinks: { id: keyof typeof decorativeMarkSelectors; name: string; url: string }[] = JSON.parse(
   readFileSync(new URL('../src/content/portfolio/profile-links.json', import.meta.url), 'utf8'),
 );
 const profileLinkLabels = {
@@ -147,9 +148,11 @@ describe.each(supportedLanguages)('localized home page /%s/', (language) => {
     expect(anchors(html).map((anchor) => anchor.attributes.href).filter((href) => profileLinkUrls.includes(href ?? ''))).toEqual(profileLinkUrls);
   });
 
-  test.each(profileLinks)('shows the $name profile link as its official mark alone', ({ url }) => {
+  test.each(profileLinks)('shows the $name profile link as its official mark alone', ({ id, url }) => {
     const link = anchors(html).find((anchor) => anchor.attributes.href === url);
     expect(link && textContentOf(link).trim()).toBe('');
+    expect(link && querySelectorAll(link, decorativeMarkSelectors[id])).toHaveLength(1);
+    expect(link && (querySelectorAll(link, 'img') as ElementNode[]).filter((image) => image.attributes.alt !== '')).toEqual([]);
   });
 
   test.each(profileLinks)('links to the $name profile with a localized accessible name', ({ name, url }) => {
