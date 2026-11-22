@@ -7,8 +7,9 @@ interface Props {
   language: Language;
   metadata: PageMetadata;
   class?: string;
+  style?: string;
 }
-const { language, metadata, class: mainClass } = Astro.props;
+const { language, metadata, class: mainClass, style: mainStyle } = Astro.props;
 ---
 <!doctype html>
 <html lang={language}>
@@ -24,5 +25,5 @@ const { language, metadata, class: mainClass } = Astro.props;
     <style is:inline set:html={fontFaceCss}></style>
     <slot name="head" />
   </head>
-  <body><slot name="header" /><main class={mainClass}><slot /></main></body>
+  <body><slot name="header" /><main class={mainClass} style={mainStyle}><slot /></main></body>
 </html>

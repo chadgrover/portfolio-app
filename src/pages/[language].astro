@@ -20,7 +20,7 @@ const nameLines = hero.displayName.split(/\s+/u);
 const nameColumns = Math.max(...nameLines.map((line) => [...line].length));
 const fontFacesUsed: FontFace[] = language === 'ja' ? ['japanese-name', 'latin'] : ['latin'];
 ---
-<Page language={language} metadata={await createHomePageMetadata(language)} class="home">
+<Page language={language} metadata={await createHomePageMetadata(language)} class="home" style={`--name-columns: ${nameColumns}`}>
   {fontFacesUsed.map((face) => (
     <link slot="head" rel="preload" href={fontFaceUrl(face)} as="font" type="font/woff2" crossorigin />
   ))}
@@ -32,7 +32,7 @@ const fontFacesUsed: FontFace[] = language === 'ja' ? ['japanese-name', 'latin']
       ))}
     </nav>
   </header>
-  <div class="identity" style={`--name-columns: ${nameColumns}`}>
+  <div class="identity">
     <h1 class="name">{nameLines.map((line, index) => <>{index > 0 && ' '}<span class="name-line">{line}</span></>)}</h1>
   </div>
   <div class="spine">
@@ -61,6 +61,8 @@ const fontFacesUsed: FontFace[] = language === 'ja' ? ['japanese-name', 'latin']
 <style>
   :global(main.home) {
     --measure: 36rem;
+    --name-advance: 0.7;
+    --name-max: 10.75rem;
     max-width: none;
     margin: 0;
     padding: 5.5rem var(--gutter) 2.5rem;
@@ -102,6 +104,7 @@ const fontFacesUsed: FontFace[] = language === 'ja' ? ['japanese-name', 'latin']
     font-size: 0.9375rem;
     font-weight: 400;
     letter-spacing: 0.16em;
+    padding-inline-start: 0.16em;
     text-transform: uppercase;
     text-decoration: none;
     border-block-end: 3px solid transparent;
@@ -111,6 +114,7 @@ const fontFacesUsed: FontFace[] = language === 'ja' ? ['japanese-name', 'latin']
   .language-switch a:lang(ja) {
     font-family: var(--japanese);
     letter-spacing: 0.08em;
+    padding-inline-start: 0.08em;
   }
 
   .language-switch a:hover {
@@ -130,9 +134,12 @@ const fontFacesUsed: FontFace[] = language === 'ja' ? ['japanese-name', 'latin']
     container-type: inline-size;
   }
 
+  :global(main.home:lang(ja)) {
+    --name-advance: 1.05;
+    --name-max: 8.25rem;
+  }
+
   .name {
-    --name-advance: 0.7;
-    --name-max: 10.75rem;
     margin: 0;
     font-family: var(--latin);
     font-size: min(var(--name-max), 100cqi / (var(--name-columns) * var(--name-advance)));
@@ -144,8 +151,6 @@ const fontFacesUsed: FontFace[] = language === 'ja' ? ['japanese-name', 'latin']
   }
 
   .name:lang(ja) {
-    --name-advance: 1.05;
-    --name-max: 8.25rem;
     font-family: "Noto Sans JP Name", var(--japanese);
     font-weight: 900;
     line-height: 1.02;
@@ -299,9 +304,10 @@ const fontFacesUsed: FontFace[] = language === 'ja' ? ['japanese-name', 'latin']
     :global(main.home) {
       --gap: clamp(3rem, 8vw, 7.5rem);
       --name-column-min: 43rem;
+      --name-column-max: calc(var(--name-columns) * var(--name-advance) * var(--name-max));
       padding: 0;
       grid-template-columns:
-        var(--gutter) minmax(0, 1fr) 3rem var(--gap)
+        var(--gutter) minmax(0, var(--name-column-max)) 3rem minmax(var(--gap), 1fr)
         clamp(20rem, 100vw - 2 * var(--gutter) - 3rem - var(--gap) - var(--name-column-min), 30.5rem) var(--gutter);
       grid-template-rows:
         clamp(6rem, 14.6svh, 8.25rem) 1.375rem clamp(2.5rem, 7.3svh, 4.125rem)
