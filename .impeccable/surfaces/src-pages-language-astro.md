@@ -18,7 +18,7 @@ Mode: Persuade (this surface only).
 - Each language has its own arrangement. The EN page shows no Japanese strings, except the 日本語 autonym in the language switch.
 - Later: a professional photo takes a solid rectangular slot in the composition.
 - Motion: bars sliding in on load plus a cross-document view transition between languages, both off under reduced motion.
-- Constraints: WCAG 2.2 AA in both languages, no first-party JavaScript, dark only.
+- Constraints: WCAG 2.2 AA in both languages, no first-party JavaScript, dark only on screen; print is ink on paper.
 - Alternate palette on record: Blue-Black & Indigo.
 
 ## Direction contract

@@ -20,6 +20,18 @@
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
+@media print {
+  :root {
+    --ground: #fff;
+    --type: #0b0e12;
+    --body: #1c232c;
+    --secondary: #2c3540;
+    --press: #0b0e12;
+    --hairline: #93a3b1;
+    --bar-dim: #c9d3db;
+    color-scheme: light;
+  }
+}
 :lang(ja) { line-break: strict; }
 ::selection { background: var(--press); color: var(--ground); }
 body { margin: 0; background: var(--ground); }
