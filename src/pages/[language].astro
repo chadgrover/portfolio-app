@@ -12,12 +12,12 @@ import { toProfileLinkAddress } from '../lib/portfolio-content/profile-links';
 export const getStaticPaths = () => supportedLanguages.map((language) => ({ params: { language } }));
 
 const language = Astro.params.language as Language;
-const { hero } = (await portfolioContentFor(language)).home;
-const englishHero = language === 'en' ? undefined : (await portfolioContentFor('en')).home.hero;
-const latinScriptName = englishHero && await getLatinScriptName();
+const { homePage } = await portfolioContentFor(language);
+const englishHomePage = language === 'en' ? undefined : (await portfolioContentFor('en')).homePage;
+const latinScriptName = englishHomePage && await getLatinScriptName();
 const text = interfaceText[language];
 const profileLinks = await getProfileLinks();
-const nameLines = hero.displayName.split(/\s+/u);
+const nameLines = homePage.displayName.split(/\s+/u);
 const nameColumns = Math.max(...nameLines.map((line) => [...line].length));
 const fontFacesUsed: FontFace[] = language === 'ja' ? ['japanese-name', 'latin'] : ['latin'];
 ---
@@ -43,10 +43,10 @@ const fontFacesUsed: FontFace[] = language === 'ja' ? ['japanese-name', 'latin']
   </div>
   <div class="about">
     <p class="role">
-      {hero.role}
-      {englishHero && <span class="role-english" lang="en">{englishHero.role}</span>}
+      {homePage.role}
+      {englishHomePage && <span class="role-english" lang="en">{englishHomePage.role}</span>}
     </p>
-    <p class="introduction">{hero.introduction}</p>
+    <p class="introduction">{homePage.introduction}</p>
   </div>
   {profileLinks.length > 0 && (
     <ul class="profile-links links-on-rule" role="list">

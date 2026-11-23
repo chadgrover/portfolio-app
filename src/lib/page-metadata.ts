@@ -18,7 +18,7 @@ const languageLinkPaths: LanguageLinkPaths = {
 
 export const createHomePageMetadata = async (language: Language): Promise<PageMetadata> => ({
   title: await getLatinScriptName(),
-  description: (await portfolioContentFor(language)).home.hero.introduction,
+  description: (await portfolioContentFor(language)).homePage.introduction,
   canonicalPath: languageLinkPaths[language],
   languageLinkPaths,
 });

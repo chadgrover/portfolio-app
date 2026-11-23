@@ -7,7 +7,7 @@ export const portfolioContentFor = async (language: Language) => {
   return entry.data;
 };
 
-export const getLatinScriptName = async () => (await portfolioContentFor('en')).home.hero.displayName;
+export const getLatinScriptName = async () => (await portfolioContentFor('en')).homePage.displayName;
 
 export const getProfileLinks = async () => {
   const entry = await getEntry('profileLinks', 'profileLinks');
