@@ -1,6 +1,5 @@
 import { supportedLanguages } from './i18n/constants';
 import type { Language } from './i18n/types';
-import { getLatinScriptName, portfolioContentFor } from './portfolio-content/entries';
 
 export type LanguageLinkPaths = Record<Language | 'x-default', string>;
 
@@ -16,19 +15,19 @@ const languageLinkPaths: LanguageLinkPaths = {
   'x-default': '/',
 };
 
-export const createHomePageMetadata = async (language: Language): Promise<PageMetadata> => ({
-  title: await getLatinScriptName(),
-  description: (await portfolioContentFor(language)).homePage.introduction,
+export const createHomePageMetadata = (language: Language, latinScriptName: string, introduction: string): PageMetadata => ({
+  title: latinScriptName,
+  description: introduction,
   canonicalPath: languageLinkPaths[language],
   languageLinkPaths,
 });
 
-export const createPageMetadata = async (pageName: string): Promise<PageMetadata> => ({
-  title: `${pageName} | ${await getLatinScriptName()}`,
+export const createPageMetadata = (pageName: string, latinScriptName: string): PageMetadata => ({
+  title: `${pageName} | ${latinScriptName}`,
 });
 
-export const createEntryPageMetadata = async (): Promise<PageMetadata> => ({
-  title: await getLatinScriptName(),
+export const createEntryPageMetadata = (latinScriptName: string): PageMetadata => ({
+  title: latinScriptName,
   canonicalPath: languageLinkPaths['x-default'],
   languageLinkPaths,
 });

@@ -1,8 +1,11 @@
 ---
 import Page from '../layouts/Page.astro';
 import { createEntryPageMetadata } from '../lib/page-metadata';
+import { getPortfolioContent } from '../lib/portfolio-content/entries';
+
+const { latinScriptName } = await getPortfolioContent('en');
 ---
-<Page language="en" metadata={await createEntryPageMetadata()}>
+<Page language="en" metadata={createEntryPageMetadata(latinScriptName)}>
   <noscript slot="head"><meta http-equiv="refresh" content="0;url=/en/" /></noscript>
   <noscript>
     <h1>Portfolio</h1>
