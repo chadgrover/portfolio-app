@@ -24,3 +24,11 @@ export const profileLinkSchema = z.object({
     'A profile link URL must not carry user info',
   ),
 });
+
+export const profileLinksSchema = z.array(profileLinkSchema).superRefine((profileLinks, context) => {
+  profileLinks.forEach(({ id }, index) => {
+    if (profileLinks.findIndex((profileLink) => profileLink.id === id) < index) {
+      context.addIssue({ code: 'custom', message: `Profile link "${id}" appears twice`, path: [index, 'id'] });
+    }
+  });
+});

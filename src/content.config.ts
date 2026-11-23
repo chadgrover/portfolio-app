@@ -1,9 +1,10 @@
 import { readFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
 import { defineCollection } from 'astro:content';
-import { file, glob } from 'astro/loaders';
+import { z } from 'astro/zod';
+import { glob } from 'astro/loaders';
 import { supportedLanguages } from './lib/i18n/constants';
-import { parseProfileLinks, profileLinksPath } from './lib/portfolio-content/profile-links';
-import { portfolioContentSchema, profileLinkSchema } from './lib/portfolio-content/schema';
+import { portfolioContentSchema, profileLinksSchema } from './lib/portfolio-content/schema';
 
 const portfolioFiles = glob({
   pattern: supportedLanguages.map((language) => `${language}.json`),
@@ -24,17 +25,23 @@ const portfolio = defineCollection({
   schema: portfolioContentSchema,
 });
 
-const profileLinksFile = file(profileLinksPath);
-
 const profileLinks = defineCollection({
   loader: {
     name: 'profileLinks',
-    async load(context) {
-      parseProfileLinks(await readFile(profileLinksPath, 'utf8'));
-      await profileLinksFile.load(context);
+    async load({ config, logger, parseData, store, watcher }) {
+      const filePath = fileURLToPath(new URL('src/content/portfolio/profile-links.json', config.root));
+      const updateProfileLinks = async () => {
+        const data = { profileLinks: JSON.parse(await readFile(filePath, 'utf8')) };
+        store.set({ id: 'profileLinks', data: await parseData({ id: 'profileLinks', data, filePath }) });
+      };
+      await updateProfileLinks();
+      watcher?.add(filePath);
+      watcher?.on('change', async (changedPath) => {
+        if (changedPath === filePath) await updateProfileLinks().catch((error: Error) => logger.error(error.message));
+      });
     },
   },
-  schema: profileLinkSchema,
+  schema: z.object({ profileLinks: profileLinksSchema }),
 });
 
 export const collections = { portfolio, profileLinks };

@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { portfolioContentSchema, profileLinkSchema } from './schema';
+import { portfolioContentSchema, profileLinkSchema, profileLinksSchema } from './schema';
 
 describe('portfolioContentSchema', () => {
   const hero = { displayName: 'Example Developer', role: 'Fictional developer', introduction: 'A fictional introduction.' };
@@ -56,5 +56,33 @@ describe('profileLinkSchema', () => {
 
   test('rejects a profile link without a name', () => {
     expect(profileLinkSchema.safeParse({ ...profileLink, name: ' ' }).success).toBe(false);
+  });
+});
+
+describe('profileLinksSchema', () => {
+  const linkedin = { id: 'linkedin', name: 'LinkedIn', url: 'https://www.linkedin.com/in/example/' };
+  const github = { id: 'github', name: 'GitHub', url: 'https://github.com/example' };
+
+  test('accepts every profile link in the shared file', () => {
+    expect(profileLinksSchema.safeParse([linkedin, github]).success).toBe(true);
+  });
+
+  test('keeps the profile links in the order the shared file lists them', () => {
+    expect(profileLinksSchema.parse([github, linkedin]).map(({ id }) => id)).toEqual(['github', 'linkedin']);
+    expect(profileLinksSchema.parse([linkedin, github]).map(({ id }) => id)).toEqual(['linkedin', 'github']);
+  });
+
+  test('accepts a shared file with no profile links', () => {
+    expect(profileLinksSchema.parse([])).toEqual([]);
+  });
+
+  test('rejects a profile link without an id, naming the entry and field', () => {
+    const result = profileLinksSchema.safeParse([{ name: 'LinkedIn', url: 'https://www.linkedin.com/in/example/' }]);
+    expect(result.error?.issues).toEqual([expect.objectContaining({ path: [0, 'id'] })]);
+  });
+
+  test('rejects a profile link id that appears twice, naming the id', () => {
+    const result = profileLinksSchema.safeParse([linkedin, { ...linkedin, url: 'https://example.com/' }]);
+    expect(result.error?.issues).toEqual([expect.objectContaining({ message: 'Profile link "linkedin" appears twice' })]);
   });
 });

@@ -1,6 +1,6 @@
 # Function Verbs
 
-Every function this repo defines has a verb-noun name: a verb from the list below, then what it acts on, such as `getPortfolioContent` or `parseProfileLinks`. A `to` function names its result instead: `toKilobytes`.
+Every function this repo defines has a verb-noun name: a verb from the list below, then what it acts on, such as `getPortfolioContent` or `createHomePage`. A `to` function names its result instead: `toKilobytes`.
 
 A name a framework requires, such as Astro's `getStaticPaths` or a loader's `load`, keeps that name.
 
