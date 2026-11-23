@@ -17,7 +17,8 @@
     "preview": "astro preview"
   },
   "dependencies": {
-    "astro": "7.4.13"
+    "astro": "7.4.13",
+    "vite": "8.3.8"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.12",
