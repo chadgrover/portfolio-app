@@ -5,23 +5,19 @@ import { supportedLanguages } from '../lib/i18n/constants';
 import { interfaceText, languageNames } from '../lib/i18n/interface-text';
 import type { Language } from '../lib/i18n/types';
 import { fontFaceUrl, type FontFace } from '../lib/fonts/faces';
+import { createHomePage } from '../lib/home-page';
 import { createHomePageMetadata } from '../lib/page-metadata';
-import { getLatinScriptName, getProfileLinks, portfolioContentFor } from '../lib/portfolio-content/entries';
-import { toProfileLinkAddress } from '../lib/portfolio-content/profile-links';
+import { getPortfolioContent } from '../lib/portfolio-content/entries';
 
 export const getStaticPaths = () => supportedLanguages.map((language) => ({ params: { language } }));
 
 const language = Astro.params.language as Language;
-const { homePage } = await portfolioContentFor(language);
-const englishHomePage = language === 'en' ? undefined : (await portfolioContentFor('en')).homePage;
-const latinScriptName = englishHomePage && await getLatinScriptName();
+const content = await getPortfolioContent(language);
+const homePage = createHomePage(language, content, (await getPortfolioContent('en')).homePage.role);
 const text = interfaceText[language];
-const profileLinks = await getProfileLinks();
-const nameLines = homePage.displayName.split(/\s+/u);
-const nameColumns = Math.max(...nameLines.map((line) => [...line].length));
 const fontFacesUsed: FontFace[] = language === 'ja' ? ['japanese-name', 'latin'] : ['latin'];
 ---
-<Page language={language} metadata={await createHomePageMetadata(language)} class="home" style={`--name-columns: ${nameColumns}`}>
+<Page language={language} metadata={createHomePageMetadata(language, content.latinScriptName, homePage.introduction)} class="home" style={`--name-columns: ${homePage.nameColumns}`}>
   {fontFacesUsed.map((face) => (
     <link slot="head" rel="preload" href={fontFaceUrl(face)} as="font" type="font/woff2" crossorigin />
   ))}
@@ -36,23 +32,23 @@ const fontFacesUsed: FontFace[] = language === 'ja' ? ['japanese-name', 'latin']
     </nav>
   </header>
   <div class="identity">
-    <h1 class="name">{nameLines.map((line, index) => <>{index > 0 && ' '}<span class="name-line">{line}</span></>)}</h1>
+    <h1 class="name">{homePage.nameLines.map((line, index) => <>{index > 0 && ' '}<span class="name-line">{line}</span></>)}</h1>
   </div>
   <div class="spine">
-    {latinScriptName && <p class="spine-name" lang="en" aria-hidden="true" translate="no">{latinScriptName}</p>}
+    {homePage.latinScriptName && <p class="spine-name" lang="en" aria-hidden="true" translate="no">{homePage.latinScriptName}</p>}
   </div>
   <div class="about">
     <p class="role">
       {homePage.role}
-      {englishHomePage && <span class="role-english" lang="en">{englishHomePage.role}</span>}
+      {homePage.englishRole && <span class="role-english" lang="en">{homePage.englishRole}</span>}
     </p>
     <p class="introduction">{homePage.introduction}</p>
   </div>
-  {profileLinks.length > 0 && (
+  {homePage.profileLinks.length > 0 && (
     <ul class="profile-links links-on-rule" role="list">
-      {profileLinks.map(({ id, name, url }) => (
+      {homePage.profileLinks.map(({ id, url, accessibleName, printedAddress }) => (
         <li>
-          <a href={url} aria-label={text.profileLinkLabel({ profileLink: name })} data-printed-address={toProfileLinkAddress(url)}>
+          <a href={url} aria-label={accessibleName} data-printed-address={printedAddress}>
             <ProfileLinkMark profileLinkId={id} />
           </a>
         </li>

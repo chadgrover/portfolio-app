@@ -1,16 +1,21 @@
 import { getEntry } from 'astro:content';
 import type { Language } from '../i18n/types';
+import type { PortfolioContent } from './schema';
 
-export const portfolioContentFor = async (language: Language) => {
+const getPortfolioEntry = async (language: Language) => {
   const entry = await getEntry('portfolio', language);
   if (!entry) throw new Error(`Missing portfolio content: src/content/portfolio/${language}.json`);
   return entry.data;
 };
 
-export const getLatinScriptName = async () => (await portfolioContentFor('en')).homePage.displayName;
-
-export const getProfileLinks = async () => {
+const getProfileLinks = async () => {
   const entry = await getEntry('profileLinks', 'profileLinks');
-  if (!entry) throw new Error('Missing profile links: src/content/portfolio/profile-links.json');
+  if (!entry) throw new Error('Missing profile links');
   return entry.data.profileLinks;
 };
+
+export const getPortfolioContent = async (language: Language): Promise<PortfolioContent> => ({
+  homePage: (await getPortfolioEntry(language)).homePage,
+  latinScriptName: (await getPortfolioEntry('en')).homePage.displayName,
+  profileLinks: await getProfileLinks(),
+});

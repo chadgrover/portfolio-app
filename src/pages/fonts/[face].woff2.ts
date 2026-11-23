@@ -3,14 +3,14 @@ import { readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import subsetFont from 'subset-font';
 import { fontFaces, type FontFace } from '../../lib/fonts/faces';
-import { portfolioContentFor } from '../../lib/portfolio-content/entries';
+import { getPortfolioContent } from '../../lib/portfolio-content/entries';
 
 const codePointRange = (first: number, last: number) =>
   String.fromCodePoint(...Array.from({ length: last - first + 1 }, (_, offset) => first + offset));
 
 const glyphsFor: Record<FontFace, () => Promise<string>> = {
   latin: async () => codePointRange(0x20, 0x7e) + codePointRange(0xa0, 0xff) + codePointRange(0x2010, 0x2027),
-  'japanese-name': async () => (await portfolioContentFor('ja')).homePage.displayName,
+  'japanese-name': async () => (await getPortfolioContent('ja')).homePage.displayName,
 };
 
 export const getStaticPaths = (() =>

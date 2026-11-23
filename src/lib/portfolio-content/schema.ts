@@ -30,3 +30,9 @@ export const profileLinksSchema = z.array(profileLinkSchema).superRefine((profil
     }
   });
 });
+
+export interface PortfolioContent {
+  homePage: z.infer<typeof portfolioContentSchema>['homePage'];
+  latinScriptName: string;
+  profileLinks: z.infer<typeof profileLinksSchema>;
+}
