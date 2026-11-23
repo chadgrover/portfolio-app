@@ -5,14 +5,13 @@ import { gzipSync } from 'node:zlib';
 import { imageMetadata } from 'astro/assets/utils';
 import { parse, TEXT_NODE, type ElementNode, type Node } from 'ultrahtml';
 import { querySelectorAll } from 'ultrahtml/selector';
-import { loadEnv } from 'vite';
 import { describe, expect, test } from 'vitest';
+import { productionOrigin } from '../src/lib/build-environment';
 import { supportedLanguages } from '../src/lib/i18n/constants';
 
 const distDirectory = fileURLToPath(new URL('../dist/', import.meta.url));
 const surfaceBriefDirectory = fileURLToPath(new URL('../.impeccable/surfaces/', import.meta.url));
 const siteOrigin = 'https://site.invalid/';
-const productionOrigin = loadEnv('production', fileURLToPath(new URL('..', import.meta.url)), '').PRODUCTION_ORIGIN || undefined;
 const languageSetPages = { 'index.html': '/', ...Object.fromEntries(supportedLanguages.map((language) => [`${language}/index.html`, `/${language}/`])) };
 const bytesPerKilobyte = 1000;
 const cssBudgetBytes = 20_000;

@@ -1,14 +1,12 @@
 import { defineConfig } from 'astro/config';
-import { loadEnv } from 'vite';
+import { isLiveSiteBuild, productionOrigin } from './src/lib/build-environment';
 
-const { PRODUCTION_ORIGIN, WORKERS_CI_BRANCH } = loadEnv('production', process.cwd(), '');
-
-if (!PRODUCTION_ORIGIN && WORKERS_CI_BRANCH === 'main') {
+if (!productionOrigin && isLiveSiteBuild) {
   throw new Error('PRODUCTION_ORIGIN must be set to build the live site.');
 }
 
 export default defineConfig({
   output: 'static',
   trailingSlash: 'always',
-  site: PRODUCTION_ORIGIN || undefined,
+  site: productionOrigin,
 });
