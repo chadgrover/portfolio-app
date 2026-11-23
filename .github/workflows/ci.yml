@@ -24,4 +24,8 @@ jobs:
       - run: npm run check
       - run: npm test
       - run: npm run build
+        env:
+          PRODUCTION_ORIGIN: https://site.invalid
       - run: npm run test:build-output
+        env:
+          PRODUCTION_ORIGIN: https://site.invalid
