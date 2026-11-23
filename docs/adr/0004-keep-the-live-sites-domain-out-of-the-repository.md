@@ -14,11 +14,11 @@ This departs from ADR 0002, where serving configuration lives in `wrangler.jsonc
 ## Considered Options
 
 - **Domain in `wrangler.jsonc` and the Astro config**: one place to read, and every deploy applies it, but it commits the domain to the public history.
-- **Domain as a GitHub secret read by CI**: GitHub masks secrets in logs, but CI would hold the real domain for no benefit, since the host builds the live site itself. CI builds with the fake `https://site.invalid` instead.
+- **Domain as a GitHub secret read by CI**: GitHub masks secrets in logs, but CI would hold the real domain for no benefit, since the host builds the live site itself. CI builds with a fake domain instead.
 
 ## Consequences
 
-When the guard or a test fails, fix the environment: the domain belongs in `PRODUCTION_ORIGIN`, so a fix that writes it into a file is the wrong fix. Tests and CI use `https://site.invalid`; tests resolve the expected origin from `PRODUCTION_ORIGIN` the same way the build does, so a local build with the real `.env` passes too.
+When the guard or a test fails, fix the environment: the domain belongs in `PRODUCTION_ORIGIN`. Tests and CI use the fake domain that `.github/workflows/ci.yml` sets; tests resolve the expected origin from `PRODUCTION_ORIGIN` the same way the build does, so a local build with the real `.env` passes too.
 
 A build of `main` in Workers Builds stops when `PRODUCTION_ORIGIN` is absent, so the live site never ships without its links. Every other build without it still succeeds and emits no canonical or language links.
 
