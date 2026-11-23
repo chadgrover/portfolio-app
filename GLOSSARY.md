@@ -42,6 +42,10 @@ _Avoid_: Language switcher, language selector, language toggle
 The page at the portfolio's root address that sends a portfolio visitor to the home page in their browser's language.
 _Avoid_: Splash page, language selection page
 
+**Home page**:
+The page, one for each language the portfolio supports, that shows the portfolio content to a portfolio visitor on the live site and on each preview.
+_Avoid_: Landing page, index page
+
 **Language set**:
 The home page in each language the portfolio supports, together with the entry page, which search engines treat as versions of one page.
 _Avoid_: Alternates, hreflang group, language versions
