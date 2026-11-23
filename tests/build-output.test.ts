@@ -5,12 +5,15 @@ import { gzipSync } from 'node:zlib';
 import { imageMetadata } from 'astro/assets/utils';
 import { parse, TEXT_NODE, type ElementNode, type Node } from 'ultrahtml';
 import { querySelectorAll } from 'ultrahtml/selector';
+import { loadEnv } from 'vite';
 import { describe, expect, test } from 'vitest';
 import { supportedLanguages } from '../src/lib/i18n/constants';
 
 const distDirectory = fileURLToPath(new URL('../dist/', import.meta.url));
 const surfaceBriefDirectory = fileURLToPath(new URL('../.impeccable/surfaces/', import.meta.url));
 const siteOrigin = 'https://site.invalid/';
+const productionOrigin = loadEnv('production', fileURLToPath(new URL('..', import.meta.url)), '').PRODUCTION_ORIGIN || undefined;
+const languageSetPages = { 'index.html': '/', ...Object.fromEntries(supportedLanguages.map((language) => [`${language}/index.html`, `/${language}/`])) };
 const bytesPerKilobyte = 1000;
 const cssBudgetBytes = 20_000;
 const webFontBudgetBytes = 60_000;
@@ -201,6 +204,39 @@ describe('404 page', () => {
   test.each([['English Home', '/en/'], ['日本語のホーム', '/ja/']])('labels its home link %s', (label, href) => {
     const homeLinks = anchors(readBuildOutput('404.html')).filter((anchor) => anchor.attributes.href === href);
     expect(homeLinks.map((anchor) => textContentOf(anchor).trim())).toContain(label);
+  });
+});
+
+describe.runIf(productionOrigin).each(Object.entries(languageSetPages))('language set page %s', (path, ownPath) => {
+  const links = elementsOf(readBuildOutput(path), 'head link');
+
+  test('declares its own absolute address as canonical', () => {
+    expect(links.filter((link) => relTokens(link).includes('canonical')).map((link) => link.attributes.href)).toEqual([
+      new URL(ownPath, productionOrigin).href,
+    ]);
+  });
+
+  test('lists the absolute address of every page in the language set', () => {
+    expect(
+      links
+        .filter((link) => relTokens(link).includes('alternate') && link.attributes.hreflang)
+        .map((link) => [link.attributes.hreflang, link.attributes.href]),
+    ).toEqual([
+      ...supportedLanguages.map((language) => [language, new URL(`/${language}/`, productionOrigin).href]),
+      ['x-default', new URL('/', productionOrigin).href],
+    ]);
+  });
+});
+
+describe.each(productionOrigin ? ['404.html'] : buildOutputFiles.filter((path) => extname(path) === '.html'))('page %s outside the language set', (path) => {
+  const links = elementsOf(readBuildOutput(path), 'link');
+
+  test('carries no canonical link', () => {
+    expect(links.filter((link) => relTokens(link).includes('canonical'))).toEqual([]);
+  });
+
+  test('carries no language links', () => {
+    expect(links.filter((link) => link.attributes.hreflang)).toEqual([]);
   });
 });
 

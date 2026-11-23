@@ -1,7 +1,7 @@
 ---
 import type { Language } from '../lib/i18n/types';
 import { fontFaceCss } from '../lib/fonts/faces';
-import type { PageMetadata } from '../lib/page-metadata';
+import { languageLinkPaths, type PageMetadata } from '../lib/page-metadata';
 import '../styles/global.css';
 interface Props {
   language: Language;
@@ -22,6 +22,14 @@ const { language, metadata, class: mainClass, style: mainStyle } = Astro.props;
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <title>{metadata.title}</title>
     {metadata.description && <meta name="description" content={metadata.description} />}
+    {Astro.site && metadata.canonicalPath && (
+      <>
+        <link rel="canonical" href={new URL(metadata.canonicalPath, Astro.site).href} />
+        {Object.entries(languageLinkPaths).map(([hreflang, path]) => (
+          <link rel="alternate" hreflang={hreflang} href={new URL(path, Astro.site).href} />
+        ))}
+      </>
+    )}
     <style is:inline set:html={fontFaceCss}></style>
     <slot name="head" />
   </head>
