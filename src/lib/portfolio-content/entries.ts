@@ -1,7 +1,5 @@
-import { readFile } from 'node:fs/promises';
-import { getCollection, getEntry } from 'astro:content';
+import { getEntry } from 'astro:content';
 import type { Language } from '../i18n/types';
-import { parseProfileLinks, profileLinksPath } from './profile-links';
 
 export const portfolioContentFor = async (language: Language) => {
   const entry = await getEntry('portfolio', language);
@@ -12,8 +10,7 @@ export const portfolioContentFor = async (language: Language) => {
 export const getLatinScriptName = async () => (await portfolioContentFor('en')).home.hero.displayName;
 
 export const getProfileLinks = async () => {
-  const fileOrder = parseProfileLinks(await readFile(profileLinksPath, 'utf8')).map(({ id }) => id);
-  return (await getCollection('profileLinks'))
-    .sort((first, second) => fileOrder.indexOf(first.data.id) - fileOrder.indexOf(second.data.id))
-    .map(({ data }) => data);
+  const entry = await getEntry('profileLinks', 'profileLinks');
+  if (!entry) throw new Error('Missing profile links: src/content/portfolio/profile-links.json');
+  return entry.data.profileLinks;
 };
