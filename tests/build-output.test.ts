@@ -124,15 +124,15 @@ describe.each(supportedLanguages)('localized home page /%s/', (language) => {
   });
 
   test('shows the name from its portfolio content', () => {
-    expect(textOf(html, 'h1').map(toWords)).toEqual([toWords(portfolioContentOf(language).home.hero.displayName)]);
+    expect(textOf(html, 'h1').map(toWords)).toEqual([toWords(portfolioContentOf(language).homePage.displayName)]);
   });
 
   test('shows the role from its portfolio content', () => {
-    expect(textOf(html, '.role')[0]).toContain(portfolioContentOf(language).home.hero.role);
+    expect(textOf(html, '.role')[0]).toContain(portfolioContentOf(language).homePage.role);
   });
 
   test('describes itself with its introduction', () => {
-    expect(metaContent(html, 'description')).toBe(portfolioContentOf(language).home.hero.introduction);
+    expect(metaContent(html, 'description')).toBe(portfolioContentOf(language).homePage.introduction);
   });
 
   test('has a language switch that marks the current language', () => {
@@ -177,7 +177,7 @@ describe('Japanese home page /ja/', () => {
   });
 
   test('shows the Latin-script name from the English portfolio content', () => {
-    expect(textOf(html, '.spine-name')).toEqual([portfolioContentOf('en').home.hero.displayName]);
+    expect(textOf(html, '.spine-name')).toEqual([portfolioContentOf('en').homePage.displayName]);
   });
 });
 

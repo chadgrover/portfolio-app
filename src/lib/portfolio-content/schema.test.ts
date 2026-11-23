@@ -2,8 +2,8 @@ import { describe, expect, test } from 'vitest';
 import { portfolioContentSchema, profileLinkSchema, profileLinksSchema } from './schema';
 
 describe('portfolioContentSchema', () => {
-  const hero = { displayName: 'Example Developer', role: 'Fictional developer', introduction: 'A fictional introduction.' };
-  const requiredHeroFields = ['displayName', 'role', 'introduction'] as const;
+  const homePage = { displayName: 'Example Developer', role: 'Fictional developer', introduction: 'A fictional introduction.' };
+  const requiredHomePageFields = ['displayName', 'role', 'introduction'] as const;
   const invalidTextValues = [
     ['missing', undefined],
     ['empty', ''],
@@ -13,19 +13,19 @@ describe('portfolioContentSchema', () => {
   ] as const;
 
   test('accepts complete portfolio content', () => {
-    expect(portfolioContentSchema.safeParse({ home: { hero } }).success).toBe(true);
+    expect(portfolioContentSchema.safeParse({ homePage }).success).toBe(true);
   });
 
   test('accepts Japanese portfolio content', () => {
-    const japaneseHero = { displayName: '架空の開発者', role: '架空の役職', introduction: 'これは架空の紹介です。' };
-    expect(portfolioContentSchema.safeParse({ home: { hero: japaneseHero } }).success).toBe(true);
+    const japaneseHomePage = { displayName: '架空の開発者', role: '架空の役職', introduction: 'これは架空の紹介です。' };
+    expect(portfolioContentSchema.safeParse({ homePage: japaneseHomePage }).success).toBe(true);
   });
 
-  describe.each(requiredHeroFields)('%s', (field) => {
+  describe.each(requiredHomePageFields)('%s', (field) => {
     test.each(invalidTextValues)('rejects a value that is %s', (_, value) => {
-      const result = portfolioContentSchema.safeParse({ home: { hero: { ...hero, [field]: value } } });
+      const result = portfolioContentSchema.safeParse({ homePage: { ...homePage, [field]: value } });
       expect(result.success).toBe(false);
-      expect(result.error?.issues[0]?.path).toEqual(['home', 'hero', field]);
+      expect(result.error?.issues[0]?.path).toEqual(['homePage', field]);
     });
   });
 });

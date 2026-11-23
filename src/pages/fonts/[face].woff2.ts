@@ -10,7 +10,7 @@ const codePointRange = (first: number, last: number) =>
 
 const glyphsFor: Record<FontFace, () => Promise<string>> = {
   latin: async () => codePointRange(0x20, 0x7e) + codePointRange(0xa0, 0xff) + codePointRange(0x2010, 0x2027),
-  'japanese-name': async () => (await portfolioContentFor('ja')).home.hero.displayName,
+  'japanese-name': async () => (await portfolioContentFor('ja')).homePage.displayName,
 };
 
 export const getStaticPaths = (() =>

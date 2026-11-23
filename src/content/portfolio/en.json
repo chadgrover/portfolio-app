@@ -1,9 +1,7 @@
 {
-  "home": {
-    "hero": {
-      "displayName": "Chad Grover",
-      "role": "Software Engineer",
-      "introduction": "I build software that is accessible and fast, with close attention to the details that make it easy to use."
-    }
+  "homePage": {
+    "displayName": "Chad Grover",
+    "role": "Software Engineer",
+    "introduction": "I build software that is accessible and fast, with close attention to the details that make it easy to use."
   }
 }
